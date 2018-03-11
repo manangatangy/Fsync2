@@ -1,2 +1,2 @@
-# LsmvpApplicationSkeleton
-app demo/skeleton showing use of Lsmvp
+# Fsync2
+FTP sync client built with Lsmvp
