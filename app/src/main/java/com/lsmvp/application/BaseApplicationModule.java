@@ -18,7 +18,8 @@ import dagger.Module;
 import dagger.Provides;
 
 /**
- * Created by david on 8/03/18.
+ * @author david
+ * @date 09 Mar 2018.
  */
 
 @Module
@@ -26,13 +27,6 @@ public class BaseApplicationModule {
 
     public static final String APPLICATION_CONTEXT = "Application Context";
     public static final String MAIN_THREAD_EXECUTOR = "Main Thread Executor";
-
-    public static final String COMMON_SECURE_SHARED_PREFS = "COMMON_SECURE_SHARED_PREFS";
-    public static final String UNPINNED_SECURITY_SERVICE = "UNPINNED_SECURITY_SERVICE";
-    public static final String INACTIVITY_TIMEOUT = "Inactivity Timeout";
-    public static final String ESG_HEARTBEAT = "ESG Heartbeat";
-    public static final String IB_HEARTBEAT = "IB Heartbeat";
-    public static final String GOOGLE_API_CLIENT_FOR_OMNITURE = "GOOGLE_API_CLIENT_FOR_OMNITURE";
 
     private final Context mApplicationContext;
 

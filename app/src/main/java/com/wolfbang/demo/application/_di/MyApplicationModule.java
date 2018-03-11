@@ -16,18 +16,11 @@ import dagger.Provides;
 @Module
 public class MyApplicationModule {
 
-//    private final Context mApplicationContext;
-
     public MyApplicationModule(MyApplication myApplication) {
-//        super(myApplication);
         mMyApplication = myApplication;
     }
 
     private final MyApplication mMyApplication;
-
-//    public ApplicationModule(Application application) {
-//        this.mApplication = application;
-//    }
 
     @Provides
     @Singleton

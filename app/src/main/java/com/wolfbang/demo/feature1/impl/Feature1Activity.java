@@ -9,7 +9,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -19,7 +18,6 @@ import com.wolfbang.demo.R;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import timber.log.Timber;
 
 /**
  * @author david
@@ -33,7 +31,7 @@ public class Feature1Activity
     private final static String KEY_FRAG_CLASS_NAME = "FRAG_CLASS_NAME";
 
     @BindView(R.id.progress_bar_frame)
-    FrameLayout mProgessBarLayout;
+    FrameLayout mProgressBarLayout;
 
     @NonNull
     public static Intent createIntent(@NonNull Context context, String fragClassName) {
@@ -91,8 +89,7 @@ public class Feature1Activity
 
     @Override
     public void showProgressDialog() {
-        Log.d("xxxx", "showProgressDialog:");
-        mProgessBarLayout.setVisibility(View.VISIBLE);
+        mProgressBarLayout.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -102,13 +99,12 @@ public class Feature1Activity
 
     @Override
     public void hideProgressDialog() {
-        Log.d("xxxx", "hideProgressDialog:");
-        mProgessBarLayout.setVisibility(View.GONE);
+        mProgressBarLayout.setVisibility(View.GONE);
     }
 
     @Override
     public boolean isProgressVisible() {
-        return (mProgessBarLayout.getVisibility() == View.VISIBLE);
+        return (mProgressBarLayout.getVisibility() == View.VISIBLE);
     }
     //endregion
 

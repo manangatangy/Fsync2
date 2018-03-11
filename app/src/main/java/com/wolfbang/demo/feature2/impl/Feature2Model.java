@@ -16,16 +16,17 @@ import javax.inject.Inject;
 /**
  * @author david
  * @date 10 Mar 2018.
+ * This is straight copy of Feature1Model
  */
 
 public class Feature2Model
         extends BaseMvpModel
         implements Model {
 
-    // Used to determine response type
     private int mRequestCount = 0;
+    private Feature2Data feature2Data;
 
-    private String mSomeValue = "Click to see what happens";
+    private String mSomeValue = "Initial model value";
 
     @VisibleForTesting
     ModelState mModelState = ModelState.IDLE;
@@ -39,9 +40,15 @@ public class Feature2Model
         super(executor);
     }
 
+    //region Feature2Contract.Contract
     @Override
-    public void setSomeValue(String someValue) {
-        mSomeValue = someValue;
+    public void setFeature2Data(Feature2Data feature2Data) {
+        this.feature2Data = feature2Data;
+    }
+
+    @Override
+    public Feature2Data getFeature2Data() {
+        return feature2Data;
     }
 
     @Override
@@ -50,17 +57,7 @@ public class Feature2Model
     }
 
     @Override
-    public boolean isBusy() {
-        return mBusy.get();
-    }
-
-    @Override
-    public ModelState getModelState() {
-        return mModelState;
-    }
-
-    @Override
-    public void doSomeAction() {
+    public void doSomeAction(final int timePeriod) {
 
         if (mBusy.compareAndSet(false, true)) {
 
@@ -73,29 +70,32 @@ public class Feature2Model
                 @Override
                 public void run() {
 
+                    ModelListener listener = getListener();
+
+                    boolean isError = (timePeriod <=0);
+
                     // Perform some long running synchronous request and block for the reply.
                     try {
-                        Thread.sleep(2500);
+                        Thread.sleep(isError ? 2500 : timePeriod);
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
+                    mSomeValue = "clicks: " + ++mRequestCount;
                     mBusy.set(false);
-
-                    ModelListener listener = getListener();
 
                     if (listener != null) {
                         listener.onBusyChanged(false);
                     }
 
-                    if ((++mRequestCount % 2) == 0) {
-                        mModelState = ModelState.SUCCESS;
-                        if (listener != null) {
-                            listener.onRetrieveSomeResult("clicks: " + mRequestCount);
-                        }
-                    } else {
+                    if (isError) {
                         mModelState = ModelState.ERROR;
                         if (listener != null) {
                             listener.onRetrieveFailed();
+                        }
+                    } else {
+                        mModelState = ModelState.SUCCESS;
+                        if (listener != null) {
+                            listener.onRetrieveSomeResult(mSomeValue);
                         }
                     }
                 }
@@ -103,5 +103,16 @@ public class Feature2Model
 
         }
     }
+
+    @Override
+    public boolean isBusy() {
+        return mBusy.get();
+    }
+
+    @Override
+    public ModelState getModelState() {
+        return mModelState;
+    }
+    //endregion
 
 }

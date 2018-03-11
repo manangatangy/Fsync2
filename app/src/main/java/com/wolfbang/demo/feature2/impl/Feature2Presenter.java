@@ -47,10 +47,10 @@ public class Feature2Presenter
     }
     //endregion
 
-    //region MainContract.Presenter
+    //region Feature2Contract.Presenter
     @Override
-    public void onSomeButtonClicked() {
-        getModel().doSomeAction();
+    public void onSomeButtonClicked(int timePeriod) {
+        getModel().doSomeAction(timePeriod);
     }
 
     @Override
@@ -62,7 +62,7 @@ public class Feature2Presenter
     }
     //endregion
 
-    //region ConfirmTermContract.ModelListener
+    //region Feature2Contract.ModelListener
     @Override
     public void onBusyChanged(boolean busy) {
         View view = getView();
@@ -73,12 +73,18 @@ public class Feature2Presenter
 
     @Override
     public void onRetrieveSomeResult(@NonNull String resultValue) {
-
+        View view = getView();
+        if (view != null) {
+            handleSuccess(view, resultValue);
+        }
     }
 
     @Override
     public void onRetrieveFailed() {
-
+        View view = getView();
+        if (view != null) {
+            handleError(view);
+        }
     }
     //endregion
 
@@ -91,10 +97,7 @@ public class Feature2Presenter
     }
 
     private void handleBusyChanged(@NonNull View view, boolean busy) {
-        if (busy) {
-            view.showProgressDialog();
-        } else {
-            view.hideProgressDialog();
-        }
+        view.showLoadingState(busy);
     }
+
 }

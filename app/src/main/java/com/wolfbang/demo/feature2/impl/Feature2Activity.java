@@ -1,15 +1,21 @@
 package com.wolfbang.demo.feature2.impl;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.view.Menu;
-import android.view.MenuItem;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.FrameLayout;
+import android.widget.TextView;
 
 import com.lsmvp.simplemvp.AbstractMvpViewActivity;
 import com.lsmvp.simplemvp.ModelUpdater;
+import com.lsmvp.simplemvp.NestedViewHost;
+import com.lsmvp.simplemvp.ObjectRegistry;
+import com.lsmvp.simplemvp.ProgressDialogProvider;
 import com.wolfbang.demo.R;
 import com.wolfbang.demo.application.MyApplication;
 import com.wolfbang.demo.feature2.Feature2Contract.Model;
@@ -20,6 +26,9 @@ import com.wolfbang.demo.feature2._di.DaggerFeature2Component;
 import com.wolfbang.demo.feature2._di.Feature2Component;
 import com.wolfbang.demo.feature2._di.Feature2Module;
 
+import butterknife.BindView;
+import butterknife.OnClick;
+
 /**
  * @author david
  * @date 10 Mar 2018.
@@ -27,9 +36,29 @@ import com.wolfbang.demo.feature2._di.Feature2Module;
 
 public class Feature2Activity
         extends AbstractMvpViewActivity<Presenter, Model, Feature2Component>
-        implements View, Navigation
-//       , BackPressListener
-{
+        implements View, Navigation, NestedViewHost, ProgressDialogProvider {
+
+    private static final String KEY_FEATURE2_DATA = "KEY_FEATURE2_DATA";
+
+    @BindView(R.id.feature2_button)
+    Button mButton;
+    @BindView(R.id.feature2_textView)
+    TextView mTextView;
+    @BindView(R.id.feature2_editText)
+    EditText mEditText;
+
+    @BindView(R.id.progress_bar_frame)
+    FrameLayout mProgressBarLayout;
+
+    @NonNull
+    public static Intent createIntent(Context context, Feature2Data feature2Data) {
+        Intent intent = new Intent(context, Feature2Activity.class);
+        ObjectRegistry objectRegistry = MyApplication.getMyApplicationComponent().getObjectRegistry();
+        String key = objectRegistry.put(feature2Data);
+        intent.putExtra(KEY_FEATURE2_DATA, key);
+
+        return intent;
+    }
 
     //region SimpleMVP
     @NonNull
@@ -55,7 +84,7 @@ public class Feature2Activity
 
     @Override
     protected int getLayoutResource() {
-        return R.layout.activity_main;
+        return R.layout.activity_feature2;
     }
 
     @Override
@@ -70,69 +99,86 @@ public class Feature2Activity
             @Override
             public void updateModel(Model model) {
                 Bundle args = getIntent().getExtras();
-//                Bundle args = getArguments();       // for frag
 
-//                DepositAccount depositAccount = getObjectRegistry().get(args.getString(KEY_CONFIRM_TERM_ACCOUNT, ""));
-//                model.setDepositAccount(depositAccount);
-
-//                Date startDate = getObjectRegistry().get(args.getString(KEY_CONFIRM_TERM_START_DATE, ""));
-//                model.setStartDate(startDate);
-
-//                RateModel rateModel = getObjectRegistry().get(args.getString(KEY_CONFIRM_TERM_RATE_MODEL, ""));
-//                model.setRateModel(rateModel);
+                String key = args.getString(KEY_FEATURE2_DATA, "");
+                Feature2Data feature2Data = getObjectRegistry().get(key);
+                model.setFeature2Data(feature2Data);
             }
         };
     }
     //endregion
 
     //region Android framework stuff
-    @Override
-    public void onResume() {
-        super.onResume();
-//        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        return super.onCreateOptionsMenu(menu);
-    }
-
-//    @Override
-//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-// for fragments
-//        inflater.inflate(R.menu.menu_term_deposit_confirm_term, menu);
-//    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-//            case R.id.action_term_details_confirm_term_btn_confirm:
-//                onClickConfirmButton();
-//                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+    //implement onOptionsItemSelected, onActivityResult, etc as desired.
     //endregion
 
-    //region MainContract.View
+    //region Feature2Contract.View
     @Override
-    public void setSomeField(String someValue) {
-
+    public void setSomeField(final String someValue) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                mTextView.setText(someValue);
+            }
+        });
     }
 
     @Override
     public void showError() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getApplicationContext());
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                AlertDialog.Builder builder = new AlertDialog.Builder(Feature2Activity.this);
+                builder.setTitle( "Error" )
+                        .setMessage("some message")
+                        .setPositiveButton("OK", null)
+                        .show();
+            }
+        });
+    }
 
-        builder.setTitle( "Error" )
-                .setMessage("some message")
-                .show();
+    @Override
+    public void showLoadingState(final boolean show) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                if (show) {
+                    showProgressDialog();
+                } else {
+                    hideProgressDialog();
+                }
+            }
+        });
+    }
+    //endregion
+
+    @OnClick(R.id.feature2_button)
+    public void onButtonClick() {
+        try {
+            getPresenter().onSomeButtonClicked(Integer.parseInt(mEditText.getText().toString()));
+        } catch (NumberFormatException nfe) {
+        }
+    }
+
+    //region ProgressDialogProvider
+    @Override
+    public void showProgressDialog() {
+        mProgressBarLayout.setVisibility(android.view.View.VISIBLE);
+    }
+
+    @Override
+    public void showProgressDialog(int messageTemplateId, Object... formatArgs) {
+        showProgressDialog();
+    }
+
+    @Override
+    public void hideProgressDialog() {
+        mProgressBarLayout.setVisibility(android.view.View.GONE);
+    }
+
+    @Override
+    public boolean isProgressVisible() {
+        return (mProgressBarLayout.getVisibility() == android.view.View.VISIBLE);
     }
     //endregion
 

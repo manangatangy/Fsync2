@@ -1,6 +1,7 @@
 package com.wolfbang.demo.application;
 
 import com.lsmvp.application.BaseApplication;
+import com.lsmvp.application.BaseApplicationComponent;
 import com.lsmvp.application.BaseApplicationModule;
 import com.wolfbang.demo.application._di.DaggerMyApplicationComponent;
 import com.wolfbang.demo.application._di.MyApplicationComponent;
@@ -18,11 +19,7 @@ public class MyApplication extends BaseApplication {
     @Override
     public void onCreate() {
         super.onCreate();
-        myApplicationComponent = createApplicationComponent();
-    }
-
-    protected MyApplicationComponent createApplicationComponent() {
-        return DaggerMyApplicationComponent.builder()
+        myApplicationComponent = DaggerMyApplicationComponent.builder()
                 .myApplicationModule(new MyApplicationModule(this))
                 .baseApplicationModule(new BaseApplicationModule(this))
                 .build();
@@ -32,15 +29,10 @@ public class MyApplication extends BaseApplication {
         return myApplicationComponent;
     }
 
-//    private static ApplicationComponent mApplicationComponent;
-
-//    public static ApplicationComponent getComponent() {
-//        return mApplicationComponent;
-//    }
-
-
-
-
+    @Override
+    protected BaseApplicationComponent getApplicationComponent() {
+        return getMyApplicationComponent();
+    }
 
     /** The App settings containing endpoints */
 //    @Inject

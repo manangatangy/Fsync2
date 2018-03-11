@@ -7,10 +7,9 @@ import android.app.Application;
  * @date 09 Mar 2018.
  */
 
-public class BaseApplication extends Application {
+public abstract class BaseApplication extends Application {
 
     private static BaseApplication sInstance;
-    protected BaseApplicationComponent mBaseApplicationComponent;
 
     public BaseApplication() {
         super();
@@ -18,7 +17,8 @@ public class BaseApplication extends Application {
     }
 
     public static BaseApplicationComponent getBaseApplicationComponent() {
-        return sInstance.mBaseApplicationComponent;
+        return sInstance.getApplicationComponent();
     }
 
+    protected abstract BaseApplicationComponent getApplicationComponent();
 }

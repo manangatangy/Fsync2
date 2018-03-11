@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -105,35 +102,10 @@ public class Feature1Fragment
     //endregion
 
     //region Android framework stuff
-    @Override
-    public void onResume() {
-        super.onResume();
-//        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-//        inflater.inflate(R.menu.menu_term_deposit_confirm_term, menu);
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-//            case R.id.action_term_details_confirm_term_btn_confirm:
-//                onClickConfirmButton();
-//                return true;
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-    }
+    //implement onOptionsItemSelected, onActivityResult, etc as desired.
     //endregion
 
-    //region MainContract.View
+    //region Feature1Contract.View
     @Override
     public void setSomeField(final String someValue) {
         runOnUiThread(new Runnable() {

@@ -10,6 +10,8 @@ import android.view.View;
 
 import com.wolfbang.demo.feature1.impl.Feature1Data;
 import com.wolfbang.demo.feature1.impl.Feature1Fragment;
+import com.wolfbang.demo.feature2.impl.Feature2Activity;
+import com.wolfbang.demo.feature2.impl.Feature2Data;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -35,6 +37,11 @@ public class MainActivity extends AppCompatActivity {
     @OnClick(R.id.feature1_button)
     public void onFeature1ButtonClick() {
         startActivity(Feature1Fragment.createIntent(this, new Feature1Data()));
+    }
+
+    @OnClick(R.id.feature2_button)
+    public void onFeature2ButtonClick() {
+        startActivity(Feature2Activity.createIntent(this, new Feature2Data()));
     }
 
 }

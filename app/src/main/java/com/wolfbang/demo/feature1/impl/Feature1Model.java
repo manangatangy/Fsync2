@@ -22,7 +22,6 @@ public class Feature1Model
         extends BaseMvpModel
         implements Model {
 
-    // Used to determine response type
     private int mRequestCount = 0;
     private Feature1Data feature1Data;
 
@@ -80,7 +79,7 @@ public class Feature1Model
                     } catch (InterruptedException e) {
                         e.printStackTrace();
                     }
-                    ++mRequestCount;
+                    mSomeValue = "clicks: " + ++mRequestCount;
                     mBusy.set(false);
 
                     if (listener != null) {
@@ -95,7 +94,7 @@ public class Feature1Model
                     } else {
                         mModelState = ModelState.SUCCESS;
                         if (listener != null) {
-                            listener.onRetrieveSomeResult("clicks: " + mRequestCount);
+                            listener.onRetrieveSomeResult(mSomeValue);
                         }
                     }
                 }

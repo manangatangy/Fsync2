@@ -23,7 +23,7 @@ public class Feature2Module {
 
     // Binds a concrete implementation to provision of a model (decouples from provide presenter)
     @Provides
-    Model provideModel(Feature2Model model) {
+    public Model provideModel(Feature2Model model) {
         return model;
     }
 
