@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context="com.wolfbang.demo.MainActivity">
+    tools:context="com.wolfbang.fsync.MainActivity">
 
     <TextView
         android:layout_width="wrap_content"
@@ -17,11 +17,11 @@
         android:layout_gravity="center"
         />
     <Button
-        android:id="@+id/feature1_button"
+        android:id="@+id/mission_summary_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:text="AbstractMvpView Fragment demo"
+        android:text="MissionSummary"
         />
     <Button
         android:id="@+id/feature2_button"
