@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
 import com.lsmvp.simplemvp.BaseMvpModel;
+import com.wolfbang.fsync.ftpservice.FtpService;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelState;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelListener;
@@ -58,6 +59,8 @@ public class MissionSummaryModel
     @Override
     public void doSomeAction(final int timePeriod) {
 
+//        java.util.TimeZone timeZone;
+//        timeZone.toZoneId()
         if (mBusy.compareAndSet(false, true)) {
 
             ModelListener listener = getListener();
@@ -73,13 +76,16 @@ public class MissionSummaryModel
 
                     boolean isError = (timePeriod <=0);
 
+                    FtpService ftpService = new FtpService();
+                    ftpService.connectAndList();
+
                     // Perform some long running synchronous request and block for the reply.
-                    try {
-                        Thread.sleep(isError ? 2500 : timePeriod);
-                    } catch (InterruptedException e) {
-                        e.printStackTrace();
-                    }
-                    mSomeValue = "clicks: " + ++mRequestCount;
+//                    try {
+//                        Thread.sleep(isError ? 2500 : timePeriod);
+//                    } catch (InterruptedException e) {
+//                        e.printStackTrace();
+//                    }
+//                    mSomeValue = "clicks: " + ++mRequestCount;
                     mBusy.set(false);
 
                     if (listener != null) {

@@ -50,7 +50,7 @@ dependencies {
     implementation 'com.android.support.constraint:constraint-layout:1.0.2'
     implementation "com.jakewharton:butterknife:$butterknifeVersion"
 
-
+    implementation 'commons-net:commons-net:3.6'
     implementation "com.jakewharton.timber:timber:$timberVersion"
 
     testImplementation 'junit:junit:4.12'
