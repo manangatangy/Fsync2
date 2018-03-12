@@ -22,6 +22,8 @@ import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Navigation;
 import com.wolfbang.fsync.missionsummary._di.DaggerMissionSummaryComponent;
 import com.wolfbang.fsync.missionsummary._di.MissionSummaryComponent;
 import com.wolfbang.fsync.missionsummary._di.MissionSummaryModule;
+import com.wolfbang.shared.BackClickHandler;
+import com.wolfbang.shared.SingleFragActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -33,9 +35,9 @@ import butterknife.OnClick;
 
 public class MissionSummaryFragment
         extends AbstractMvpViewFragment<Presenter, Model, MissionSummaryComponent>
-        implements View, Navigation {
+        implements View, Navigation, BackClickHandler {
 
-    private static final String KEY_FEATURE1_DATA = "KEY_FEATURE1_DATA";
+    private static final String MSF_FEATURE1_DATA = "MSF_FEATURE1_DATA";
 
     @BindView(R.id.feature1_button)
     Button mButton;
@@ -45,11 +47,14 @@ public class MissionSummaryFragment
     EditText mEditText;
 
     public static Intent createIntent(Context context, MissionSummaryData missionSummaryData) {
-        Intent intent = Feature1Activity.createIntent(context, MissionSummaryFragment.class.getName());
+        Intent intent = new SingleFragActivity.Builder(context, MissionSummaryFragment.class.getName())
+                .setDisplayHomeAsUpEnabled(true)
+                .setTitle("Mission")
+                .build();
 
         ObjectRegistry objectRegistry = FsyncApplication.getFsyncApplicationComponent().getObjectRegistry();
         String key = objectRegistry.put(missionSummaryData);
-        intent.putExtra(KEY_FEATURE1_DATA, key);
+        intent.putExtra(MSF_FEATURE1_DATA, key);
 
         return intent;
     }
@@ -93,7 +98,7 @@ public class MissionSummaryFragment
             public void updateModel(Model model) {
                 Bundle args = getArguments();
 
-                String key = args.getString(KEY_FEATURE1_DATA, "");
+                String key = args.getString(MSF_FEATURE1_DATA, "");
                 MissionSummaryData missionSummaryData = getObjectRegistry().get(key);
                 model.setMissionSummaryData(missionSummaryData);
             }
@@ -101,11 +106,7 @@ public class MissionSummaryFragment
     }
     //endregion
 
-    //region Android framework stuff
-    //implement onOptionsItemSelected, onActivityResult, etc as desired.
-    //endregion
-
-    //region Feature1Contract.View
+    //region MissionSummaryContract.View
     @Override
     public void setSomeField(final String someValue) {
         runOnUiThread(new Runnable() {
@@ -151,6 +152,12 @@ public class MissionSummaryFragment
             getPresenter().onSomeButtonClicked(Integer.parseInt(mEditText.getText().toString()));
         } catch (NumberFormatException nfe) {
         }
+    }
+
+    @Override
+    public boolean onBackPressed() {
+        getPresenter().onBackClicked();
+        return false;
     }
 
 }

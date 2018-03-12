@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -13,6 +14,7 @@ import com.wolfbang.fsync.missionsummary.impl.MissionSummaryFragment;
 import com.wolfbang.fsync.feature2.impl.Feature2Activity;
 import com.wolfbang.fsync.feature2.impl.Feature2Data;
 
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -23,11 +25,18 @@ import butterknife.OnClick;
 
 public class MainActivity extends AppCompatActivity {
 
+    @BindView(R.id.my_toolbar)
+    Toolbar mToolbar;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);    }
+        ButterKnife.bind(this);
+        // Note that the Toolbar defined in the layout has the id "my_toolbar"
+        setSupportActionBar(mToolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+    }
 
     @Override
     public View onCreateView(String name, Context context, AttributeSet attrs) {

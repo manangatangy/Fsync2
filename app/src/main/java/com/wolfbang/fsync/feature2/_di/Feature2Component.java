@@ -1,6 +1,6 @@
 package com.wolfbang.fsync.feature2._di;
 
-import com.wolfbang.fsync.application.PerActivity;
+import com.wolfbang.shared.PerActivity;
 import com.wolfbang.fsync.application._di.FsyncApplicationComponent;
 import com.wolfbang.fsync.feature2.Feature2Contract.Presenter;
 import com.wolfbang.fsync.feature2.impl.Feature2Activity;

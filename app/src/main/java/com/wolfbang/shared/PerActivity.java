@@ -1,4 +1,4 @@
-package com.wolfbang.fsync.application;
+package com.wolfbang.shared;
 
 import java.lang.annotation.Retention;
 

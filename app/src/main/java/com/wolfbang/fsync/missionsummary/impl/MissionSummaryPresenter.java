@@ -47,7 +47,7 @@ public class MissionSummaryPresenter
     }
     //endregion
 
-    //region Feature1Contract.Presenter
+    //region MissionSummaryContract.Presenter
     @Override
     public void onSomeButtonClicked(int timePeriod) {
         getModel().doSomeAction(timePeriod);
@@ -62,7 +62,7 @@ public class MissionSummaryPresenter
     }
     //endregion
 
-    //region Feature1Contract.ModelListener
+    //region MissionSummaryContract.ModelListener
     @Override
     public void onBusyChanged(boolean busy) {
         View view = getView();

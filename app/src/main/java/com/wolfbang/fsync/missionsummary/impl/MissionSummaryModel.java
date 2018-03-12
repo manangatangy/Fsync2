@@ -39,7 +39,7 @@ public class MissionSummaryModel
         super(executor);
     }
 
-    //region Feature1Contract.Contract
+    //region MissionSummaryContract.Contract
     @Override
     public void setMissionSummaryData(MissionSummaryData missionSummaryData) {
         this.missionSummaryData = missionSummaryData;
