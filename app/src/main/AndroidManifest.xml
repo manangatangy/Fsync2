@@ -9,7 +9,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:name="com.wolfbang.fsync.application.FsyncApplication"
-        android:theme="@style/AppTheme">
+        android:theme="@style/Theme.AppCompat.Light.NoActionBar"
+        >
         <activity android:name="com.wolfbang.fsync.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
