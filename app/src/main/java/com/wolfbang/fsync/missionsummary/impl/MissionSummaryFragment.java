@@ -82,7 +82,7 @@ public class MissionSummaryFragment
 
     @Override
     protected int getLayoutResource() {
-        return R.layout.fragment_feature1;
+        return R.layout.fragment_mission_summary;
     }
 
     @Override
