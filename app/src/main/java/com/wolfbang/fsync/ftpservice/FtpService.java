@@ -1,6 +1,10 @@
 package com.wolfbang.fsync.ftpservice;
 
+import android.support.annotation.Nullable;
 import android.util.Log;
+
+import com.wolfbang.fsync.ftpservice.model.Directory;
+import com.wolfbang.fsync.ftpservice.model.File;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPClientConfig;
@@ -21,6 +25,7 @@ public class FtpService {
     String server = "192.168.0.9";
     String user = "music";
     String password = "music";
+    String dir = "/home/music";
 
     public void connectAndList() {
         FTPClient ftpClient = new FTPClient();
@@ -35,7 +40,7 @@ public class FtpService {
                     Log.d("FtpService", "Remote systemType:" + systemType);
                     Log.d("FtpService", "workingDirectory:" + currentDir);
 
-                    FTPFile[] files = ftpClient.mlistDir();
+                    FTPFile[] files = ftpClient.mlistDir(".profile");
                     for (FTPFile file : files) {
                         Date date = file.getTimestamp().getTime();
                         String dateStr = new SimpleDateFormat().format(date);
@@ -52,9 +57,58 @@ public class FtpService {
         } catch (IOException ioe) {
             ioe.printStackTrace();
         }
-
     }
-    
+
+    private File visit(FTPClient ftpClient, String path) throws IOException{
+        FTPFile ftpFile = ftpClient.mlistFile(path);
+        File file = makeFile(ftpFile);
+        if (file != null ) {
+            populateAndTraverseIfDirectory(ftpClient, file);
+        }
+        return file;
+    }
+
+    private void populateAndTraverseIfDirectory(FTPClient ftpClient, File file) throws IOException {
+        if (file instanceof Directory) {
+            Directory directory = (Directory)file;
+            populate(ftpClient, directory);
+            for (File child : directory.children) {
+                populateAndTraverseIfDirectory(ftpClient, child);
+            }
+        }
+    }
+
+    private void populate(FTPClient ftpClient, Directory directory) throws IOException {
+        FTPFile[] ftpFiles = ftpClient.mlistDir("");
+        for (FTPFile ftpFile : ftpFiles) {
+            File file = makeFile(ftpFile);
+            if (file != null) {
+                directory.children.add(file);
+            }
+        }
+    }
+
+    private File makeFile(@Nullable FTPFile ftpFile) {
+        if (ftpFile != null) {
+            String name = ftpFile.getName();
+            Date date = ftpFile.getTimestamp().getTime();
+            if (ftpFile.isFile()) {
+                return new File(name, date);
+            } else if (ftpFile.isDirectory()) {
+                return new Directory(name, date);
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Populate the children of this Directory with Files.
+     * Some of the children may be more Directories, but
+     * they will not be recursed into here.  This approach means
+     * FTPFile instances will not be existent for the entire
+     * tree traversal.
+     */
+
 }
 
 
