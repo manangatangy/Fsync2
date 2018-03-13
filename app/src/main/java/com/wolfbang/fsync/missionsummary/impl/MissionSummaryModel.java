@@ -2,12 +2,20 @@ package com.wolfbang.fsync.missionsummary.impl;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
+import android.util.Log;
 
 import com.lsmvp.simplemvp.BaseMvpModel;
-import com.wolfbang.fsync.ftpservice.FtpService;
+import com.wolfbang.fsync.ftpservice.FtpListDir;
+import com.wolfbang.fsync.ftpservice.FtpListFile;
+import com.wolfbang.fsync.ftpservice.FtpListFiles;
+import com.wolfbang.fsync.ftpservice.FtpResponse;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelState;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelListener;
+
+import org.apache.commons.net.ftp.CustomFtpClient;
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -57,7 +65,7 @@ public class MissionSummaryModel
     }
 
     @Override
-    public void doSomeAction(final int timePeriod) {
+    public void doSomeAction(final String path) {
 
 //        java.util.TimeZone timeZone;
 //        timeZone.toZoneId()
@@ -74,39 +82,45 @@ public class MissionSummaryModel
 
                     ModelListener listener = getListener();
 
-                    boolean isError = (timePeriod <=0);
+                    FtpResponse<FTPFile> ftpResponse1 = new FtpListDir(new CustomFtpClient(), path).execute();        //==> Doesn't return symlinks
+//                    FtpResponse<FTPFile> ftpResponse2 = new FtpListFile(new FTPClient(), path).execute();     //==> MalformedServerReplyException every time
+                    FtpResponse<FTPFile> ftpResponse3 =  new FtpListFiles(new FTPClient(), path).execute();      //==> Doesn't return dot files
+//                    FtpResponse<FTPFile> ftpResponse =  new FtpFileListService(path).execute();
 
-                    FtpService ftpService = new FtpService();
-                    ftpService.connectAndList();
-
-                    // Perform some long running synchronous request and block for the reply.
-//                    try {
-//                        Thread.sleep(isError ? 2500 : timePeriod);
-//                    } catch (InterruptedException e) {
-//                        e.printStackTrace();
-//                    }
-//                    mSomeValue = "clicks: " + ++mRequestCount;
                     mBusy.set(false);
-
                     if (listener != null) {
                         listener.onBusyChanged(false);
                     }
 
-                    if (isError) {
+                    FtpResponse<FTPFile> ftpResponse = ftpResponse1;
+
+                    if (ftpResponse.isErrored()) {
                         mModelState = ModelState.ERROR;
+                        mErrorMsg = ftpResponse.errorMessage;
                         if (listener != null) {
-                            listener.onRetrieveFailed();
+                            listener.onRetrieveFailed(mErrorMsg);
                         }
                     } else {
                         mModelState = ModelState.SUCCESS;
+                        FTPFile ftpFile = ftpResponse.getResponse();
+                        Log.d("ftpFile", ftpFile.toFormattedString());
+
                         if (listener != null) {
-                            listener.onRetrieveSomeResult(mSomeValue);
+                            listener.onRetrieveSomeResult(
+                                    ftpFile.toFormattedString()
+                            );
                         }
                     }
                 }
             });
 
         }
+    }
+
+    private String mErrorMsg;
+    @Override
+    public String getErrorMsg() {
+        return mErrorMsg;
     }
 
     @Override

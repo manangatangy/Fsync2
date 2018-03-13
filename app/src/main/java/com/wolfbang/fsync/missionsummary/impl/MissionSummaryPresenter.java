@@ -38,7 +38,7 @@ public class MissionSummaryPresenter
                     handleSuccess(view, model.getSomeValue());
                     break;
                 case ERROR:
-                    handleError(view);
+                    handleError(view, model.getErrorMsg());
                     break;
                 default:
                     throw new IllegalStateException("Unsupported model state");
@@ -49,8 +49,8 @@ public class MissionSummaryPresenter
 
     //region MissionSummaryContract.Presenter
     @Override
-    public void onSomeButtonClicked(int timePeriod) {
-        getModel().doSomeAction(timePeriod);
+    public void onSomeButtonClicked(String path) {
+        getModel().doSomeAction(path);
     }
 
     @Override
@@ -80,10 +80,10 @@ public class MissionSummaryPresenter
     }
 
     @Override
-    public void onRetrieveFailed() {
+    public void onRetrieveFailed(String errorMsg) {
         View view = getView();
         if (view != null) {
-            handleError(view);
+            handleError(view, errorMsg);
         }
     }
     //endregion
@@ -92,8 +92,8 @@ public class MissionSummaryPresenter
         view.setSomeField(resultValue);
     }
 
-    private void handleError(@NonNull View view) {
-        view.showError();
+    private void handleError(@NonNull View view, String errorMsg) {
+        view.showError(errorMsg);
     }
 
     private void handleBusyChanged(@NonNull View view, boolean busy) {

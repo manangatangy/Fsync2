@@ -17,12 +17,12 @@ public interface MissionSummaryContract extends AbstractMvpContract {
 
     interface View extends AbstractView {
         void setSomeField(String someValue);
-        void showError();
+        void showError(String errorMsg);
         void showLoadingState(boolean show);
     }
 
     interface Presenter extends AbstractPresenter<View, Model, Navigation> {
-        void onSomeButtonClicked(int timePeriod);
+        void onSomeButtonClicked(String path);
         void onBackClicked();
     }
 
@@ -31,8 +31,9 @@ public interface MissionSummaryContract extends AbstractMvpContract {
         MissionSummaryData getMissionSummaryData();
 
         String getSomeValue();
-        void doSomeAction(int timePeriod);
+        void doSomeAction(String path);
 
+        String getErrorMsg();
         boolean isBusy();
         ModelState getModelState();
     }
@@ -45,6 +46,6 @@ public interface MissionSummaryContract extends AbstractMvpContract {
     interface ModelListener extends AbstractModelListener {
         void onBusyChanged(boolean busy);
         void onRetrieveSomeResult(@NonNull String resultValue);
-        void onRetrieveFailed();
+        void onRetrieveFailed(String errorMsg);
     }
 }

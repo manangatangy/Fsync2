@@ -33,3 +33,10 @@ https://developer.android.com/guide/topics/permissions/index.html
 https://developer.android.com/guide/topics/permissions/overview.html
 https://www.captechconsulting.com/blogs/runtime-permissions-best-practices-and-how-to-gracefully-handle-permission-removal
 
+mListDir fails to parse:
+entry =
+modify=20180306103717;perm=adfrw;size=31;type=OS.unix=symlink;unique=801U66C00C8;UNIX.group=1002;UNIX.mode=0777;UNIX.owner=1002; Music
+and therefore excludes sylinks from the resultset.
+
+MLSxEntryParser#128
+The above entry is parsed as factparts = { type, OS.unix, symlink } which has three elements.

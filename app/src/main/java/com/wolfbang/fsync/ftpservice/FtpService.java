@@ -1,20 +1,25 @@
 package com.wolfbang.fsync.ftpservice;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 
 import com.wolfbang.fsync.ftpservice.model.Directory;
 import com.wolfbang.fsync.ftpservice.model.File;
 
+import org.apache.commons.net.PrintCommandListener;
+import org.apache.commons.net.ProtocolCommandEvent;
+import org.apache.commons.net.ProtocolCommandListener;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.IOException;
+import java.io.PrintWriter;
+import java.net.ConnectException;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -22,65 +27,132 @@ import java.util.Date;
  * @date 12 Mar 2018.
  */
 
-public class FtpService {
+public abstract class FtpService<ResponseT> {
 
     String server1 = "192.168.0.9";
     String server2 = "crazycat.mental";
     String server3 = "localhost";
     String server4 = "8.8.8.8";
-    String server = "8.8.8.8";
+    String server5 = "8.8.8.8";
     String user = "music";
     String password = "music";
     String dir = "/home/music";
 
-    public void connectAndList() {
-        FTPClient ftpClient = new FTPClient();
+    private ProtocolCommandListener mProtocolCommandListener = new ProtocolCommandListener() {
+        @Override
+        public void protocolCommandSent(ProtocolCommandEvent event) {
+        }
+
+        @Override
+        public void protocolReplyReceived(ProtocolCommandEvent event) {
+        }
+    };
+
+    private ProtocolCommandListener mPrintCommandListener =
+            new PrintCommandListener(new PrintWriter(System.err), true);
+
+    void enableProtocolListener(@NonNull FTPClient ftpClient) {
+        ftpClient.addProtocolCommandListener(mPrintCommandListener);
+    }
+
+    void disableProtocolListener(@NonNull FTPClient ftpClient) {
+        ftpClient.removeProtocolCommandListener(mPrintCommandListener);
+    }
+
+    @NonNull
+    protected FTPClient mFtpClient;
+
+    public FtpService(@NonNull FTPClient ftpClient) {
+        mFtpClient = ftpClient;
+    }
+
+    /**
+     * Perform a service using the FtpClient, which will have been connected
+     * and logged on, ready to use.  Once thismethod returns, the connection
+     * will be logged out and disconnected.
+     * @return the result of the service.
+     * @throws IOException
+     */
+    @NonNull
+    protected abstract FtpResponse<ResponseT> executeService() throws IOException;
+
+
+//    @NonNull
+//    public <ResponseT> FtpResponse<ResponseT> connectAndList() {
+//        return connectAnd(new PostConnectHandler() {
+//            @Override
+//            public FtpResponse<ResponseT> postConnectService(@NonNull FTPClient ftpClient) throws IOException {
+//                FTPFile[] files = ftpClient.mlistDir(".profile");
+//                for (FTPFile file : files) {
+//                    Date date = file.getTimestamp().getTime();
+//                    String dateStr = new SimpleDateFormat().format(date);
+//                    Log.d("FtpService", "File:" + file.getName() + ", Time:" + dateStr);
+//                }
+//
+//                return FtpResponse.success(null);
+//            }
+//        });
+//    }
+
+    @NonNull
+    public FtpResponse<ResponseT> execute() {
+        FtpResponse<ResponseT> ftpResponse;
         try {
-            if (InetAddress.getByName(server)== null) {
+            if (InetAddress.getByName(server1)== null) {
                 Log.d("FtpService", "server can't be named");
+                ftpResponse = FtpResponse.error(FtpError.ADDRESS_FOR_HOST_NOT_FOUND);
             } else {
-                ftpClient.setConnectTimeout(5000);
-                ftpClient.setDefaultTimeout(5000);
-                ftpClient.connect(server);
-                if (!ftpClient.login(user, password)) {
-                    Log.d("FtpService", "login failed");
+                mFtpClient.setConnectTimeout(5000);
+                mFtpClient.setDefaultTimeout(5000);
+                mFtpClient.connect(server1);
+                if (!FTPReply.isPositiveCompletion(mFtpClient.getReplyCode())) {
+                    ftpResponse = FtpResponse.error(FtpError.CONNECT_REFUSED);
                 } else {
-                    if (FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
-                        ftpClient.enterLocalPassiveMode();
-                        String systemType = ftpClient.getSystemType();
-                        String currentDir = ftpClient.printWorkingDirectory();
+                    if (!mFtpClient.login(user, password)) {
+                        Log.d("FtpService", "login failed");
+                        ftpResponse = FtpResponse.error(FtpError.LOGIN_FAILED);
+                    } else {
+                        mFtpClient.enterLocalPassiveMode();
+                        String systemType = mFtpClient.getSystemType();
+                        String currentDir = mFtpClient.printWorkingDirectory();
 
                         Log.d("FtpService", "Remote systemType:" + systemType);
                         Log.d("FtpService", "workingDirectory:" + currentDir);
 
-                        FTPFile[] files = ftpClient.mlistDir(".profile");
-                        for (FTPFile file : files) {
-                            Date date = file.getTimestamp().getTime();
-                            String dateStr = new SimpleDateFormat().format(date);
-                            Log.d("FtpService", "File:" + file.getName() + ", Time:" + dateStr);
-                        }
+                        ftpResponse = executeService();
+                        mFtpClient.logout();
                     }
-                    ftpClient.logout();
                 }
             }
         } catch (UnknownHostException uhe) {
             // "crazycat.mental":"Unable to resolve host "crazycat.mental": No address associated with hostname"
             uhe.printStackTrace();
+            ftpResponse = FtpResponse.error(FtpError.UNKNOWN_HOST, uhe.getMessage());
         } catch (FTPConnectionClosedException fcce) {
             fcce.printStackTrace();
+            ftpResponse = FtpResponse.error(FtpError.CONNECTION_CLOSED, fcce.getMessage());
+        } catch (ConnectException ce) {
+            // "localhost":ConnectException: "failed to connect to localhost/127.0.0.1 (port 21) after 5000ms: isConnected failed: ECONNREFUSED (Connection refused)"
+            ce.printStackTrace();
+            ftpResponse = FtpResponse.error(FtpError.CONNECTION_EXCEPTION, ce.getMessage());
         } catch (IOException ioe) {
             // "192.168.0.9"/"8.8.8.8":"Timed out waiting for initial connect reply"
-            // "localhost":ConnectException: "failed to connect to localhost/127.0.0.1 (port 21) after 5000ms: isConnected failed: ECONNREFUSED (Connection refused)"
             ioe.printStackTrace();
+            ftpResponse = FtpResponse.error(FtpError.IO_EXCEPTION, ioe.getMessage());
         } catch (Exception exc) {
             exc.printStackTrace();
+            ftpResponse = FtpResponse.error(FtpError.UNKNOWN_EXCEPTION, exc.getMessage());
+        } finally {
+            try {
+                mFtpClient.disconnect();
+            } catch (IOException ioe) {
+                // Swallow this exception.
+                ioe.printStackTrace();
+            }
         }
-        try {
-            ftpClient.disconnect();
-        } catch (IOException ioe) {
-            ioe.printStackTrace();
-        }
+        return ftpResponse;
     }
+
 
     private File visit(FTPClient ftpClient, String path) throws IOException{
         FTPFile ftpFile = ftpClient.mlistFile(path);

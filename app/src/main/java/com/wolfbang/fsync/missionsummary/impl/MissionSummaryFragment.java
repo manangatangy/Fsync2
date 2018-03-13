@@ -118,13 +118,13 @@ public class MissionSummaryFragment
     }
 
     @Override
-    public void showError() {
+    public void showError(final String errorMsg) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 AlertDialog.Builder builder = new AlertDialog.Builder(getContext());
                 builder.setTitle( "Error" )
-                        .setMessage("some message")
+                        .setMessage(errorMsg)
                         .setPositiveButton("OK", null)
                         .show();
             }
@@ -148,10 +148,7 @@ public class MissionSummaryFragment
 
     @OnClick(R.id.feature1_button)
     public void onButtonClick() {
-        try {
-            getPresenter().onSomeButtonClicked(Integer.parseInt(mEditText.getText().toString()));
-        } catch (NumberFormatException nfe) {
-        }
+        getPresenter().onSomeButtonClicked(mEditText.getText().toString());
     }
 
     @Override
