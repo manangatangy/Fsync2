@@ -7,11 +7,13 @@ import com.wolfbang.fsync.ftpservice.model.Directory;
 import com.wolfbang.fsync.ftpservice.model.File;
 
 import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPClientConfig;
+import org.apache.commons.net.ftp.FTPConnectionClosedException;
 import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.FTPReply;
 
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -22,7 +24,11 @@ import java.util.Date;
 
 public class FtpService {
 
-    String server = "192.168.0.9";
+    String server1 = "192.168.0.9";
+    String server2 = "crazycat.mental";
+    String server3 = "localhost";
+    String server4 = "8.8.8.8";
+    String server = "8.8.8.8";
     String user = "music";
     String password = "music";
     String dir = "/home/music";
@@ -30,25 +36,42 @@ public class FtpService {
     public void connectAndList() {
         FTPClient ftpClient = new FTPClient();
         try {
-            ftpClient.connect(server);
-            if(ftpClient.login(user, password)) {
-                if (FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
-                    ftpClient.enterLocalPassiveMode();
-                    String systemType = ftpClient.getSystemType();
-                    String currentDir = ftpClient.printWorkingDirectory();
+            if (InetAddress.getByName(server)== null) {
+                Log.d("FtpService", "server can't be named");
+            } else {
+                ftpClient.setConnectTimeout(5000);
+                ftpClient.setDefaultTimeout(5000);
+                ftpClient.connect(server);
+                if (!ftpClient.login(user, password)) {
+                    Log.d("FtpService", "login failed");
+                } else {
+                    if (FTPReply.isPositiveCompletion(ftpClient.getReplyCode())) {
+                        ftpClient.enterLocalPassiveMode();
+                        String systemType = ftpClient.getSystemType();
+                        String currentDir = ftpClient.printWorkingDirectory();
 
-                    Log.d("FtpService", "Remote systemType:" + systemType);
-                    Log.d("FtpService", "workingDirectory:" + currentDir);
+                        Log.d("FtpService", "Remote systemType:" + systemType);
+                        Log.d("FtpService", "workingDirectory:" + currentDir);
 
-                    FTPFile[] files = ftpClient.mlistDir(".profile");
-                    for (FTPFile file : files) {
-                        Date date = file.getTimestamp().getTime();
-                        String dateStr = new SimpleDateFormat().format(date);
-                        Log.d("FtpService", "File:" + file.getName() + ", Time:" + dateStr);
+                        FTPFile[] files = ftpClient.mlistDir(".profile");
+                        for (FTPFile file : files) {
+                            Date date = file.getTimestamp().getTime();
+                            String dateStr = new SimpleDateFormat().format(date);
+                            Log.d("FtpService", "File:" + file.getName() + ", Time:" + dateStr);
+                        }
                     }
+                    ftpClient.logout();
                 }
-                ftpClient.logout();
             }
+        } catch (UnknownHostException uhe) {
+            // "crazycat.mental":"Unable to resolve host "crazycat.mental": No address associated with hostname"
+            uhe.printStackTrace();
+        } catch (FTPConnectionClosedException fcce) {
+            fcce.printStackTrace();
+        } catch (IOException ioe) {
+            // "192.168.0.9"/"8.8.8.8":"Timed out waiting for initial connect reply"
+            // "localhost":ConnectException: "failed to connect to localhost/127.0.0.1 (port 21) after 5000ms: isConnected failed: ECONNREFUSED (Connection refused)"
+            ioe.printStackTrace();
         } catch (Exception exc) {
             exc.printStackTrace();
         }

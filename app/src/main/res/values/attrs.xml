@@ -1,18 +1,39 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
     <declare-styleable name="LabelValueRowView">
-        <attr name="labelWeight" format="float"/>
-        <attr name="labelSize" format="dimension"/>
-        <attr name="valueSize" format="dimension"/>
-        <attr name="labelColor" format="color"/>
-        <attr name="valueColor" format="color"/>
-        <attr name="labelText" format="reference"/>
-        <attr name="valueText" format="reference"/>
-        <attr name="labelGravity" format="enum">
+        <attr name="label" format="string"/>
+        <attr name="value" format="string"/>
+
+        <attr name="label_layout_weight" format="float"/>
+
+        <attr name="label_color" format="color"/>
+        <attr name="label_font" format="string"/>
+        <attr name="label_font_size" format="dimension"/>
+        <attr name="label_style">
+            <enum name="normal" value="0"/>
+            <enum name="bold" value="1"/>
+            <enum name="italic" value="2"/>
+            <enum name="bold_italic" value="3"/>
+        </attr>
+        <attr name="value_color" format="color"/>
+        <attr name="value_font" format="string"/>
+        <attr name="value_font_size" format="dimension"/>
+        <attr name="value_style">
+            <enum name="normal" value="0"/>
+            <enum name="bold" value="1"/>
+            <enum name="italic" value="2"/>
+            <enum name="bold_italic" value="3"/>
+        </attr>
+        <attr name="overall_padding_left" format="dimension"/>
+        <attr name="overall_padding_right" format="dimension"/>
+        <attr name="overall_padding_top" format="dimension"/>
+        <attr name="overall_padding_bottom" format="dimension"/>
+
+        <attr name="label_gravity" format="enum">
             <enum name="left" value="0"/>
             <enum name="right" value="1"/>
         </attr>
-        <attr name="valueGravity" format="enum">
+        <attr name="value_gravity" format="enum">
             <enum name="left" value="0"/>
             <enum name="right" value="1"/>
         </attr>

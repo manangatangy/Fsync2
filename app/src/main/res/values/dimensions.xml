@@ -4,4 +4,6 @@
     <dimen name="default_label_size">16sp</dimen>
     <dimen name="default_value_size">16sp</dimen>
 
+    <dimen name="default_padding">16dp</dimen>
+
 </resources>

@@ -18,7 +18,11 @@
         <com.wolfbang.shared.LabelValueRowView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:labelText="@string/app_name"
+            app:label="@string/app_name"
+            tools:value="$10,215.30"
+            app:label_font_size="20sp"
+            android:layout_margin="@dimen/default_padding"
+            app:label_style="normal"
 
             />
 
