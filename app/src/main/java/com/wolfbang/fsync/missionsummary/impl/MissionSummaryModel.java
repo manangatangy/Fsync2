@@ -13,7 +13,6 @@ import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelState;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelListener;
 
-import org.apache.commons.net.ftp.CustomFtpClient;
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
 
@@ -82,7 +81,7 @@ public class MissionSummaryModel
 
                     ModelListener listener = getListener();
 
-                    FtpResponse<FTPFile> ftpResponse1 = new FtpListDir(new CustomFtpClient(), path).execute();        //==> Doesn't return symlinks
+                    FtpResponse<FTPFile> ftpResponse1 = new FtpListDir(new FTPClient(), path).execute();        //==> Doesn't return symlinks
 //                    FtpResponse<FTPFile> ftpResponse2 = new FtpListFile(new FTPClient(), path).execute();     //==> MalformedServerReplyException every time
                     FtpResponse<FTPFile> ftpResponse3 =  new FtpListFiles(new FTPClient(), path).execute();      //==> Doesn't return dot files
 //                    FtpResponse<FTPFile> ftpResponse =  new FtpFileListService(path).execute();

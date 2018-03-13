@@ -21,6 +21,12 @@ public class CustomFtpClient extends FTPClient {
         this.__configuration = config;
     }
 
+    /**
+     * The mListDir and initiateMListParsing methods are copied verbatim from the
+     * commons-net-3.6 source. The only change to these methods is that an instance
+     * of XfsfdhshshshtthXX is passed to FTPListParseEngine() ctor instead of the
+     * previous parameter: MLSxEntryParser.getInstance().
+     */
     public FTPFile[] mlistDir(String pathname) throws IOException
     {
         FTPListParseEngine engine = initiateMListParsing( pathname);
@@ -30,7 +36,9 @@ public class CustomFtpClient extends FTPClient {
     private FTPListParseEngine initiateMListParsing(String pathname) throws IOException
     {
         Socket socket = _openDataConnection_(FTPCmd.MLSD, pathname);
-        FTPListParseEngine engine = new FTPListParseEngine(MLSxEntryParser.getInstance(), __configuration);
+        // Alter the engine.parser ...
+        FTPFileEntryParser parser = MLSxEntryParser.getInstance();
+        FTPListParseEngine engine = new FTPListParseEngine(parser, __configuration);
         if (socket == null)
         {
             return engine;
