@@ -21,6 +21,9 @@ import java.util.Date;
 
 public class FtpRecursiveList extends FtpService<File> {
 
+    public static final String DOT_FILE = ".";
+    public static final String DOT_DOT_FILE = "..";
+
     private String mRootPath;
 
     /**
@@ -46,7 +49,6 @@ public class FtpRecursiveList extends FtpService<File> {
     protected FtpResponse<File> executeService() throws IOException {
 
         FTPFile ftpRoot = mFtpClient.mlistFile(mRootPath);
-        // TODO check that "." works correctly and indicate isDirectory()
 
         if (ftpRoot == null) {
             return FtpResponse.error(FtpError.PATH_NOT_FOUND);
@@ -54,6 +56,11 @@ public class FtpRecursiveList extends FtpService<File> {
 
         File rootFile = makeFile(ftpRoot, null);
 
+        // If path is a symlinked dir, then the rootFile will be SYMLINK, since
+        // the file/directory status of symlinks cannot be determined.  However
+        // appending "/." to the same value (ie., "Music/." where Music is
+        // a symlink like 'Music -> /mnt/sda1/Music/music2-picarded') will give
+        // a DIR rootFile.
         if (rootFile instanceof Directory) {
             populateAndTraverse(mFtpClient, (Directory)rootFile);
         }
@@ -94,13 +101,13 @@ public class FtpRecursiveList extends FtpService<File> {
     @Nullable
     private File makeFile(@NonNull FTPFile ftpFile, Directory parent) {
         String name = ftpFile.getName();
-        // TODO maybe check there are no / separators
-//        Date date = ftpFile.getTimestamp().getTime();
-        Date date = null;       // TODO temp
+        // TODO maybe check there are no / separators in some weird filenames ?
+        Date date = (ftpFile.getTimestamp() == null) ? null : ftpFile.getTimestamp().getTime();
         if (ftpFile.isFile()) {
             return new File(name, parent, date);
         } else if (ftpFile.isDirectory()) {
-            if (".".equals(ftpFile.getName()) || "..".equals(ftpFile.getName())) {
+            if (DOT_FILE.equals(ftpFile.getName()) ||
+                    DOT_DOT_FILE.equals(ftpFile.getName())) {
                 return null;
             } else {
                 return new Directory(name, parent, date);

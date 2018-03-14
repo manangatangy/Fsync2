@@ -58,12 +58,20 @@ public class File implements BaseNode {
 
     @Override
     public String toString() {
-        return "'" + getName() + "', " + getNodeType().name();
+        return "'" + getName() + "', " + getDetails();
     }
 
     @Override
     public String toStringWithPath() {
-        return "'" + getPath() + "', " + getNodeType().name();
+        return "'" + getPath() + "', " + getDetails();
+    }
+
+    public String getDetails() {
+        String details = getNodeType().name();
+        if (getTimeStamp() != null) {
+            details = details + "', '" + getTimeStamp().toString() + "'";
+        }
+        return details;
     }
 
     @Override
