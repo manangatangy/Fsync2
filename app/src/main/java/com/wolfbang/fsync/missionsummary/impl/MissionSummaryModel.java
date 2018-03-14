@@ -6,15 +6,15 @@ import android.util.Log;
 
 import com.lsmvp.simplemvp.BaseMvpModel;
 import com.wolfbang.fsync.ftpservice.FtpListDir;
-import com.wolfbang.fsync.ftpservice.FtpListFile;
 import com.wolfbang.fsync.ftpservice.FtpListFiles;
 import com.wolfbang.fsync.ftpservice.FtpResponse;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
-import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelState;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelListener;
+import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelState;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.SymLinkParsingFtpClient;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -80,11 +80,13 @@ public class MissionSummaryModel
                 public void run() {
 
                     ModelListener listener = getListener();
-
-                    FtpResponse<FTPFile> ftpResponse1 = new FtpListDir(new FTPClient(), path).execute();        //==> Doesn't return symlinks
-//                    FtpResponse<FTPFile> ftpResponse2 = new FtpListFile(new FTPClient(), path).execute();     //==> MalformedServerReplyException every time
-                    FtpResponse<FTPFile> ftpResponse3 =  new FtpListFiles(new FTPClient(), path).execute();      //==> Doesn't return dot files
-//                    FtpResponse<FTPFile> ftpResponse =  new FtpFileListService(path).execute();
+//
+                    FtpResponse<FTPFile> ftpResponse1 = new FtpListDir(new FTPClient(),
+                                                                       path).execute();
+                    FtpResponse<FTPFile> ftpResponse2 = new FtpListDir(new SymLinkParsingFtpClient(),
+                                                                       path).execute();
+//                    FtpResponse<FTPFile> ftpResponse3 = new FtpListFile(new FTPClient(), path).execute();     //==> MalformedServerReplyException every time
+                    FtpResponse<FTPFile> ftpResponse4 =  new FtpListFiles(new FTPClient(), path).execute();      //==> Doesn't return dot files
 
                     mBusy.set(false);
                     if (listener != null) {
