@@ -73,12 +73,14 @@ public class FtpRecursiveList extends FtpService<File> {
         for (FTPFile ftpFile : ftpFiles) {
             File child = makeFile(ftpFile, directory);
             if (child != null) {
-                directory.children.add(child);
+                directory.getChildren().add(child);
             }
         }
 
-        for (File child : directory.children) {
-            populateAndTraverse(ftpClient, (Directory)child);
+        for (File child : directory.getChildren()) {
+            if (child instanceof Directory) {
+                populateAndTraverse(ftpClient, (Directory)child);
+            }
         }
     }
 
@@ -87,19 +89,25 @@ public class FtpRecursiveList extends FtpService<File> {
      * @param parent - may be null to indicate the root
      * @return a File (which may be a Directory or a Symlink) corresponding
      * to the specified FTPFile. No traversing/recursion is performed.
+     * Exclude "." and ".." nodes.
      */
     @Nullable
     private File makeFile(@NonNull FTPFile ftpFile, Directory parent) {
         String name = ftpFile.getName();
         // TODO maybe check there are no / separators
-        Date date = ftpFile.getTimestamp().getTime();
+//        Date date = ftpFile.getTimestamp().getTime();
+        Date date = null;       // TODO temp
         if (ftpFile.isFile()) {
-            return new File(name, date, parent);
+            return new File(name, parent, date);
         } else if (ftpFile.isDirectory()) {
-            return new Directory(name, date, parent);
+            if (".".equals(ftpFile.getName()) || "..".equals(ftpFile.getName())) {
+                return null;
+            } else {
+                return new Directory(name, parent, date);
+            }
         } else if (ftpFile.isSymbolicLink()) {
             // These will only occur if using a SymLinkParsingFtpClient
-            return new Symlink(name, date, parent);
+            return new Symlink(name, parent, date);
         } else {
             return null;        // What could it be ?
         }

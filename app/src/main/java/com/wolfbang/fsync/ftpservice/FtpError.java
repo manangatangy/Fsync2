@@ -13,10 +13,7 @@ public enum FtpError {
     CONNECTION_CLOSED,
     CONNECTION_EXCEPTION,
     IO_EXCEPTION,
-    NOT_A_DIRECTORY,
-    NOT_A_FILE,
     PATH_NOT_FOUND,
-    FILE_NOT_FOUND,     // todo deprecate
     UNKNOWN_EXCEPTION;
 
 }

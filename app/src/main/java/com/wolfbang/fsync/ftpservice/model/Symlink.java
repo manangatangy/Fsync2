@@ -1,5 +1,7 @@
 package com.wolfbang.fsync.ftpservice.model;
 
+import android.support.annotation.NonNull;
+
 import java.util.Date;
 
 /**
@@ -9,14 +11,13 @@ import java.util.Date;
 
 public class Symlink extends File {
 
-    public Symlink(String name, Date timeStamp,
-                   Directory parent) {
-        super(name, timeStamp, parent);
+    public Symlink(String name, Directory parent, Date timeStamp) {
+        super(name, parent, timeStamp);
     }
 
     @Override
-    public String getPath() {
-        return parent.getPath() + "/" + name;
+    public NodeType getNodeType() {
+        return NodeType.SYMLINK;
     }
 
 }

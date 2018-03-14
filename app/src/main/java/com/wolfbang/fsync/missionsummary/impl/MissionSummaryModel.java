@@ -7,7 +7,9 @@ import android.util.Log;
 import com.lsmvp.simplemvp.BaseMvpModel;
 import com.wolfbang.fsync.ftpservice.FtpListDir;
 import com.wolfbang.fsync.ftpservice.FtpListFile;
+import com.wolfbang.fsync.ftpservice.FtpRecursiveList;
 import com.wolfbang.fsync.ftpservice.FtpResponse;
+import com.wolfbang.fsync.ftpservice.model.File;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelListener;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelState;
@@ -80,59 +82,28 @@ public class MissionSummaryModel
                 public void run() {
 
                     ModelListener listener = getListener();
-
-                    for (String p : new String[]{
-//                            null,
-//                            "",
-//                            "xyzzy",
-//                            "someDir",
-//                            ".profile",
-//                            ".cache",
-//                            "/home/music/xxx",
-//                            "/home/music/someDir",
-                            "/home/music/Music",
-                            "/home/music/someDir/sss",
-//                            "..",
-//                            ".",
-                    }) {
-                        new FtpListFile(new SymLinkParsingFtpClient(), p)
-                                .setShowProtocolTrace(true)
-                                .execute();
-                    }
-//
-//                    FtpResponse<FTPFile[]> ftpResponse1
-//                            = new FtpListDir(new FTPClient(), path).execute();
-                    FtpResponse<FTPFile[]> ftpResponse2 = new FtpListDir(new SymLinkParsingFtpClient(), "xewe")
+                    FtpResponse<File> ftpResponse = new FtpRecursiveList(new SymLinkParsingFtpClient(), path)
                             .setShowProtocolTrace(true)
                             .execute();
-
-
-//                    FtpResponse<FTPFile> ftpResponse3 = new FtpListFile(new FTPClient(), path).execute();     //==> MalformedServerReplyException every time
-                    FtpResponse<FTPFile> ftpResponse4
-                            =  new FtpListFile(new SymLinkParsingFtpClient(), "hfkh").execute();
 
                     mBusy.set(false);
                     if (listener != null) {
                         listener.onBusyChanged(false);
                     }
 
-                    FtpResponse<FTPFile[]> ftpResponse = ftpResponse2;
-
                     if (ftpResponse.isErrored()) {
                         mModelState = ModelState.ERROR;
-                        mErrorMsg = ftpResponse.errorMessage;
+                        mErrorMsg = ftpResponse.getErrorText();
                         if (listener != null) {
                             listener.onRetrieveFailed(mErrorMsg);
                         }
                     } else {
                         mModelState = ModelState.SUCCESS;
-                        FTPFile ftpFile = ftpResponse.getResponse()[0];
-                        Log.d("ftpFile", ftpFile.toFormattedString());
-
+                        File file = ftpResponse.getResponse();
+                        Log.d("ftpFile", file.getName());
+                        file.dump("mission");
                         if (listener != null) {
-                            listener.onRetrieveSomeResult(
-                                    ftpFile.toFormattedString()
-                            );
+                            listener.onRetrieveSomeResult(file.getName());
                         }
                     }
                 }
@@ -140,6 +111,11 @@ public class MissionSummaryModel
 
         }
     }
+
+    public void dump(File file) {
+
+    }
+
 
     private String mErrorMsg;
     @Override

@@ -1,5 +1,7 @@
 package com.wolfbang.fsync.ftpservice.model;
 
+import android.support.annotation.NonNull;
+
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -11,16 +13,37 @@ import java.util.List;
 
 public class Directory extends File {
 
-    public List<File> children = new ArrayList<>();
+    private List<File> mChildren = new ArrayList<>();
 
-    public Directory(String name, Date timeStamp,
-                     Directory parent) {
-        super(name, timeStamp, parent);
+    public Directory(String name, @NonNull Directory parent, Date timeStamp) {
+        super(name, parent, timeStamp);
     }
 
     @Override
-    public String getPath() {
-        return parent.getPath() + "/" + name;
+    public NodeType getNodeType() {
+        return NodeType.DIR;
     }
 
+    @NonNull
+    public List<File> getChildren() {
+        return mChildren;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ", [" + getChildren().size() + " children]";
+    }
+
+    @Override
+    public String toStringWithPath() {
+        return super.toStringWithPath() + ", [" + getChildren().size() + " children]";
+    }
+
+    @Override
+    public void dump(String tag) {
+        super.dump(tag);
+        for (File child : getChildren()) {
+            child.dump(tag);
+        }
+    }
 }

@@ -1,5 +1,7 @@
 package com.wolfbang.fsync.ftpservice.model;
 
+import android.util.Log;
+
 import java.util.Date;
 
 /**
@@ -7,32 +9,66 @@ import java.util.Date;
  * @date 12 Mar 2018.
  */
 
-public class File {
+public class File implements BaseNode {
 
-    public final String name;
-    public final Date timeStamp;
-    public final Directory parent;
+    private final String mName;
+    private final Directory mParent;
+    private final Date mTimeStamp;
 
     /**
      * @param name should not include path separators.
-     * @param timeStamp
      * @param parent null to indicate root File
+     * @param timeStamp
      */
-    public File(String name, Date timeStamp,
-                Directory parent) {
-        this.name = name;
-        this.timeStamp = timeStamp;
-        this.parent = parent;
+    public File(String name, Directory parent, Date timeStamp) {
+        mName = name;
+        mParent = parent;
+        mTimeStamp = timeStamp;
     }
 
-    public boolean isRoot() {
-        return (parent == null);
+    @Override
+    public NodeType getNodeType() {
+        return NodeType.FILE;
     }
 
-    /**
-     * @return path including all ancestor's paths, separated by /
-     */
+    @Override
+    public String getName() {
+        return mName;
+    }
+
+    @Override
+    public Directory getParent() {
+        return mParent;
+    }
+
+    @Override
+    public Date getTimeStamp() {
+        return mTimeStamp;
+    }
+
+    @Override
     public String getPath() {
-        return name;
+        return (getParent() != null ? (getParent().getPath() + "/") : "") + getName();
     }
+
+    @Override
+    public boolean isRoot() {
+        return (getParent() == null);
+    }
+
+    @Override
+    public String toString() {
+        return "'" + getName() + "', " + getNodeType().name();
+    }
+
+    @Override
+    public String toStringWithPath() {
+        return "'" + getPath() + "', " + getNodeType().name();
+    }
+
+    @Override
+    public void dump(String tag) {
+        Log.d(tag, toStringWithPath());
+    }
+
 }

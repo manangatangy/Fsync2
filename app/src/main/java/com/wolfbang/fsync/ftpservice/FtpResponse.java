@@ -42,4 +42,11 @@ public class FtpResponse<ResponseT> {
     public FtpError getFtpError() {
         return ftpError;
     }
+
+    public String getErrorText() {
+        if (ftpError == null) {
+            return null;
+        }
+        return ftpError.name() + (errorMessage == null ? "" : (":" + errorMessage));
+    }
 }

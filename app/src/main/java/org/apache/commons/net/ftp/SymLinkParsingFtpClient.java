@@ -69,6 +69,7 @@ public class SymLinkParsingFtpClient extends FTPClient {
             String reply = getReplyStrings()[1];
             /* check the response makes sense.
              * Fact(s) can be absent, so at least 3 chars are needed.
+             * TODO deosnt seem to handle date. "250-modify=hkhgkhkh" expects "modify" ?
              */
             if (reply.length() < 3) {
                 throw new MalformedServerReplyException("Invalid server reply (MLST): '" + reply + "'");
