@@ -15,23 +15,33 @@ import java.io.IOException;
 
 public class FtpListFile extends FtpService<FTPFile> {
 
-    private String mDirName;
+    private String mPath;
 
-    public FtpListFile(@NonNull FTPClient ftpClient, String dirName) {
+    /**
+     * The commons-net-3.6 version of {@link FTPClient#mlistFile(String)} fails with
+     * MalformedServerReplyException on every call, even if setStrictReplyParsing is set.
+     * Therefore please pass {@link org.apache.commons.net.ftp.SymLinkParsingFtpClient}
+     * if you want to use this class successfully.
+     */
+    public FtpListFile(@NonNull FTPClient ftpClient, String path) {
         super(ftpClient);
-        mDirName = dirName;
+        mPath = path;
     }
 
     /**
-     * Fails with MalformedServerReplyException on every call, even when
-     * setStrictReplyParsing is set.  It might be an idea to go back to v 3.5
-     * Although it hardly seems worth it since this method doesn't help anyway.
+     * @return an FTPFile entry corresponding to the path which
+     * should be a file. null or empty string causes FILE_NOT_FOUND error.
+     * If the path exists but is not a file, then NOT_A_FILE
+     * error is returned.
      */
     @Override
     @NonNull
     protected FtpResponse<FTPFile> executeService() throws IOException {
 //        ftpClient.setStrictReplyParsing(true);
-        FTPFile file = mFtpClient.mlistFile(mDirName);
+        FTPFile file = mFtpClient.mlistFile(mPath);
+        // TODO check that "." works correctly and returns NOT_A_FILE
+
+        // todo handle NOT_A_FILE
         if (file == null) {
             return FtpResponse.error(FtpError.FILE_NOT_FOUND);
         } else {

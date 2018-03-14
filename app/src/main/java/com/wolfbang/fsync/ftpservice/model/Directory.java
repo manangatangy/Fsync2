@@ -13,8 +13,14 @@ public class Directory extends File {
 
     public List<File> children = new ArrayList<>();
 
-    public Directory(String name, Date timeStamp) {
-        super(name, timeStamp);
+    public Directory(String name, Date timeStamp,
+                     Directory parent) {
+        super(name, timeStamp, parent);
+    }
+
+    @Override
+    public String getPath() {
+        return parent.getPath() + "/" + name;
     }
 
 }

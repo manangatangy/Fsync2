@@ -1,0 +1,105 @@
+package com.wolfbang.fsync.ftpservice;
+
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
+
+import com.wolfbang.fsync.ftpservice.model.Directory;
+import com.wolfbang.fsync.ftpservice.model.File;
+
+import org.apache.commons.net.ftp.FTPClient;
+import org.apache.commons.net.ftp.FTPFile;
+
+import java.io.IOException;
+import java.util.Date;
+
+/**
+ * @author david
+ * @date 14 Mar 2018.
+ */
+
+public class FtpRecursiveList extends FtpService<File> {
+
+    private String mRootPath;
+
+    /**
+     * The commons-net-3.6 version of {@link FTPClient#mlistDir(String)} returns
+     * dot-prefixed entries, but doesn't return symlinks in the result array.
+     * Therefore please pass {@link org.apache.commons.net.ftp.SymLinkParsingFtpClient}
+     * if you want to see symlinks in the result.
+     * Note that the default FTPClient will still correctly handle the case where
+     * the pathname parameter is itself a symlink directory, in which case it returns
+     * the contents of that directory.
+     */
+    public FtpRecursiveList(@NonNull FTPClient ftpClient, String rootPath) {
+        super(ftpClient);
+        mRootPath = rootPath;
+    }
+
+    /**
+     * @return array of File, corresponding to the path which may be a directory
+     * or a file. Do not pass null or empty string; use "." to specify the current
+     * directory.  Returns FtpError.PATH_NOT_FOUND if path does not exist,
+     */
+    @NonNull
+    @Override
+    protected FtpResponse<File> executeService() throws IOException {
+
+        FTPFile ftpRoot = mFtpClient.mlistFile(mRootPath);
+        // TODO check that "." works correctly and indicate isDirectory()
+
+        if (ftpRoot == null) {
+            return FtpResponse.error(FtpError.PATH_NOT_FOUND);
+        }
+
+        File rootFile = makeFile(ftpRoot, null);
+
+        if (rootFile instanceof Directory) {
+            populateAndTraverse(mFtpClient, (Directory)rootFile);
+        }
+        return FtpResponse.success(rootFile);
+    }
+
+    private void populateAndTraverse(FTPClient ftpClient,
+                                     Directory directory) throws IOException {
+
+        // Fetch a list of the directory's children and iterate over it
+        // twice; first to add new Files to the Directory and then second
+        // to recursively traverse into any of those children which are also
+        // a directory. This approach means FTPFile instances will not be
+        // existent for the entire tree traversal.
+        // TODO check that mListDir works for paths containing separators
+        FTPFile[] ftpFiles = ftpClient.mlistDir(directory.getPath());
+
+        for (FTPFile ftpFile : ftpFiles) {
+            File child = makeFile(ftpFile, directory);
+            if (child != null) {
+                directory.children.add(child);
+            }
+        }
+
+        for (File child : directory.children) {
+            populateAndTraverse(ftpClient, (Directory)child);
+        }
+    }
+
+    /**
+     * @param ftpFile
+     * @param parent - may be null to indicate the root
+     * @return a File (which may be a Directory) corresponding
+     * to the specified FTPFile. No traversing/recursion is performed.
+     */
+    @Nullable
+    private File makeFile(@NonNull FTPFile ftpFile, Directory parent) {
+        String name = ftpFile.getName();
+        // TODO maybe check there are no / separators
+        Date date = ftpFile.getTimestamp().getTime();
+        if (ftpFile.isFile()) {
+            return new File(name, date, parent);
+        } else if (ftpFile.isDirectory()) {
+            return new Directory(name, date, parent);
+        } else {
+            return null;        // What could it be ?
+        }
+    }
+
+}

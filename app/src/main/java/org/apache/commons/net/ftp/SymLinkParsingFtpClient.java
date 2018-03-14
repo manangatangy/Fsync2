@@ -16,8 +16,8 @@ import java.net.Socket;
 /**
  * This class fixes two bugs with the baseclass {@link FTPClient} in the
  * commons-net-3.6 source;
- * 1. {@link #mlistDir(String)} fails to detect unix symlinks
- * 2. {@link #mlistFile(String)} always throws {@link MalformedServerReplyException}
+ * 1. {@link #mlistFile(String)} always throws {@link MalformedServerReplyException}
+ * 2. {@link #mlistDir(String)} fails to detect unix symlinks
  */
 public class SymLinkParsingFtpClient extends FTPClient {
 
@@ -30,14 +30,39 @@ public class SymLinkParsingFtpClient extends FTPClient {
     }
 
     /**
+     * This is identical to base class implementation {@link FTPClient#mlistDir(String)}
+     * in the commons-net-3.6 source, except that this version doesn't throw an
+     * MalformedServerReplyException if there is no leading space.  In fact, the
+     * base class version insistence on a leading space contradicts the comment on
+     * the first line of {@link MLSxEntryParser#parseFTPEntry(String)} which states:
+     * "leading space means no facts are present". lol
+     * Therefore this version simply omits to check for leading space.
+     */
+    public FTPFile mlistFile(String pathname) throws IOException {
+        boolean success = FTPReply.isPositiveCompletion(sendCommand(FTPCmd.MLST, pathname));
+        if (success){
+            String reply = getReplyStrings()[1];
+            /* check the response makes sense.
+             * Fact(s) can be absent, so at least 3 chars are needed.
+             */
+            if (reply.length() < 3) {
+                throw new MalformedServerReplyException("Invalid server reply (MLST): '" + reply + "'");
+            }
+            String entry = reply;
+            return MLSxEntryParser.parseEntry(entry);
+        } else {
+            return null;
+        }
+    }
+
+    /**
      * This is identical to baseclass implementation {@link FTPClient#mlistDir(String)}
      * in the commons-net-3.6 source.
      * However because {@link FTPClient#initiateMListParsing(String)} is private, it
      * cannot be override'd (if it was protected, then this method would not be
      * necessary sigh).
      */
-    public FTPFile[] mlistDir(String pathname) throws IOException
-    {
+    public FTPFile[] mlistDir(String pathname) throws IOException {
         FTPListParseEngine engine = initiateMListParsingWithSymLinkDetection( pathname);
         return engine.getFiles();
     }
@@ -47,10 +72,12 @@ public class SymLinkParsingFtpClient extends FTPClient {
      * baseclass {@link MLSxEntryParser}. That is the only change from the
      * original implementation; {@link FTPClient#initiateMListParsing(String)} in
      * the commons-net-3.6 source.
+     * If {@link FTPClient#initiateMListParsing(String)} were protected and not private,
+     * then it could be overridden by this method, and I would not need to implement
+     * {@link SymLinkParsingFtpClient#mlistDir(String)}.
      */
     private FTPListParseEngine initiateMListParsingWithSymLinkDetection(String pathname)
-            throws IOException
-    {
+            throws IOException {
         Socket socket = _openDataConnection_(FTPCmd.MLSD, pathname);
         // Alter the engine.parser to use a better implementation.
         FTPFileEntryParser parser = SymLinkParsingMLSxEntryParser.getInstance();

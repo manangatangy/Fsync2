@@ -6,7 +6,7 @@ import android.util.Log;
 
 import com.lsmvp.simplemvp.BaseMvpModel;
 import com.wolfbang.fsync.ftpservice.FtpListDir;
-import com.wolfbang.fsync.ftpservice.FtpListFiles;
+import com.wolfbang.fsync.ftpservice.FtpListFile;
 import com.wolfbang.fsync.ftpservice.FtpResponse;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelListener;
@@ -81,19 +81,20 @@ public class MissionSummaryModel
 
                     ModelListener listener = getListener();
 //
-                    FtpResponse<FTPFile> ftpResponse1 = new FtpListDir(new FTPClient(),
-                                                                       path).execute();
-                    FtpResponse<FTPFile> ftpResponse2 = new FtpListDir(new SymLinkParsingFtpClient(),
-                                                                       path).execute();
+                    FtpResponse<FTPFile[]> ftpResponse1
+                            = new FtpListDir(new FTPClient(), path).execute();
+                    FtpResponse<FTPFile[]> ftpResponse2
+                            = new FtpListDir(new SymLinkParsingFtpClient(), path).execute();
 //                    FtpResponse<FTPFile> ftpResponse3 = new FtpListFile(new FTPClient(), path).execute();     //==> MalformedServerReplyException every time
-                    FtpResponse<FTPFile> ftpResponse4 =  new FtpListFiles(new FTPClient(), path).execute();      //==> Doesn't return dot files
+                    FtpResponse<FTPFile> ftpResponse4
+                            =  new FtpListFile(new SymLinkParsingFtpClient(), path).execute();
 
                     mBusy.set(false);
                     if (listener != null) {
                         listener.onBusyChanged(false);
                     }
 
-                    FtpResponse<FTPFile> ftpResponse = ftpResponse1;
+                    FtpResponse<FTPFile[]> ftpResponse = ftpResponse1;
 
                     if (ftpResponse.isErrored()) {
                         mModelState = ModelState.ERROR;
@@ -103,7 +104,7 @@ public class MissionSummaryModel
                         }
                     } else {
                         mModelState = ModelState.SUCCESS;
-                        FTPFile ftpFile = ftpResponse.getResponse();
+                        FTPFile ftpFile = ftpResponse.getResponse()[0];
                         Log.d("ftpFile", ftpFile.toFormattedString());
 
                         if (listener != null) {

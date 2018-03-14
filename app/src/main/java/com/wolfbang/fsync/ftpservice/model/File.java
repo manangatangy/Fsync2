@@ -8,11 +8,31 @@ import java.util.Date;
  */
 
 public class File {
+
     public final String name;
     public final Date timeStamp;
+    public final Directory parent;
 
-    public File(String name, Date timeStamp) {
+    /**
+     * @param name should not include path separators.
+     * @param timeStamp
+     * @param parent null to indicate root File
+     */
+    public File(String name, Date timeStamp,
+                Directory parent) {
         this.name = name;
         this.timeStamp = timeStamp;
+        this.parent = parent;
+    }
+
+    public boolean isRoot() {
+        return (parent == null);
+    }
+
+    /**
+     * @return path including all ancestor's paths, separated by /
+     */
+    public String getPath() {
+        return name;
     }
 }
