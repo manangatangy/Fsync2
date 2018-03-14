@@ -29,10 +29,12 @@ public class FtpListFile extends FtpService<FTPFile> {
     }
 
     /**
-     * @return an FTPFile entry corresponding to the path which
-     * should be a file. null or empty string causes FILE_NOT_FOUND error.
-     * If the path exists but is not a file, then NOT_A_FILE
-     * error is returned.
+     * @return an FTPFile entry corresponding to the path which should be a file or a
+     * directory (which returns a single result for that directory, not its contents).
+     * null or empty string is treated as working-directory.
+     * If the path does not exists then PATH_NOT_FOUND is returned.
+     * Refer to {@link org.apache.commons.net.ftp.SymLinkParsingFtpClient} for details
+     * of the result entries.
      */
     @Override
     @NonNull
@@ -40,14 +42,16 @@ public class FtpListFile extends FtpService<FTPFile> {
 //        ftpClient.setStrictReplyParsing(true);
         FTPFile file = mFtpClient.mlistFile(mPath);
         // TODO check that "." works correctly and returns NOT_A_FILE
+        Log.d("ftp", "---------[" + mPath + "]--------");
 
         // todo handle NOT_A_FILE
         if (file == null) {
-            return FtpResponse.error(FtpError.FILE_NOT_FOUND);
+            return FtpResponse.error(FtpError.PATH_NOT_FOUND);
         } else {
-            Log.d("ftp", "-----------------");
-            Log.d("ftp", "name:" + file.getName());
-            Log.d("ftp", "isSymbolicLink:" + file.isSymbolicLink());
+            Log.d("ftp", "name:" + file.getName()
+                    + "  isSymbolicLink:" + file.isSymbolicLink()
+                    + "  isDirectory:" + file.isDirectory()
+                    + "  isFile:" + file.isFile());
             Log.d("ftp", "formatted:" + file.toFormattedString());
             return FtpResponse.success(file);
         }

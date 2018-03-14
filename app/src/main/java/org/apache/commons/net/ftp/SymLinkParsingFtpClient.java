@@ -18,6 +18,22 @@ import java.net.Socket;
  * commons-net-3.6 source;
  * 1. {@link #mlistFile(String)} always throws {@link MalformedServerReplyException}
  * 2. {@link #mlistDir(String)} fails to detect unix symlinks
+ *
+ * Note that this class cannot determine the file/directory status of symlinks,
+ * although mListDir(symLinkedDir) will return the contents of the dir even though
+ * it is a symLinked path.
+ *
+ * FTPFile results (single or multi)
+ * ---------------------------------
+ * "."              ==> file=N,dir=Y,symlink=N
+ * ".."             ==> file=N,dir=Y,symlink=N
+ *
+ * "symLinkFile"    ==> file=N,dir=N,symlink=Y
+ * "symLinkDir"     ==> file=N,dir=N,symlink=Y
+ *
+ * "normalFile"     ==> file=Y,dir=N,symlink=N
+ * "normalDir"      ==> file=N,dir=Y,symlink=N
+ *
  */
 public class SymLinkParsingFtpClient extends FTPClient {
 
@@ -37,6 +53,15 @@ public class SymLinkParsingFtpClient extends FTPClient {
      * the first line of {@link MLSxEntryParser#parseFTPEntry(String)} which states:
      * "leading space means no facts are present". lol
      * Therefore this version simply omits to check for leading space.
+     *
+     * path-parameter
+     * --------------
+     * 'nonExistent'    ==> PATH_NOT_FOUND
+     * 'existentFile'   ==> single-result for this path
+     * 'existentDir'    ==> single-result for this path [even if path is a symLinkedDir]
+     * ''               ==> same result as for "working-dir"
+     * null             ==> same result as for "working-dir"
+     *
      */
     public FTPFile mlistFile(String pathname) throws IOException {
         boolean success = FTPReply.isPositiveCompletion(sendCommand(FTPCmd.MLST, pathname));
@@ -49,7 +74,7 @@ public class SymLinkParsingFtpClient extends FTPClient {
                 throw new MalformedServerReplyException("Invalid server reply (MLST): '" + reply + "'");
             }
             String entry = reply;
-            return MLSxEntryParser.parseEntry(entry);
+            return SymLinkParsingMLSxEntryParser.parseEntry(entry);
         } else {
             return null;
         }
@@ -61,6 +86,15 @@ public class SymLinkParsingFtpClient extends FTPClient {
      * However because {@link FTPClient#initiateMListParsing(String)} is private, it
      * cannot be override'd (if it was protected, then this method would not be
      * necessary sigh).
+     *
+     * path-parameter
+     * --------------
+     * 'nonExistent'    ==> PATH_NOT_FOUND
+     * 'existentFile'   ==> PATH_NOT_FOUND
+     * 'existentDir'    ==> multi-result for this path
+     * ''               ==> same result as for "working-dir"
+     * null             ==> same result as for "working-dir"
+     *
      */
     public FTPFile[] mlistDir(String pathname) throws IOException {
         FTPListParseEngine engine = initiateMListParsingWithSymLinkDetection( pathname);

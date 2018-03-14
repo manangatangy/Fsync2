@@ -13,6 +13,7 @@ import java.io.IOException;
  * @date 13 Mar 2018.
  */
 
+@Deprecated
 public class FtpListFiles extends FtpService<FTPFile> {
 
     private String mPathname;

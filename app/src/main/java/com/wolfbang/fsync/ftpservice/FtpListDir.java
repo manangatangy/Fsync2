@@ -33,22 +33,25 @@ public class FtpListDir extends FtpService<FTPFile[]> {
 
     /**
      * @return array of FTPFile entries, corresponding to the path which
-     * should be a directory. null or empty string means the current directory.
-     * If the path exists but is not a directory, then NOT_A_DIRECTORY
-     * error is returned.
+     * should be a directory.
+     * null or empty string is treated as working-directory.
+     * If the path doesn't exist, or is not a directory, then  PATH_NOT_FOUND is returned.
+     * Refer to {@link org.apache.commons.net.ftp.SymLinkParsingFtpClient} for details
+     * of the result entries.
      */
     @Override
     @NonNull
     protected FtpResponse<FTPFile[]> executeService() throws IOException {
-        // TODO check for dirName is a file  and return NOT_A_DIRECTORY
         FTPFile[] files = mFtpClient.mlistDir(mPath);
+        Log.d("ftp", "---------[" + mPath + "]--------");
         if (files == null) {
-            return FtpResponse.error(FtpError.PATH_NOT_FOUND);
+            return FtpResponse.error(FtpError.NOT_A_DIRECTORY);
         } else {
-            Log.d("ftp", "-----------------");
             for (FTPFile file : files) {
-                Log.d("ftp", "name:" + file.getName());
-                Log.d("ftp", "isSymbolicLink:" + file.isSymbolicLink());
+                Log.d("ftp", "name:" + file.getName()
+                        + "  isSymbolicLink:" + file.isSymbolicLink()
+                        + "  isDirectory:" + file.isDirectory()
+                        + "  isFile:" + file.isFile());
                 Log.d("ftp", "formatted:" + file.toFormattedString());
             }
             return FtpResponse.success(files);

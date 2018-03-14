@@ -80,21 +80,43 @@ public class MissionSummaryModel
                 public void run() {
 
                     ModelListener listener = getListener();
+
+                    for (String p : new String[]{
+//                            null,
+//                            "",
+//                            "xyzzy",
+//                            "someDir",
+//                            ".profile",
+//                            ".cache",
+//                            "/home/music/xxx",
+//                            "/home/music/someDir",
+                            "/home/music/Music",
+                            "/home/music/someDir/sss",
+//                            "..",
+//                            ".",
+                    }) {
+                        new FtpListFile(new SymLinkParsingFtpClient(), p)
+                                .setShowProtocolTrace(true)
+                                .execute();
+                    }
 //
-                    FtpResponse<FTPFile[]> ftpResponse1
-                            = new FtpListDir(new FTPClient(), path).execute();
-                    FtpResponse<FTPFile[]> ftpResponse2
-                            = new FtpListDir(new SymLinkParsingFtpClient(), path).execute();
+//                    FtpResponse<FTPFile[]> ftpResponse1
+//                            = new FtpListDir(new FTPClient(), path).execute();
+                    FtpResponse<FTPFile[]> ftpResponse2 = new FtpListDir(new SymLinkParsingFtpClient(), "xewe")
+                            .setShowProtocolTrace(true)
+                            .execute();
+
+
 //                    FtpResponse<FTPFile> ftpResponse3 = new FtpListFile(new FTPClient(), path).execute();     //==> MalformedServerReplyException every time
                     FtpResponse<FTPFile> ftpResponse4
-                            =  new FtpListFile(new SymLinkParsingFtpClient(), path).execute();
+                            =  new FtpListFile(new SymLinkParsingFtpClient(), "hfkh").execute();
 
                     mBusy.set(false);
                     if (listener != null) {
                         listener.onBusyChanged(false);
                     }
 
-                    FtpResponse<FTPFile[]> ftpResponse = ftpResponse1;
+                    FtpResponse<FTPFile[]> ftpResponse = ftpResponse2;
 
                     if (ftpResponse.isErrored()) {
                         mModelState = ModelState.ERROR;

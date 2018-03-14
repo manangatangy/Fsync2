@@ -43,8 +43,9 @@ public abstract class FtpService<ResponseT> {
         mFtpClient = ftpClient;
     }
 
-    public void setShowProtocolTrace(boolean showProtocolTrace) {
+    public FtpService<ResponseT> setShowProtocolTrace(boolean showProtocolTrace) {
         mShowProtocolTrace = showProtocolTrace;
+        return this;
     }
 
     /**

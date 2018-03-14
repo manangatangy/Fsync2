@@ -5,9 +5,11 @@ import android.support.annotation.Nullable;
 
 import com.wolfbang.fsync.ftpservice.model.Directory;
 import com.wolfbang.fsync.ftpservice.model.File;
+import com.wolfbang.fsync.ftpservice.model.Symlink;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
+import org.apache.commons.net.ftp.SymLinkParsingFtpClient;
 
 import java.io.IOException;
 import java.util.Date;
@@ -22,13 +24,12 @@ public class FtpRecursiveList extends FtpService<File> {
     private String mRootPath;
 
     /**
-     * The commons-net-3.6 version of {@link FTPClient#mlistDir(String)} returns
-     * dot-prefixed entries, but doesn't return symlinks in the result array.
-     * Therefore please pass {@link org.apache.commons.net.ftp.SymLinkParsingFtpClient}
-     * if you want to see symlinks in the result.
-     * Note that the default FTPClient will still correctly handle the case where
-     * the pathname parameter is itself a symlink directory, in which case it returns
-     * the contents of that directory.
+     * The commons-net-3.6 version of {@link FTPClient#mlistDir(String)} doesn't return
+     * symlinks in the result array, will still correctly handle the case where the
+     * pathname parameter is itself a symlink directory, in which case it is treated as
+     * a normal directory.
+     * If you wish to see Syslink s in the result, then pass {@link SymLinkParsingFtpClient}
+     * (which is able to parse symlinks correctly).
      */
     public FtpRecursiveList(@NonNull FTPClient ftpClient, String rootPath) {
         super(ftpClient);
@@ -67,7 +68,6 @@ public class FtpRecursiveList extends FtpService<File> {
         // to recursively traverse into any of those children which are also
         // a directory. This approach means FTPFile instances will not be
         // existent for the entire tree traversal.
-        // TODO check that mListDir works for paths containing separators
         FTPFile[] ftpFiles = ftpClient.mlistDir(directory.getPath());
 
         for (FTPFile ftpFile : ftpFiles) {
@@ -85,7 +85,7 @@ public class FtpRecursiveList extends FtpService<File> {
     /**
      * @param ftpFile
      * @param parent - may be null to indicate the root
-     * @return a File (which may be a Directory) corresponding
+     * @return a File (which may be a Directory or a Symlink) corresponding
      * to the specified FTPFile. No traversing/recursion is performed.
      */
     @Nullable
@@ -97,6 +97,9 @@ public class FtpRecursiveList extends FtpService<File> {
             return new File(name, date, parent);
         } else if (ftpFile.isDirectory()) {
             return new Directory(name, date, parent);
+        } else if (ftpFile.isSymbolicLink()) {
+            // These will only occur if using a SymLinkParsingFtpClient
+            return new Symlink(name, date, parent);
         } else {
             return null;        // What could it be ?
         }
