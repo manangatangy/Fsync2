@@ -5,17 +5,13 @@ import android.support.annotation.VisibleForTesting;
 import android.util.Log;
 
 import com.lsmvp.simplemvp.BaseMvpModel;
-import com.wolfbang.fsync.ftpservice.FtpListDir;
-import com.wolfbang.fsync.ftpservice.FtpListFile;
 import com.wolfbang.fsync.ftpservice.FtpRecursiveList;
 import com.wolfbang.fsync.ftpservice.FtpResponse;
-import com.wolfbang.fsync.ftpservice.model.File;
+import com.wolfbang.fsync.ftpservice.model.FileNode;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelListener;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelState;
 
-import org.apache.commons.net.ftp.FTPClient;
-import org.apache.commons.net.ftp.FTPFile;
 import org.apache.commons.net.ftp.SymLinkParsingFtpClient;
 
 import java.util.concurrent.Executor;
@@ -82,7 +78,7 @@ public class MissionSummaryModel
                 public void run() {
 
                     ModelListener listener = getListener();
-                    FtpResponse<File> ftpResponse = new FtpRecursiveList(new SymLinkParsingFtpClient(), path)
+                    FtpResponse<FileNode> ftpResponse = new FtpRecursiveList(new SymLinkParsingFtpClient(), path)
                             .setShowProtocolTrace(true)
                             .execute();
 
@@ -99,11 +95,11 @@ public class MissionSummaryModel
                         }
                     } else {
                         mModelState = ModelState.SUCCESS;
-                        File file = ftpResponse.getResponse();
-                        Log.d("ftpFile", file.getName());
-                        file.dump("mission");
+                        FileNode fileNode = ftpResponse.getResponse();
+                        Log.d("ftpFile", fileNode.getName());
+                        fileNode.dump("mission");
                         if (listener != null) {
-                            listener.onRetrieveSomeResult(file.getName());
+                            listener.onRetrieveSomeResult(fileNode.getName());
                         }
                     }
                 }
@@ -112,7 +108,7 @@ public class MissionSummaryModel
         }
     }
 
-    public void dump(File file) {
+    public void dump(FileNode fileNode) {
 
     }
 

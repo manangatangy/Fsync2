@@ -3,9 +3,9 @@ package com.wolfbang.fsync.ftpservice;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.wolfbang.fsync.ftpservice.model.Directory;
-import com.wolfbang.fsync.ftpservice.model.File;
-import com.wolfbang.fsync.ftpservice.model.Symlink;
+import com.wolfbang.fsync.ftpservice.model.DirNode;
+import com.wolfbang.fsync.ftpservice.model.FileNode;
+import com.wolfbang.fsync.ftpservice.model.SymlinkNode;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -19,7 +19,7 @@ import java.util.Date;
  * @date 14 Mar 2018.
  */
 
-public class FtpRecursiveList extends FtpService<File> {
+public class FtpRecursiveList extends FtpService<FileNode> {
 
     public static final String DOT_FILE = ".";
     public static final String DOT_DOT_FILE = "..";
@@ -46,7 +46,7 @@ public class FtpRecursiveList extends FtpService<File> {
      */
     @NonNull
     @Override
-    protected FtpResponse<File> executeService() throws IOException {
+    protected FtpResponse<FileNode> executeService() throws IOException {
 
         FTPFile ftpRoot = mFtpClient.mlistFile(mRootPath);
 
@@ -54,39 +54,39 @@ public class FtpRecursiveList extends FtpService<File> {
             return FtpResponse.error(FtpError.PATH_NOT_FOUND);
         }
 
-        File rootFile = makeFile(ftpRoot, null);
+        FileNode rootFileNode = makeFile(ftpRoot, null);
 
         // If path is a symlinked dir, then the rootFile will be SYMLINK, since
         // the file/directory status of symlinks cannot be determined.  However
         // appending "/." to the same value (ie., "Music/." where Music is
         // a symlink like 'Music -> /mnt/sda1/Music/music2-picarded') will give
         // a DIR rootFile.
-        if (rootFile instanceof Directory) {
-            populateAndTraverse(mFtpClient, (Directory)rootFile);
+        if (rootFileNode instanceof DirNode) {
+            populateAndTraverse(mFtpClient, (DirNode) rootFileNode);
         }
-        return FtpResponse.success(rootFile);
+        return FtpResponse.success(rootFileNode);
     }
 
     private void populateAndTraverse(FTPClient ftpClient,
-                                     Directory directory) throws IOException {
+                                     DirNode dirNode) throws IOException {
 
         // Fetch a list of the directory's children and iterate over it
         // twice; first to add new Files to the Directory and then second
         // to recursively traverse into any of those children which are also
         // a directory. This approach means FTPFile instances will not be
         // existent for the entire tree traversal.
-        FTPFile[] ftpFiles = ftpClient.mlistDir(directory.getPath());
+        FTPFile[] ftpFiles = ftpClient.mlistDir(dirNode.getPath());
 
         for (FTPFile ftpFile : ftpFiles) {
-            File child = makeFile(ftpFile, directory);
+            FileNode child = makeFile(ftpFile, dirNode);
             if (child != null) {
-                directory.getChildren().add(child);
+                dirNode.getChildren().add(child);
             }
         }
 
-        for (File child : directory.getChildren()) {
-            if (child instanceof Directory) {
-                populateAndTraverse(ftpClient, (Directory)child);
+        for (FileNode child : dirNode.getChildren()) {
+            if (child instanceof DirNode) {
+                populateAndTraverse(ftpClient, (DirNode)child);
             }
         }
     }
@@ -99,22 +99,22 @@ public class FtpRecursiveList extends FtpService<File> {
      * Exclude "." and ".." nodes.
      */
     @Nullable
-    private File makeFile(@NonNull FTPFile ftpFile, Directory parent) {
+    private FileNode makeFile(@NonNull FTPFile ftpFile, DirNode parent) {
         String name = ftpFile.getName();
         // TODO maybe check there are no / separators in some weird filenames ?
         Date date = (ftpFile.getTimestamp() == null) ? null : ftpFile.getTimestamp().getTime();
         if (ftpFile.isFile()) {
-            return new File(name, parent, date);
+            return new FileNode(name, parent, date);
         } else if (ftpFile.isDirectory()) {
             if (DOT_FILE.equals(ftpFile.getName()) ||
                     DOT_DOT_FILE.equals(ftpFile.getName())) {
                 return null;
             } else {
-                return new Directory(name, parent, date);
+                return new DirNode(name, parent, date);
             }
         } else if (ftpFile.isSymbolicLink()) {
             // These will only occur if using a SymLinkParsingFtpClient
-            return new Symlink(name, parent, date);
+            return new SymlinkNode(name, parent, date);
         } else {
             return null;        // What could it be ?
         }
