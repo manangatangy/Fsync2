@@ -39,7 +39,7 @@ public class FileNodeTest {
         assertEquals(root, Node.inflate(root, "1-ddd/2018-03-15 00:00:00.000 AEDT"));
         assertEquals(root, Node.inflate(root, "1-ccc/2018-03-15 00:00:00.000 AEDT"));
 
-        root.dump("tfp");
+        root.dump("rootDump");
 
     }
 }

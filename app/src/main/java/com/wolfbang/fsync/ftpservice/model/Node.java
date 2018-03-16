@@ -12,7 +12,7 @@ import java.util.Date;
  * @date 16 Mar 2018.
  */
 
-public abstract class Node {
+public abstract class Node implements Comparable<Node> {
 
     enum NodeType {
         FILE,
@@ -25,6 +25,16 @@ public abstract class Node {
     public abstract DirNode getParent();
     public abstract Date getTimeStamp();
 
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Node) ? (compareTo((Node)obj) == 0) : super.equals(obj);
+    }
+
+    @Override
+    public int compareTo(Node node) {
+        return this.getName().compareTo(node.getName());
+    }
+
     public String getPath() {
         return (getParent() != null ? (getParent().getPath() + "/") : "") + getName();
     }
@@ -33,6 +43,7 @@ public abstract class Node {
         return (getParent() == null);
     }
 
+    @Override
     public String toString() {
         return "'" + getName() + "', " + getDetails();
     }
@@ -69,8 +80,6 @@ public abstract class Node {
         }
     }
 
-    //
-
     /**
      * Parse the path and create the corresponding tree of nodes.  All but the last
      * names will be that of DirNodes.  If the nodes already exist in the specified
@@ -97,7 +106,7 @@ public abstract class Node {
             // The last name should be of a non-directory
             NodeType expectedChildType = (index == (numberOfNames - 1)) ? NodeType.FILE : NodeType.DIR;
             String name = names[index];
-            FileNode child = parent.findChild(name);
+            Node child = parent.findChild(name);
             if (child == null) {
                 // No more common ancestors; start creating nodes.
                 child = (expectedChildType == NodeType.FILE)
@@ -125,6 +134,5 @@ public abstract class Node {
         }
         return root;
     }
-
 
 }

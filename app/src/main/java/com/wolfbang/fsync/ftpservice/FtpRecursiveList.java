@@ -5,6 +5,7 @@ import android.support.annotation.Nullable;
 
 import com.wolfbang.fsync.ftpservice.model.DirNode;
 import com.wolfbang.fsync.ftpservice.model.FileNode;
+import com.wolfbang.fsync.ftpservice.model.Node;
 import com.wolfbang.fsync.ftpservice.model.SymlinkNode;
 
 import org.apache.commons.net.ftp.FTPClient;
@@ -84,7 +85,7 @@ public class FtpRecursiveList extends FtpService<FileNode> {
             }
         }
 
-        for (FileNode child : dirNode.getChildren()) {
+        for (Node child : dirNode.getChildren()) {
             if (child instanceof DirNode) {
                 populateAndTraverse(ftpClient, (DirNode)child);
             }

@@ -14,10 +14,10 @@ import java.util.TreeSet;
 
 public class DirNode extends FileNode {
 
-    private TreeSet<FileNode> mChildren = new TreeSet<>(new Comparator<FileNode>() {
+    private TreeSet<Node> mChildren = new TreeSet<>(new Comparator<Node>() {
         @Override
-        public int compare(FileNode fileNode1, FileNode fileNode2) {
-            return fileNode1.getName().compareTo(fileNode2.getName());
+        public int compare(Node node1, Node node2) {
+            return node1.compareTo(node2);
         }
     });
 
@@ -30,13 +30,13 @@ public class DirNode extends FileNode {
         return Node.NodeType.DIR;
     }
 
-    public TreeSet<FileNode> getChildren() {
+    public TreeSet<Node> getChildren() {
         return mChildren;
     }
 
     @Nullable
-    public FileNode findChild(String name) {
-        for (FileNode child : mChildren) {
+    public Node findChild(String name) {
+        for (Node child : mChildren) {
             if (child.getName().equals(name)) {
                 return child;
             }
@@ -54,10 +54,14 @@ public class DirNode extends FileNode {
         return super.toStringWithPath() + ", [" + getChildren().size() + " children]";
     }
 
+    /**
+     * Perform a depth-first tree traversal and dump each node.
+     * @param tag - prefix for each node trace
+     */
     @Override
     public void dump(String tag) {
         super.dump(tag);
-        for (FileNode child : getChildren()) {
+        for (Node child : getChildren()) {
             child.dump(tag);
         }
     }
