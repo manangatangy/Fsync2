@@ -2,9 +2,10 @@ package com.wolfbang.fsync.ftpservice.model;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import java.util.Comparator;
 
-import java.util.*;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.TreeSet;
 
 /**
  * @author david
@@ -26,22 +27,12 @@ public class DirNode extends FileNode {
 
     @Override
     public NodeType getNodeType() {
-        return NodeType.DIR;
+        return Node.NodeType.DIR;
     }
 
     public TreeSet<FileNode> getChildren() {
         return mChildren;
     }
-
-//    @NonNull
-//    public final FileNode[] getChildren() {
-//        FileNode[] children = new FileNode[mChildren.size()];
-//        return mChildren.toArray(children);
-//    }
-
-//    public int getChildCount() {
-//        return mChildren.size();
-//    }
 
     @Nullable
     public FileNode findChild(String name) {
