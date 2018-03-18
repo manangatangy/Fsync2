@@ -10,7 +10,7 @@ import java.util.Date;
 public class FileNode extends Node {
 
     private final String mName;
-    private final DirNode mParent;
+    private DirNode mParent;
     private final Date mTimeStamp;
 
     /**
@@ -44,4 +44,7 @@ public class FileNode extends Node {
         return mTimeStamp;
     }
 
+    public void reParent(DirNode parent) {
+        mParent = parent;
+    }
 }

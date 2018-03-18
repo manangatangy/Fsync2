@@ -12,22 +12,21 @@ import java.util.TreeSet;
 
 public class NodeList implements Iterable<Node> {
 
-    private TreeSet<Node> mChildren = new TreeSet<>(Node.Comparator);
+    private TreeSet<Node> mNodeTreeSet = new TreeSet<>(Node.Comparator);
 
     public NodeList() {
-
     }
 
     public int size() {
-        return mChildren.size();
+        return mNodeTreeSet.size();
     }
 
     public void add(Node node) {
-        mChildren.add(node);
+        mNodeTreeSet.add(node);
     }
 
     public Node find(String name) {
-        for (Node child : mChildren) {
+        for (Node child : mNodeTreeSet) {
             if (child.getName().equals(name)) {
                 return child;
             }
@@ -35,10 +34,18 @@ public class NodeList implements Iterable<Node> {
         return null;
     }
 
+    public boolean remove(Node node) {
+        return mNodeTreeSet.remove(node);
+    }
+
+    public Node[] toArray() {
+        return mNodeTreeSet.toArray(new Node[size()]);
+    }
+
     @NonNull
     @Override
     public Iterator<Node> iterator() {
-        return mChildren.iterator();
+        return mNodeTreeSet.iterator();
     }
 
 }

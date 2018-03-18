@@ -26,7 +26,13 @@ public abstract class Node implements Comparable<Node> {
     public abstract Date getTimeStamp();
 
     public String getPath() {
-        return (getParent() != null ? (getParent().getPath() + "/") : "") + getName();
+        return (getParent() != null
+                ? (getParent().getPath() + "/") : "") + getName();
+    }
+
+    public String getPathExcRoot() {
+        return (getParent() != null && !getParent().isRoot()
+                ? (getParent().getPathExcRoot() + "/") : "") + getName();
     }
 
     public boolean isRoot() {
@@ -63,8 +69,8 @@ public abstract class Node implements Comparable<Node> {
      * Add missing nodes in the root, according to the path; the last path name for a dir.
      * @return the terminal node or null (if node-type mismatch during traversal)
      */
-    public static FileNode inflateDir(@NonNull DirNode root, @NonNull String path) {
-        return (FileNode)inflate(root, path, NodeType.DIR);
+    public static DirNode inflateDir(@NonNull DirNode root, @NonNull String path) {
+        return (DirNode)inflate(root, path, NodeType.DIR);
     }
 
     /**
@@ -75,7 +81,7 @@ public abstract class Node implements Comparable<Node> {
      * path name is already existing as a file but the timestamp is different.
      * @param root - the DirNode to which this new set of nodes will be attached.
      * @param path - a spec of the form "dirName/dirName/fileName/timestamp" for
-     * FILE terminalNodeType, or "dirName/dirName/dirName/timestamp" for DIR terminalNodeType.
+     * FILE terminalNodeType, or "dirName/dirName/dirName" for DIR terminalNodeType.
      * @param terminalNodeType
      * @return null in the case of mismatch error, or FileNode/DirNode depending on
      * the specified terminalNodeType.
@@ -84,22 +90,28 @@ public abstract class Node implements Comparable<Node> {
 
         String[] names = path.split("/");
 
-        int numberOfDirNames = names.length - (terminalNodeType == NodeType.DIR ? 1 : 2);
+        int numberOfDirNames = names.length - 2;
+        int minimumNames = 2;
+        String createTimestamp = names[names.length - 1];
+        if (terminalNodeType == NodeType.DIR) {
+            numberOfDirNames = names.length;
+            minimumNames = 1;
+            createTimestamp = null;
+        }
 
-        if (names.length < 2) {
+        if (names.length < minimumNames) {
             return null;
         }
-        String createTimestamp = names[names.length - 1];
 
         DirNode parent = root;
         for (int index = 0; index < numberOfDirNames; index++) {
             // The last name should be of a non-directory
             String name = names[index];
-            Node child = parent.findChild(name);
+            FileNode child = parent.findChild(name);
             if (child == null) {
                 // No more common ancestors; start creating dir nodes.
-                child = new DirNode(name, parent, parseDate(createTimestamp));
-                parent.getChildren().add(child);
+                child = new DirNode(name, parent, null);
+                parent.add(child);
                 Log.d("ftp", "create-dir " + child.toStringWithPath());
             }
             if (NodeType.DIR != child.getNodeType()) {
@@ -114,10 +126,10 @@ public abstract class Node implements Comparable<Node> {
         }
 
         String name = names[names.length - 2];          // Filename (last path name)
-        Node child = parent.findChild(name);
+        FileNode child = parent.findChild(name);
         if (child == null) {
             child = new FileNode(name, parent, parseDate(createTimestamp));
-            parent.getChildren().add(child);
+            parent.add(child);
             Log.d("ftp", "create-file" + child.toStringWithPath());
         } else if (NodeType.FILE != child.getNodeType()) {
             Log.d("ftp", "Mismatch on node type (expecting FILE) for same path, index:"

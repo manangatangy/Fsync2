@@ -81,7 +81,7 @@ public class FtpRecursiveList extends FtpService<FileNode> {
         for (FTPFile ftpFile : ftpFiles) {
             FileNode child = makeFile(ftpFile, dirNode);
             if (child != null) {
-                dirNode.getChildren().add(child);
+                dirNode.add(child);
             }
         }
 

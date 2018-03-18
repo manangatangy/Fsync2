@@ -8,7 +8,6 @@ import com.wolfbang.fsync.ftpservice.model.Node.NodeType;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 
 /**
  * @author david
@@ -22,8 +21,8 @@ public class Comparator {
      * present in both trees as either; both file-types, or a file-type and a dir-type.
      *
      */
-    protected NodeList uniqueTolist1               = new NodeList();
-    protected NodeList uniqueTolist2               = new NodeList();
+    protected DirNode uniqueTolist1 = new DirNode("uniqueTolist1", null, null);
+    protected DirNode uniqueTolist2 = new DirNode("uniqueTolist2", null, null);
     protected List<Pair<Node, Node>> presentAndFile     = new ArrayList<>();
     // todo this list prob not needed
     @Deprecated
@@ -32,8 +31,7 @@ public class Comparator {
     protected List<Pair<Node, Node>> nodeTypeMismatch   = new ArrayList<>();
 
     private DirNode mEmptyDir = new DirNode(null, null, null);
-
-
+    
     /**
      * Performs a depth-first tree traversal comparing the Nodes at each level
      * and placing the results of the comparison in the list members.
@@ -52,11 +50,11 @@ public class Comparator {
         Log.d("about to compare ", dir1.toStringWithPath());
         Log.d("about to compare ", dir2.toStringWithPath());
 
-        for (Node node1 : dir1.getChildren()) {
+        for (Node node1 : dir1.toChildrenArray()) {
             if (dir2.findChild(node1.getName()) == null) {
                 if (node1.getNodeType() == NodeType.FILE) {
                     // ==> 1. in only list1
-                    uniqueTolist1.add((FileNode)node1);
+                    uniqueTolist1.adopt((FileNode)node1);
                     Log.d("add to uniqueTolist1", node1.toStringWithPath());
                 } else {
                     compare((DirNode)node1, mEmptyDir);
@@ -64,12 +62,12 @@ public class Comparator {
             }
         }
 
-        for (Node node2 : dir2.getChildren()) {
+        for (Node node2 : dir2.toChildrenArray()) {
             Node node1 = dir1.findChild(node2.getName());
             if (node1 == null) {
                 if (node2.getNodeType() == NodeType.FILE) {
                     // ==> 2. in only list2
-                    uniqueTolist2.add((FileNode)node2);
+                    uniqueTolist2.adopt((FileNode)node2);
                     Log.d("add to uniqueTolist2", node2.toStringWithPath());
                 } else {
                     compare(mEmptyDir, (DirNode)node2);
@@ -89,10 +87,8 @@ public class Comparator {
                     // Probably compare further on basis of timestamp
                     presentAndFile.add(new Pair(node1, node2));
                 }
-
             }
         }
-
 
     }
 }
