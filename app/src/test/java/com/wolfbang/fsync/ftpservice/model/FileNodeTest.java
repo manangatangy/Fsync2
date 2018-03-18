@@ -17,14 +17,15 @@ import static junit.framework.Assert.*;
 public class FileNodeTest {
 
     @Test
-    public void testNodeInflate() {
+    public void testFileNodeInflate() {
         // Syntax for names; N-XXX [N=directory level, root is 0] [XXX=dir-name, xxx=file-name]
         DirNode root = new DirNode("root", null, Node.parseDate("2018-01-01 00:00:00.000 AEDT"));
-        assertEquals(root, Node.inflateFile(root, "1-AAA/2-aaa/2018-03-15 00:00:00.000 AEDT"));
-        root.dump("tfp");
+        assertEquals("'root/1-AAA/2-aaa', FILE', '2018-03-15 00:00:00.000 AEDT'",
+                Node.inflateFile(root, "1-AAA/2-aaa/2018-03-15 00:00:00.000 AEDT").toStringWithPath());
 
-        // Inflating same path will create nothing, return same root,
-        assertEquals(root, Node.inflateFile(root, "1-AAA/2-aaa/2018-03-15 00:00:00.000 AEDT"));
+        // Inflating same path will create nothing,
+        assertEquals("'root/1-AAA/2-aaa', FILE', '2018-03-15 00:00:00.000 AEDT'",
+                Node.inflateFile(root, "1-AAA/2-aaa/2018-03-15 00:00:00.000 AEDT").toStringWithPath());
         // Mismatch on timestamp
         assertNull(Node.inflateFile(root, "1-AAA/2-aaa/2018-03-15 00:00:00.001 AEDT"));
         // Mismatch on node type - new=child
@@ -33,15 +34,37 @@ public class FileNodeTest {
         assertNull(Node.inflateFile(root, "1-AAA/2-aaa/3-ccc/2018-03-15 00:00:00.000 AEDT"));
 
         // Now create diverging tree
-        assertEquals(root, Node.inflateFile(root, "1-AAA/2-bbb/2018-03-15 00:00:00.000 AEDT"));
-        assertEquals(root, Node.inflateFile(root, "1-AAA/2-ccc/2018-03-15 00:00:00.000 AEDT"));
-        assertEquals(root, Node.inflateFile(root, "1-BBB/2-aaa/2018-03-15 00:00:00.000 AEDT"));
-        assertEquals(root, Node.inflateFile(root, "1-BBB/2-BBB/3-aaa/2018-03-15 00:00:00.000 AEDT"));
-        assertEquals(root, Node.inflateFile(root, "1-eee/2018-03-15 00:00:00.000 AEDT"));
-        assertEquals(root, Node.inflateFile(root, "1-ddd/2018-03-15 00:00:00.000 AEDT"));
-        assertEquals(root, Node.inflateFile(root, "1-ccc/2018-03-15 00:00:00.000 AEDT"));
+        assertEquals("'root/1-AAA/2-bbb', FILE', '2018-03-15 00:00:00.000 AEDT'",
+                Node.inflateFile(root, "1-AAA/2-bbb/2018-03-15 00:00:00.000 AEDT").toStringWithPath());
+        assertEquals("'root/1-AAA/2-ccc', FILE', '2018-03-15 00:00:00.000 AEDT'",
+                Node.inflateFile(root, "1-AAA/2-ccc/2018-03-15 00:00:00.000 AEDT").toStringWithPath());
+        assertEquals("'root/1-BBB/2-aaa', FILE', '2018-03-15 00:00:00.000 AEDT'",
+                Node.inflateFile(root, "1-BBB/2-aaa/2018-03-15 00:00:00.000 AEDT").toStringWithPath());
+        assertEquals("'root/1-BBB/2-BBB/3-aaa', FILE', '2018-03-15 00:00:00.000 AEDT'",
+                Node.inflateFile(root, "1-BBB/2-BBB/3-aaa/2018-03-15 00:00:00.000 AEDT").toStringWithPath());
+        assertEquals("'root/1-eee', FILE', '2018-03-15 00:00:00.000 AEDT'",
+                Node.inflateFile(root, "1-eee/2018-03-15 00:00:00.000 AEDT").toStringWithPath());
+        assertEquals("'root/1-ddd', FILE', '2018-03-15 00:00:00.000 AEDT'",
+                Node.inflateFile(root, "1-ddd/2018-03-15 00:00:00.000 AEDT").toStringWithPath());
+        assertEquals("'root/1-ccc', FILE', '2018-03-15 00:00:00.000 AEDT'",
+                Node.inflateFile(root, "1-ccc/2018-03-15 00:00:00.000 AEDT").toStringWithPath());
 
         root.dump("rootDump");
+
+    }
+
+    @Test
+    public void testDirNodeInflate() {
+        DirNode root = new DirNode("root", null, Node.parseDate("2018-01-01 00:00:00.000 AEDT"));
+        assertEquals("'root/1-AAA', DIR', '2018-03-15 00:00:00.000 AEDT', [0 children]",
+                Node.inflateDir(root, "1-AAA/2018-03-15 00:00:00.000 AEDT").toStringWithPath());
+
+        assertEquals("'root/1-AAA/2-AAA', DIR', '2018-03-15 00:00:00.000 AEDT', [0 children]",
+                Node.inflateDir(root, "1-AAA/2-AAA/2018-03-15 00:00:00.000 AEDT").toStringWithPath());
+
+        assertEquals("'root/1-AAA/2-AAA/3-ccc', FILE', '2018-03-15 00:00:00.000 AEDT'",
+                Node.inflateFile(root, "1-AAA/2-AAA/3-ccc/2018-03-15 00:00:00.000 AEDT").toStringWithPath());
+        assertNull(Node.inflateDir(root, "1-AAA/2-AAA/3-ccc/2018-03-15 00:00:00.000 AEDT"));
 
     }
 

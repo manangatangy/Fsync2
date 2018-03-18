@@ -51,58 +51,88 @@ public abstract class Node implements Comparable<Node> {
     }
 
     /**
-     * Parse the path and create the corresponding tree of nodes.  All but the last
-     * names will be that of DirNodes.  If the nodes already exist in the specified
-     * root tree, then any new nodes will be attached under the correct DirNode.
-     * This call will fail (with no new nodes created) if the name already exists in
-     * the root-tree but is; 1) of the wrong type (file/directory), or; 2) if the type
-     * is a file and the timestamp is different.  Note that if the name already existed,
-     * and is file type, and the timestamp is matching, then no new node would be
-     * created anyway -- it is simply a check for an existing path.
-     * @param root - the DirNode to which this new set of nodes will be attached.
-     * @param path - a spec of the form "dirName/dirName/fileName/file-date-string"
-     * @return either the same root that was passed in, or null in the case of error.
+     * Add missing nodes in the root, according to the path; the last path name for a file.
+     * @return the terminal node or null (if node-type mismatch or terminal node file
+     * timestamp during traversal)
      */
-    public static DirNode inflateFile(@NonNull DirNode root, @NonNull String path) {
+    public static FileNode inflateFile(@NonNull DirNode root, @NonNull String path) {
+        return (FileNode)inflate(root, path, NodeType.FILE);
+    }
+
+    /**
+     * Add missing nodes in the root, according to the path; the last path name for a dir.
+     * @return the terminal node or null (if node-type mismatch during traversal)
+     */
+    public static FileNode inflateDir(@NonNull DirNode root, @NonNull String path) {
+        return (FileNode)inflate(root, path, NodeType.DIR);
+    }
+
+    /**
+     * Parse the path and use the dir names to traverse the node tree (from the root).
+     * Create any nodes specified in the path but missing from the tree.
+     * This call will fail (with no new nodes created) if a path name already exists in
+     * the root-tree but is; 1) of the wrong type (file/directory), or; 2) if the last
+     * path name is already existing as a file but the timestamp is different.
+     * @param root - the DirNode to which this new set of nodes will be attached.
+     * @param path - a spec of the form "dirName/dirName/fileName/timestamp" for
+     * FILE terminalNodeType, or "dirName/dirName/dirName/timestamp" for DIR terminalNodeType.
+     * @param terminalNodeType
+     * @return null in the case of mismatch error, or FileNode/DirNode depending on
+     * the specified terminalNodeType.
+     */
+    public static Node inflate(@NonNull DirNode root, @NonNull String path, NodeType terminalNodeType) {
 
         String[] names = path.split("/");
+
+        int numberOfDirNames = names.length - (terminalNodeType == NodeType.DIR ? 1 : 2);
+
         if (names.length < 2) {
             return null;
         }
-        int numberOfNames = names.length - 1;
-        String expectedTimeStamp = names[numberOfNames];
+        String createTimestamp = names[names.length - 1];
+
         DirNode parent = root;
-        for (int index = 0; index < numberOfNames; index++) {
+        for (int index = 0; index < numberOfDirNames; index++) {
             // The last name should be of a non-directory
-            NodeType expectedChildType = (index == (numberOfNames - 1)) ? NodeType.FILE : NodeType.DIR;
             String name = names[index];
             Node child = parent.findChild(name);
             if (child == null) {
-                // No more common ancestors; start creating nodes.
-                child = (expectedChildType == NodeType.FILE)
-                        ? new FileNode(name, parent, parseDate(expectedTimeStamp))
-                        : new DirNode(name, parent, parseDate(expectedTimeStamp));
+                // No more common ancestors; start creating dir nodes.
+                child = new DirNode(name, parent, parseDate(createTimestamp));
                 parent.getChildren().add(child);
-                Log.d("ftp", "create " + child.toStringWithPath());
+                Log.d("ftp", "create-dir " + child.toStringWithPath());
             }
-            if (expectedChildType != child.getNodeType()) {
-                Log.d("ftp", "Mismatch on node type for same path, index:"
+            if (NodeType.DIR != child.getNodeType()) {
+                Log.d("ftp", "Mismatch on node type (expecting DIR) for same path, index:"
                         + index + ", path:" + path);
-                return null;        // Mismatch on node type for same path
+                return null;          // Mismatch on node type for same path
             }
-            if (expectedChildType == NodeType.DIR) {
-                parent = (DirNode)child;
-            } else {
-                // Check timestamps are equal.
-                String actualTimeStamp = formatDate(child.getTimeStamp());
-                if (!expectedTimeStamp.equals(actualTimeStamp)) {
-                    Log.d("ftp", "Mismatch on last node timestamp, actual '"
-                            + actualTimeStamp + "', expected '" + expectedTimeStamp + "'");
-                    return null;        // Mismatch on last node timestamp
-                }
+            parent = (DirNode)child;
+        }
+        if (terminalNodeType == NodeType.DIR) {
+            return parent;
+        }
+
+        String name = names[names.length - 2];          // Filename (last path name)
+        Node child = parent.findChild(name);
+        if (child == null) {
+            child = new FileNode(name, parent, parseDate(createTimestamp));
+            parent.getChildren().add(child);
+            Log.d("ftp", "create-file" + child.toStringWithPath());
+        } else if (NodeType.FILE != child.getNodeType()) {
+            Log.d("ftp", "Mismatch on node type (expecting FILE) for same path, index:"
+                    + (names.length) + ", path:" + path);
+            return null;          // Mismatch on node type for same path
+        } else {
+            String actualTimeStamp = formatDate(child.getTimeStamp());
+            if (!createTimestamp.equals(actualTimeStamp)) {
+                Log.d("ftp", "Mismatch on last node timestamp, actual '"
+                        + actualTimeStamp + "', expected '" + createTimestamp + "'");
+                return null;        // Mismatch on last node timestamp
             }
         }
-        return root;
+
+        return child;
     }
 
     //region comparison
