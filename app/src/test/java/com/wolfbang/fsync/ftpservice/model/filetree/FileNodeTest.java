@@ -1,7 +1,12 @@
-package com.wolfbang.fsync.ftpservice.model;
+package com.wolfbang.fsync.ftpservice.model.filetree;
 
 import android.support.v4.util.Pair;
 import android.util.Log;
+
+import com.wolfbang.fsync.ftpservice.model.filetree.Comparator;
+import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
+import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
+import com.wolfbang.fsync.ftpservice.model.filetree.Node;
 
 import org.junit.Test;
 

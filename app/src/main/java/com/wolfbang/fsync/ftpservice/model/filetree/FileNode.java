@@ -1,4 +1,4 @@
-package com.wolfbang.fsync.ftpservice.model;
+package com.wolfbang.fsync.ftpservice.model.filetree;
 
 import java.util.Date;
 

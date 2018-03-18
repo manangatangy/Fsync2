@@ -114,18 +114,6 @@ public class LabelValueRowView extends FrameLayout {
         setValueTextSize(TypedValue.COMPLEX_UNIT_PX,
                          styledAttributes.getDimension(R.styleable.LabelValueRowView_value_font_size, 0));
 
-//        int paddingLeft = (int)styledAttributes.getDimension(R.styleable.LabelValueRowView_overall_padding_left,
-//                                                             this.dpToPx(this.getContext(), mDefaultPaddingLeft));
-//        int paddingTop = (int)styledAttributes.getDimension(R.styleable.LabelValueRowView_overall_padding_top,
-//                                                            this.dpToPx(this.getContext(), mDefaultPaddingTop));
-//        int paddingRight = (int)styledAttributes.getDimension(R.styleable.LabelValueRowView_overall_padding_right,
-//                                                              this.dpToPx(this.getContext(), mDefaultPaddingRight));
-//        int paddingBottom = (int)styledAttributes.getDimension(R.styleable.LabelValueRowView_overall_padding_bottom,
-//                                                               this.dpToPx(this.getContext(), mDefaultPaddingBottom));
-//
-//        setOverallPaddings(paddingLeft, paddingTop, paddingRight, paddingBottom);
-
-
         int labelGravity = styledAttributes.getInteger(R.styleable.LabelValueRowView_label_gravity, -1);
         if (labelGravity >= 0) {
             setLabelGravity(labelGravity);
@@ -180,20 +168,6 @@ public class LabelValueRowView extends FrameLayout {
             mValueTextView.setLayoutParams(valueParams);
         }
     }
-
-//    public void setOverallPaddings(int left, int top, int right, int bottom) {
-//        // Because of the original layout structure, the overall padding fields are shared
-//        // by the TextView mLabelTextView and the LinearLayout mValueLayout.
-//        mLabelTextView.setPadding(left,
-//                                  top,
-//                                  mLabelTextView.getPaddingRight(),
-//                                  bottom);
-//        mValueLayout.setPadding(mValueLayout.getPaddingLeft(),
-//                                top,
-//                                right,
-//                                bottom);
-//    }
-
 
     public void setLabelFont(@Nullable String labelFont) {
         if (labelFont != null) {
@@ -259,30 +233,6 @@ public class LabelValueRowView extends FrameLayout {
         float density = context.getResources().getDisplayMetrics().density;
         return Math.round((float) dp * density);
     }
-
-
-
-//    private void init(@Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-//        final TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.LabelValueRowView, defStyleAttr, defStyleRes);
-//
-//        setLabelWeight(a.getFloat(R.styleable.LabelValueRowView_labelWeight, mDefaultLabelWeight));
-//
-//        setLabelSize(a.getDimensionPixelSize(R.styleable.LabelValueRowView_labelSize, 0));
-//        setValueSize(a.getDimensionPixelSize(R.styleable.LabelValueRowView_valueSize, 0));
-//        setLabelColor();
-//        setValueColor();
-//        setLabelText(a.getString(R.styleable.LabelValueRowView_labelText));
-//        setValueText(a.getString(R.styleable.LabelValueRowView_valueText));
-//        int labelGravity = a.getInt(R.styleable.LabelValueRowView_labelGravity, -1);
-//        if (labelGravity >= 0) {
-//            setLabelGravity(labelGravity);
-//        }
-//        int valueGravity = a.getInt(R.styleable.LabelValueRowView_valueGravity, -1);
-//        if (valueGravity >= 0) {
-//            setValueGravity(valueGravity);
-//        }
-//        a.recycle();
-//    }
 
     public void setLabelGravity(@GravityMode int gravity) {
         mLabelTextView.setGravity((gravity == GRAVITY_LEFT) ? Gravity.LEFT : Gravity.RIGHT);

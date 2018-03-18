@@ -22,14 +22,14 @@ import java.net.UnknownHostException;
 
 public abstract class FtpService<ResponseT> {
 
-    String server1 = "192.168.0.9";
-    String server2 = "crazycat.mental";
-    String server3 = "localhost";
-    String server4 = "8.8.8.8";
-    String server5 = "8.8.8.8";
-    String user = "music";
-    String password = "music";
-    String dir = "/home/music";
+//    String server1 = "192.168.0.9";
+//    String server2 = "crazycat.mental";
+//    String server3 = "localhost";
+//    String server4 = "8.8.8.8";
+//    String server5 = "8.8.8.8";
+//    String user = "music";
+//    String password = "music";
+//    String dir = "/home/music";
 
     private ProtocolCommandListener mPrintCommandListener =
             new PrintCommandListener(new PrintWriter(System.err), true);
@@ -60,36 +60,11 @@ public abstract class FtpService<ResponseT> {
     @NonNull
     protected abstract FtpResponse<ResponseT> executeService() throws IOException;
 
-
-//    @NonNull
-//    public <ResponseT> FtpResponse<ResponseT> connectAndList() {
-//        return connectAnd(new PostConnectHandler() {
-//            @Override
-//            public FtpResponse<ResponseT> postConnectService(@NonNull FTPClient ftpClient) throws IOException {
-//                FTPFile[] files = ftpClient.mlistDir(".profile");
-//                for (FTPFile file : files) {
-//                    Date date = file.getTimestamp().getTime();
-//                    String dateStr = new SimpleDateFormat().format(date);
-//                    Log.d("FtpService", "File:" + file.getName() + ", Time:" + dateStr);
-//                }
-//
-//                return FtpResponse.success(null);
-//            }
-//        });
-//    }
-
-    /*
-        enableProtocolListener(mFtpClient);
-        FTPFile[] files = mFtpClient.mlistDir(mDirName);
-        disableProtocolListener(mFtpClient);
-
-     */
-
     @NonNull
-    public FtpResponse<ResponseT> execute() {
+    public FtpResponse<ResponseT> execute(String hostName, String userName, String password) {
         FtpResponse<ResponseT> ftpResponse;
         try {
-            if (InetAddress.getByName(server1) == null) {
+            if (InetAddress.getByName(hostName) == null) {
                 Log.d("FtpService", "server can't be named");
                 ftpResponse = FtpResponse.error(FtpError.ADDRESS_FOR_HOST_NOT_FOUND);
             } else {
@@ -98,11 +73,11 @@ public abstract class FtpService<ResponseT> {
                 }
                 mFtpClient.setConnectTimeout(5000);
                 mFtpClient.setDefaultTimeout(5000);
-                mFtpClient.connect(server1);
+                mFtpClient.connect(hostName);
                 if (!FTPReply.isPositiveCompletion(mFtpClient.getReplyCode())) {
                     ftpResponse = FtpResponse.error(FtpError.CONNECT_REFUSED);
                 } else {
-                    if (!mFtpClient.login(user, password)) {
+                    if (!mFtpClient.login(userName, password)) {
                         Log.d("FtpService", "login failed");
                         ftpResponse = FtpResponse.error(FtpError.LOGIN_FAILED);
                     } else {

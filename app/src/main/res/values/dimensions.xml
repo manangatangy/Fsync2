@@ -4,6 +4,11 @@
     <dimen name="default_label_size">16sp</dimen>
     <dimen name="default_value_size">16sp</dimen>
 
-    <dimen name="default_padding">16dp</dimen>
+    <dimen name="default_padding">8dp</dimen>
+
+    <dimen name="half_padding">4dp</dimen>
+    <dimen name="single_padding">8dp</dimen>
+    <dimen name="double_padding">16dp</dimen>
+    <dimen name="quad_padding">32dp</dimen>
 
 </resources>

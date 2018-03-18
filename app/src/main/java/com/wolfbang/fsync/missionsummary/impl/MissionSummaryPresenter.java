@@ -34,6 +34,8 @@ public class MissionSummaryPresenter
             switch (model.getModelState()) {
                 case IDLE:
                     // Display the initial value of the model value.
+                    view.setEndPointDetailsA(model.getMissionData().getEndPointA());
+                    view.setEndPointDetailsB(model.getMissionData().getEndPointB());
                 case SUCCESS:
                     handleSuccess(view, model.getSomeValue());
                     break;
@@ -49,8 +51,8 @@ public class MissionSummaryPresenter
 
     //region MissionSummaryContract.Presenter
     @Override
-    public void onSomeButtonClicked(String path) {
-        getModel().doSomeAction(path);
+    public void onSyncScanButtonClicked() {
+        getModel().doSyncScan();
     }
 
     @Override

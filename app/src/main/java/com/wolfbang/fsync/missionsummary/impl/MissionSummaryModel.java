@@ -7,7 +7,9 @@ import android.util.Log;
 import com.lsmvp.simplemvp.BaseMvpModel;
 import com.wolfbang.fsync.ftpservice.FtpRecursiveList;
 import com.wolfbang.fsync.ftpservice.FtpResponse;
-import com.wolfbang.fsync.ftpservice.model.FileNode;
+import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
+import com.wolfbang.fsync.ftpservice.model.mission.FtpEndPoint;
+import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelListener;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelState;
@@ -29,7 +31,7 @@ public class MissionSummaryModel
         implements Model {
 
     private int mRequestCount = 0;
-    private MissionSummaryData missionSummaryData;
+    private MissionData mMissionData;
 
     private String mSomeValue = "Initial model value";
 
@@ -47,13 +49,13 @@ public class MissionSummaryModel
 
     //region MissionSummaryContract.Contract
     @Override
-    public void setMissionSummaryData(MissionSummaryData missionSummaryData) {
-        this.missionSummaryData = missionSummaryData;
+    public void setMissionData(MissionData missionData) {
+        this.mMissionData = missionData;
     }
 
     @Override
-    public MissionSummaryData getMissionSummaryData() {
-        return missionSummaryData;
+    public MissionData getMissionData() {
+        return mMissionData;
     }
 
     @Override
@@ -62,7 +64,7 @@ public class MissionSummaryModel
     }
 
     @Override
-    public void doSomeAction(final String path) {
+    public void doSyncScan() {
 
 //        java.util.TimeZone timeZone;
 //        timeZone.toZoneId()
@@ -77,10 +79,16 @@ public class MissionSummaryModel
                 @Override
                 public void run() {
 
+                    FtpEndPoint ftpEndPoint = (FtpEndPoint)mMissionData.getEndPointA();
                     ModelListener listener = getListener();
-                    FtpResponse<FileNode> ftpResponse = new FtpRecursiveList(new SymLinkParsingFtpClient(), path)
+                    FtpResponse<FileNode> ftpResponse = new FtpRecursiveList(
+                            new SymLinkParsingFtpClient(), ftpEndPoint.getRootDir())
                             .setShowProtocolTrace(true)
-                            .execute();
+                            .execute(
+                                    ftpEndPoint.getHost(),
+                                    ftpEndPoint.getUserName(),
+                                    ftpEndPoint.getPassword()
+                            );
 
                     mBusy.set(false);
                     if (listener != null) {

@@ -1,9 +1,13 @@
 <resources>
     <string name="app_name">Fsync</string>
-    <string name="sdfb">Fsync</string>
-    <string name="sdfbdf">Fsync</string>
-    <string name="fgadg">Fsync</string>
+    <string name="host_name">Host name</string>
+    <string name="user_name">User name</string>
+    <string name="password">Password</string>
+    <string name="root_dir">Root directory</string>
     <string name="sdfbsdb">Fsync</string>
+    <string name="sdfbgsdb">Fsync</string>
+    <string name="sdfsdbsdb">Fsync</string>
+    <string name="sdfvzbsdb">Fsync</string>
     <string name="fdsdfbbd">Fsync</string>
 
 </resources>

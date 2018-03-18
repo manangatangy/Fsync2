@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/coordinator_layout"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="@dimen/single_padding"
+    android:layout_marginRight="@dimen/single_padding"
+    android:orientation="vertical"
+    >
+
+    <com.wolfbang.shared.LabelValueRowView
+        android:id="@+id/heading_row_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/default_padding"
+        android:layout_marginBottom="@dimen/default_padding"
+        android:layout_marginLeft="@dimen/half_padding"
+        android:layout_marginRight="@dimen/half_padding"
+        app:label_font_size="16sp"
+        app:value_style="normal"
+        app:label="End Point"
+        tools:value="$10,215.30"
+        />
+
+    <com.wolfbang.shared.LabelValueRowView
+        android:id="@+id/host_row_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/half_padding"
+        app:label_font_size="14sp"
+        app:value_font_size="14sp"
+        app:value_style="normal"
+        app:label="@string/host_name"
+        tools:value="$10,215.30"
+        />
+    <com.wolfbang.shared.LabelValueRowView
+        android:id="@+id/user_row_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/half_padding"
+        app:label_font_size="14sp"
+        app:value_font_size="14sp"
+        app:label_style="normal"
+        app:label="@string/user_name"
+        tools:value="$10,215.30"
+        />
+    <com.wolfbang.shared.LabelValueRowView
+        android:id="@+id/password_row_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/half_padding"
+        app:label_font_size="14sp"
+        app:value_font_size="14sp"
+        app:label_style="normal"
+        app:label="@string/password"
+        tools:value="$10,215.30"
+        />
+    <com.wolfbang.shared.LabelValueRowView
+        android:id="@+id/root_dir_row_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_margin="@dimen/half_padding"
+        app:label_font_size="14sp"
+        app:value_font_size="14sp"
+        app:label_style="normal"
+        app:label="@string/root_dir"
+        tools:value="$10,215.30"
+        />
+
+</LinearLayout>

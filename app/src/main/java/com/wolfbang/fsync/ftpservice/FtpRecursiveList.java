@@ -3,10 +3,10 @@ package com.wolfbang.fsync.ftpservice;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.wolfbang.fsync.ftpservice.model.DirNode;
-import com.wolfbang.fsync.ftpservice.model.FileNode;
-import com.wolfbang.fsync.ftpservice.model.Node;
-import com.wolfbang.fsync.ftpservice.model.SymlinkNode;
+import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
+import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
+import com.wolfbang.fsync.ftpservice.model.filetree.Node;
+import com.wolfbang.fsync.ftpservice.model.filetree.SymlinkNode;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;
@@ -29,10 +29,10 @@ public class FtpRecursiveList extends FtpService<FileNode> {
 
     /**
      * The commons-net-3.6 version of {@link FTPClient#mlistDir(String)} doesn't return
-     * symlinks in the result array, will still correctly handle the case where the
+     * symlinks in the result array, but will still correctly handle the case where the
      * pathname parameter is itself a symlink directory, in which case it is treated as
      * a normal directory.
-     * If you wish to see Syslink s in the result, then pass {@link SymLinkParsingFtpClient}
+     * If you wish to see Syslinks in the result, then pass {@link SymLinkParsingFtpClient}
      * (which is able to parse symlinks correctly).
      */
     public FtpRecursiveList(@NonNull FTPClient ftpClient, String rootPath) {

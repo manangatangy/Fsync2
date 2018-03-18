@@ -3,7 +3,8 @@ package com.wolfbang.fsync.missionsummary;
 import android.support.annotation.NonNull;
 
 import com.lsmvp.simplemvp.AbstractMvpContract;
-import com.wolfbang.fsync.missionsummary.impl.MissionSummaryData;
+import com.wolfbang.fsync.ftpservice.model.mission.EndPoint;
+import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
 
 /**
  * @author david
@@ -16,22 +17,24 @@ public interface MissionSummaryContract extends AbstractMvpContract {
     }
 
     interface View extends AbstractView {
+        void setEndPointDetailsA(EndPoint endPoint);
+        void setEndPointDetailsB(EndPoint endPoint);
         void setSomeField(String someValue);
         void showError(String errorMsg);
         void showLoadingState(boolean show);
     }
 
     interface Presenter extends AbstractPresenter<View, Model, Navigation> {
-        void onSomeButtonClicked(String path);
+        void onSyncScanButtonClicked();
         void onBackClicked();
     }
 
     interface Model extends AbstractModel {
-        void setMissionSummaryData(MissionSummaryData missionSummaryData);
-        MissionSummaryData getMissionSummaryData();
+        void setMissionData(MissionData missionData);
+        MissionData getMissionData();
 
         String getSomeValue();
-        void doSomeAction(String path);
+        void doSyncScan();
 
         String getErrorMsg();
         boolean isBusy();

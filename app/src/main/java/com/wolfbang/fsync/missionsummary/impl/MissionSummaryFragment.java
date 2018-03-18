@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
 
 import com.lsmvp.simplemvp.AbstractMvpViewFragment;
@@ -15,6 +14,9 @@ import com.lsmvp.simplemvp.ModelUpdater;
 import com.lsmvp.simplemvp.ObjectRegistry;
 import com.wolfbang.fsync.R;
 import com.wolfbang.fsync.application.FsyncApplication;
+import com.wolfbang.fsync.ftpservice.model.mission.EndPoint;
+import com.wolfbang.fsync.ftpservice.model.mission.FtpEndPoint;
+import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Presenter;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.View;
@@ -23,6 +25,7 @@ import com.wolfbang.fsync.missionsummary._di.DaggerMissionSummaryComponent;
 import com.wolfbang.fsync.missionsummary._di.MissionSummaryComponent;
 import com.wolfbang.fsync.missionsummary._di.MissionSummaryModule;
 import com.wolfbang.shared.BackClickHandler;
+import com.wolfbang.shared.EndPointDetailView;
 import com.wolfbang.shared.SingleFragActivity;
 
 import butterknife.BindView;
@@ -37,24 +40,26 @@ public class MissionSummaryFragment
         extends AbstractMvpViewFragment<Presenter, Model, MissionSummaryComponent>
         implements View, Navigation, BackClickHandler {
 
-    private static final String MSF_FEATURE1_DATA = "MSF_FEATURE1_DATA";
+    private static final String MSF_MISSION_DATA = "MSF_MISSION_DATA";
 
-    @BindView(R.id.feature1_button)
-    Button mButton;
-    @BindView(R.id.feature1_textView)
-    TextView mTextView;
-    @BindView(R.id.feature1_editText)
-    EditText mEditText;
+    @BindView(R.id.heading_text_view)
+    TextView mHeadingTextView;
+    @BindView(R.id.end_point_view_a)
+    EndPointDetailView mEndPointA;
+    @BindView(R.id.end_point_view_b)
+    EndPointDetailView mEndPointB;
+    @BindView(R.id.sync_scan_button)
+    Button mSyncScanButton;
 
-    public static Intent createIntent(Context context, MissionSummaryData missionSummaryData) {
+    public static Intent createIntent(Context context, MissionData missionData) {
         Intent intent = new SingleFragActivity.Builder(context, MissionSummaryFragment.class.getName())
                 .setDisplayHomeAsUpEnabled(true)
                 .setTitle("Mission")
                 .build();
 
         ObjectRegistry objectRegistry = FsyncApplication.getFsyncApplicationComponent().getObjectRegistry();
-        String key = objectRegistry.put(missionSummaryData);
-        intent.putExtra(MSF_FEATURE1_DATA, key);
+        String key = objectRegistry.put(missionData);
+        intent.putExtra(MSF_MISSION_DATA, key);
 
         return intent;
     }
@@ -98,9 +103,9 @@ public class MissionSummaryFragment
             public void updateModel(Model model) {
                 Bundle args = getArguments();
 
-                String key = args.getString(MSF_FEATURE1_DATA, "");
-                MissionSummaryData missionSummaryData = getObjectRegistry().get(key);
-                model.setMissionSummaryData(missionSummaryData);
+                String key = args.getString(MSF_MISSION_DATA, "");
+                MissionData missionData = getObjectRegistry().get(key);
+                model.setMissionData(missionData);
             }
         };
     }
@@ -108,11 +113,23 @@ public class MissionSummaryFragment
 
     //region MissionSummaryContract.View
     @Override
+    public void setEndPointDetailsA(EndPoint endPoint) {
+        FtpEndPoint ftpEndPoint = (FtpEndPoint)endPoint;
+        setEndPointDetails("A", ftpEndPoint, mEndPointA);
+    }
+
+    @Override
+    public void setEndPointDetailsB(EndPoint endPoint) {
+        FtpEndPoint ftpEndPoint = (FtpEndPoint)endPoint;
+        setEndPointDetails("B", ftpEndPoint, mEndPointB);
+    }
+
+    @Override
     public void setSomeField(final String someValue) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                mTextView.setText(someValue);
+//                mTextView.setText(someValue);
             }
         });
     }
@@ -146,15 +163,24 @@ public class MissionSummaryFragment
     }
     //endregion
 
-    @OnClick(R.id.feature1_button)
+    @OnClick(R.id.sync_scan_button)
     public void onButtonClick() {
-        getPresenter().onSomeButtonClicked(mEditText.getText().toString());
+        getPresenter().onSyncScanButtonClicked();
     }
 
     @Override
     public boolean onBackPressed() {
         getPresenter().onBackClicked();
         return false;
+    }
+
+    private void setEndPointDetails(String name, FtpEndPoint endPoint, EndPointDetailView view) {
+        view.getHeadingRowView().setLabel("End Point " + name);
+        view.getHeadingRowView().setValue(endPoint.getEndPointName());
+        view.getHostNameRowView().setValue(endPoint.getHost());
+        view.getUserNameRowView().setValue(endPoint.getUserName());
+        view.getPasswordRowView().setValue(endPoint.getPassword());
+        view.getRootDirRowView().setValue(endPoint.getRootDir());
     }
 
 }

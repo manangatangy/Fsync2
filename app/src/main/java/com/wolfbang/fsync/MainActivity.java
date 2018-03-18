@@ -1,6 +1,5 @@
 package com.wolfbang.fsync;
 
-
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -9,7 +8,8 @@ import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.wolfbang.fsync.missionsummary.impl.MissionSummaryData;
+import com.wolfbang.fsync.ftpservice.model.mission.FtpEndPoint;
+import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
 import com.wolfbang.fsync.missionsummary.impl.MissionSummaryFragment;
 import com.wolfbang.fsync.feature2.impl.Feature2Activity;
 import com.wolfbang.fsync.feature2.impl.Feature2Data;
@@ -45,7 +45,26 @@ public class MainActivity extends AppCompatActivity {
 
     @OnClick(R.id.mission_summary_button)
     public void onMissionSummaryButtonClick() {
-        startActivity(MissionSummaryFragment.createIntent(this, new MissionSummaryData()));
+        startActivity(MissionSummaryFragment.createIntent(this,
+                new MissionData(
+                        "Mission-One",
+                        MissionData.Direction.A_BI_B,
+                        new FtpEndPoint(
+                                "Dell-Mint-Music",
+                                "192.168.0.9",
+                                "music",
+                                "music",
+                                "Music/."
+                        ),
+                        new FtpEndPoint(
+                                "Local-Android-Music",
+                                "host",
+                                "userName",
+                                "password",
+                                "rootDir"
+                        )
+                )
+        ));
     }
 
     @OnClick(R.id.feature2_button)
