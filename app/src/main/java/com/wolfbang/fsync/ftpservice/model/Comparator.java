@@ -1,9 +1,14 @@
 package com.wolfbang.fsync.ftpservice.model;
 
+import android.support.annotation.NonNull;
+import android.support.v4.util.Pair;
+import android.util.Log;
+
 import com.wolfbang.fsync.ftpservice.model.Node.NodeType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 /**
  * @author david
@@ -12,26 +17,30 @@ import java.util.List;
 
 public class Comparator {
 
-    List<Node> uniqueTolist1    = new ArrayList<>();
-    List<Node> uniqueTolist2    = new ArrayList<>();
-    List<Node> presentAndFile   = new ArrayList<>();
-    List<Node> presentAndDir    = new ArrayList<>();
-    List<Node> nodeTypeMismatch = new ArrayList<>();
+    /**
+     * Comparing two Nodes (trees); each file-path will be unique to it's tree or be
+     * present in both trees as either; both file-types, or a file-type and a dir-type.
+     *
+     */
+    protected NodeList uniqueTolist1               = new NodeList();
+    protected NodeList uniqueTolist2               = new NodeList();
+    protected List<Pair<Node, Node>> presentAndFile     = new ArrayList<>();
+    // todo this list prob not needed
+    @Deprecated
+    protected List<Node> presentAndDir                  = new ArrayList<>();
+
+    protected List<Pair<Node, Node>> nodeTypeMismatch   = new ArrayList<>();
+
+    private DirNode mEmptyDir = new DirNode(null, null, null);
+
 
     /**
      * Performs a depth-first tree traversal comparing the Nodes at each level
      * and placing the results of the comparison in the list members.
-     * Assumes the child lists are sorted.
      * @param dir1
      * @param dir2
      */
-    public void compare(DirNode dir1, DirNode dir2) {
-
-        int size1 = dir1.getChildren().size();
-        int size2 = dir2.getChildren().size();
-
-        Node[] list1 = dir1.getChildren().toArray(new Node[size1]);
-        Node[] list2 = dir2.getChildren().toArray(new Node[size2]);
+    public void compare(@NonNull DirNode dir1, @NonNull DirNode dir2) {
 
         // Each item in these lists is either
         // 1. in only list1
@@ -40,24 +49,50 @@ public class Comparator {
         // 4. in both lists and both have type DIR
         // 5. in both lists and have different types
 
-        int index1 = 0;
-        int index2 = 0;
-        while (index1 < size1 && index2 < size2) {
-            Node node1 = list1[index1++];
-            Node node2 = list2[index2++];
-            String name1 = node1.getName();
-            String name2 = node2.getName();
-            if (node1.equals(node2)) {
-                if (node1.getNodeType() != node2.getNodeType()) {
-                    // ==> list 5
-                } else if (node1.getNodeType() == NodeType.DIR) {
-                    // ==> list 4
-                } else if (node1.getNodeType() == NodeType.DIR) {
-                    // ==> list 3
+        Log.d("about to compare ", dir1.toStringWithPath());
+        Log.d("about to compare ", dir2.toStringWithPath());
+
+        for (Node node1 : dir1.getChildren()) {
+            if (dir2.findChild(node1.getName()) == null) {
+                if (node1.getNodeType() == NodeType.FILE) {
+                    // ==> 1. in only list1
+                    uniqueTolist1.add((FileNode)node1);
+                    Log.d("add to uniqueTolist1", node1.toStringWithPath());
+                } else {
+                    compare((DirNode)node1, mEmptyDir);
                 }
             }
-
         }
+
+        for (Node node2 : dir2.getChildren()) {
+            Node node1 = dir1.findChild(node2.getName());
+            if (node1 == null) {
+                if (node2.getNodeType() == NodeType.FILE) {
+                    // ==> 2. in only list2
+                    uniqueTolist2.add((FileNode)node2);
+                    Log.d("add to uniqueTolist2", node2.toStringWithPath());
+                } else {
+                    compare(mEmptyDir, (DirNode)node2);
+                }
+            } else {
+                if (node1.getNodeType() != node2.getNodeType()) {
+                    // ==> 5. in both lists and have different types
+                    // This conflict blocks further descending to discover more paths.
+                    nodeTypeMismatch.add(new Pair(node1, node2));
+                } else if (node1.getNodeType() == NodeType.DIR) {
+                    // ==> 4. in both lists and both have type DIR
+                    // Continue to recurse and discover more paths.
+                    compare((DirNode)node1, (DirNode)node2);
+                    presentAndDir.add(node1);
+                } else if (node1.getNodeType() == NodeType.FILE) {
+                    // ==> 3. in both lists and both have type FILE
+                    // Probably compare further on basis of timestamp
+                    presentAndFile.add(new Pair(node1, node2));
+                }
+
+            }
+        }
+
 
     }
 }

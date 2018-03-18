@@ -3,9 +3,7 @@ package com.wolfbang.fsync.ftpservice.model;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import java.util.Comparator;
 import java.util.Date;
-import java.util.TreeSet;
 
 /**
  * @author david
@@ -14,12 +12,7 @@ import java.util.TreeSet;
 
 public class DirNode extends FileNode {
 
-    private TreeSet<Node> mChildren = new TreeSet<>(new Comparator<Node>() {
-        @Override
-        public int compare(Node node1, Node node2) {
-            return node1.compareTo(node2);
-        }
-    });
+    private NodeList mChildren = new NodeList();
 
     public DirNode(String name, @NonNull DirNode parent, Date timeStamp) {
         super(name, parent, timeStamp);
@@ -30,18 +23,17 @@ public class DirNode extends FileNode {
         return Node.NodeType.DIR;
     }
 
-    public TreeSet<Node> getChildren() {
+    public NodeList getChildren() {
         return mChildren;
     }
 
     @Nullable
     public Node findChild(String name) {
-        for (Node child : mChildren) {
-            if (child.getName().equals(name)) {
-                return child;
-            }
-        }
-        return null;
+        return mChildren.find(name);
+    }
+
+    public void add() {
+
     }
 
     @Override

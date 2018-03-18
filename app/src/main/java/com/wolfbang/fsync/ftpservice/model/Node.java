@@ -5,7 +5,7 @@ import android.util.Log;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 
 /**
  * @author david
@@ -24,16 +24,6 @@ public abstract class Node implements Comparable<Node> {
     public abstract String getName();
     public abstract DirNode getParent();
     public abstract Date getTimeStamp();
-
-    @Override
-    public boolean equals(Object obj) {
-        return (obj instanceof Node) ? (compareTo((Node)obj) == 0) : super.equals(obj);
-    }
-
-    @Override
-    public int compareTo(Node node) {
-        return this.getName().compareTo(node.getName());
-    }
 
     public String getPath() {
         return (getParent() != null ? (getParent().getPath() + "/") : "") + getName();
@@ -60,26 +50,6 @@ public abstract class Node implements Comparable<Node> {
         return details;
     }
 
-    public void dump(String tag) {
-        Log.d(tag, toStringWithPath());
-    }
-
-    private static String mDateFormat = "yyyy-MM-dd HH:mm:ss.SSS z";
-    // TODO should Locale be used in this formatter ?
-    private static SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat(mDateFormat);
-
-    public static String formatDate(Date date) {
-        return mSimpleDateFormat.format(date);
-    }
-
-    public static Date parseDate(String timeStamp) {
-        try {
-            return mSimpleDateFormat.parse(timeStamp);
-        } catch (ParseException e) {
-            return null;
-        }
-    }
-
     /**
      * Parse the path and create the corresponding tree of nodes.  All but the last
      * names will be that of DirNodes.  If the nodes already exist in the specified
@@ -93,7 +63,7 @@ public abstract class Node implements Comparable<Node> {
      * @param path - a spec of the form "dirName/dirName/fileName/file-date-string"
      * @return either the same root that was passed in, or null in the case of error.
      */
-    public static DirNode inflate(@NonNull DirNode root, @NonNull String path) {
+    public static DirNode inflateFile(@NonNull DirNode root, @NonNull String path) {
 
         String[] names = path.split("/");
         if (names.length < 2) {
@@ -133,6 +103,45 @@ public abstract class Node implements Comparable<Node> {
             }
         }
         return root;
+    }
+
+    //region comparison
+    public static final java.util.Comparator<Node> Comparator = new java.util.Comparator<Node>() {
+        @Override
+        public int compare(Node node1, Node node2) {
+            return node1.compareTo(node2);
+        }
+    };
+
+    @Override
+    public boolean equals(Object obj) {
+        return (obj instanceof Node) ? (compareTo((Node)obj) == 0) : super.equals(obj);
+    }
+
+    @Override
+    public int compareTo(Node node) {
+        return this.getName().compareTo(node.getName());
+    }
+    //endregion
+
+    private static String mDateFormat = "yyyy-MM-dd HH:mm:ss.SSS z";
+    // TODO should Locale be used in this formatter ?
+    private static SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat(mDateFormat);
+
+    public static String formatDate(Date date) {
+        return mSimpleDateFormat.format(date);
+    }
+
+    public static Date parseDate(String timeStamp) {
+        try {
+            return mSimpleDateFormat.parse(timeStamp);
+        } catch (ParseException e) {
+            return null;
+        }
+    }
+
+    public void dump(String tag) {
+        Log.d(tag, toStringWithPath());
     }
 
 }
