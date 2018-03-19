@@ -26,6 +26,7 @@ import com.wolfbang.fsync.missionsummary._di.MissionSummaryComponent;
 import com.wolfbang.fsync.missionsummary._di.MissionSummaryModule;
 import com.wolfbang.shared.BackClickHandler;
 import com.wolfbang.shared.EndPointDetailView;
+import com.wolfbang.shared.LabelValueRowView;
 import com.wolfbang.shared.SingleFragActivity;
 
 import butterknife.BindView;
@@ -42,8 +43,8 @@ public class MissionSummaryFragment
 
     private static final String MSF_MISSION_DATA = "MSF_MISSION_DATA";
 
-    @BindView(R.id.heading_text_view)
-    TextView mHeadingTextView;
+    @BindView(R.id.heading_row_view)
+    LabelValueRowView mHeadingRowView;
     @BindView(R.id.end_point_view_a)
     EndPointDetailView mEndPointA;
     @BindView(R.id.end_point_view_b)
@@ -112,6 +113,11 @@ public class MissionSummaryFragment
     //endregion
 
     //region MissionSummaryContract.View
+    @Override
+    public void setMissionName(String missionName) {
+        mHeadingRowView.setValue(missionName);
+    }
+
     @Override
     public void setEndPointDetailsA(EndPoint endPoint) {
         FtpEndPoint ftpEndPoint = (FtpEndPoint)endPoint;

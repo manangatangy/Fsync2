@@ -17,6 +17,7 @@ public interface MissionSummaryContract extends AbstractMvpContract {
     }
 
     interface View extends AbstractView {
+        void setMissionName(String missionName);
         void setEndPointDetailsA(EndPoint endPoint);
         void setEndPointDetailsB(EndPoint endPoint);
         void setSomeField(String someValue);

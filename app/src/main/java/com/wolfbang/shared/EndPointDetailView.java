@@ -29,6 +29,28 @@ public class EndPointDetailView extends LinearLayout {
     @BindView(R.id.root_dir_row_view)
     LabelValueRowView mRootDirRowView;
 
+    public EndPointDetailView(Context context) {
+        super(context);
+    }
+
+    public EndPointDetailView(Context context, @Nullable AttributeSet attrs) {
+        super(context, attrs);
+    }
+    public EndPointDetailView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+    }
+    public EndPointDetailView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+        super(context, attrs, defStyleAttr);
+    }
+
+    {
+        init();
+    }
+    private void init() {
+        inflate(getContext(), R.layout.view_end_point_detail, this);
+        ButterKnife.bind(this);
+    }
+
     public LabelValueRowView getHeadingRowView() {
         return mHeadingRowView;
     }
@@ -47,27 +69,6 @@ public class EndPointDetailView extends LinearLayout {
 
     public LabelValueRowView getRootDirRowView() {
         return mRootDirRowView;
-    }
-
-    public EndPointDetailView(Context context) {
-        super(context);
-    }
-    public EndPointDetailView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-    }
-    public EndPointDetailView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
-    }
-    public EndPointDetailView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
-        super(context, attrs, defStyleAttr);
-    }
-
-    {
-        init();
-    }
-    private void init() {
-        inflate(getContext(), R.layout.view_end_point_detail, this);
-        ButterKnife.bind(this);
     }
 
 }

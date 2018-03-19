@@ -32,7 +32,8 @@ public class LabelValueRowView extends FrameLayout {
     public static final int GRAVITY_LEFT = 0;
     public static final int GRAVITY_RIGHT = 1;
 
-    @IntDef({GRAVITY_LEFT, GRAVITY_RIGHT})
+    @IntDef({GRAVITY_LEFT, GRAVITY_RIGHT}
+    )
     @Retention(RetentionPolicy.SOURCE)
     public @interface GravityMode {}
 
@@ -42,11 +43,6 @@ public class LabelValueRowView extends FrameLayout {
     private static final int mDefaultLabelStyle = TwoColumnStyle.NORMAL;
     @TwoColumnStyle
     private static final int mDefaultValueStyle = TwoColumnStyle.NORMAL;
-
-    private static final int mDefaultPaddingLeft = 12;
-    private static final int mDefaultPaddingTop = 10;
-    private static final int mDefaultPaddingRight = 12;
-    private static final int mDefaultPaddingBottom = 8;
 
     @IntDef({
             LabelValueRowView.TwoColumnStyle.NORMAL,

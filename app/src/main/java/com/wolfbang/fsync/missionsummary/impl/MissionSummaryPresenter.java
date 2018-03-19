@@ -34,6 +34,7 @@ public class MissionSummaryPresenter
             switch (model.getModelState()) {
                 case IDLE:
                     // Display the initial value of the model value.
+                    view.setMissionName(model.getMissionData().getMissionName());
                     view.setEndPointDetailsA(model.getMissionData().getEndPointA());
                     view.setEndPointDetailsB(model.getMissionData().getEndPointB());
                 case SUCCESS:

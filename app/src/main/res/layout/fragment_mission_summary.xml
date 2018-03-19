@@ -1,46 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v7.widget.CardView
+<ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:layout_margin="@dimen/default_gap"
     >
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_margin="@dimen/single_padding"
         >
 
-        <TextView
-            android:id="@+id/heading_text_view"
+        <com.wolfbang.shared.LabelValueRowView
+            android:id="@+id/heading_row_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="This is Feature1Fragment"
-            android:textSize="20sp"
-            android:padding="10dp"
-            android:gravity="center"
+            android:layout_marginLeft="@dimen/double_padding"
+            android:layout_marginRight="@dimen/double_padding"
+            app:label_font_size="18sp"
+            app:label_style="bold"
+            app:value_style="bold"
+            app:label_gravity="right"
+            app:value_gravity="left"
+            app:label="Mission : "
+            tools:value="Dell/Local"
             />
 
-        <com.wolfbang.shared.EndPointDetailView
-            android:id="@+id/end_point_view_a"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:layout_margin="@dimen/single_padding"
+            >
+            <com.wolfbang.shared.EndPointDetailView
+                android:id="@+id/end_point_view_a"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+        </android.support.v7.widget.CardView>
 
-        <com.wolfbang.shared.EndPointDetailView
-            android:id="@+id/end_point_view_b"
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            />
+            android:layout_margin="@dimen/single_padding"
+            >
+            <com.wolfbang.shared.EndPointDetailView
+                android:id="@+id/end_point_view_b"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+        </android.support.v7.widget.CardView>
 
         <Button
             android:id="@+id/sync_scan_button"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_margin="@dimen/single_padding"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/double_padding"
             android:layout_marginBottom="@dimen/single_padding"
@@ -49,4 +67,4 @@
 
     </LinearLayout>
 
-</android.support.v7.widget.CardView>
+</ScrollView>

@@ -8,6 +8,7 @@
 
     <dimen name="half_padding">4dp</dimen>
     <dimen name="single_padding">8dp</dimen>
+    <dimen name="one_and_half_padding">12dp</dimen>
     <dimen name="double_padding">16dp</dimen>
     <dimen name="quad_padding">32dp</dimen>
 

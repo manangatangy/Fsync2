@@ -20,7 +20,8 @@
         android:layout_marginLeft="@dimen/half_padding"
         android:layout_marginRight="@dimen/half_padding"
         app:label_font_size="16sp"
-        app:value_style="normal"
+        app:label_style="bold"
+        app:value_style="bold"
         app:label="End Point"
         tools:value="$10,215.30"
         />
