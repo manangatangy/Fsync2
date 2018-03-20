@@ -51,9 +51,13 @@ public abstract class Node implements Comparable<Node> {
     public String getDetails() {
         String details = getNodeType().name();
         if (getTimeStamp() != null) {
-            details = details + "', '" + Node.formatDate(getTimeStamp()) + "'";
+            details = details + "', '" + getTimeStampAsText() + "'";
         }
         return details;
+    }
+
+    public String getTimeStampAsText() {
+        return formatDate(getTimeStamp()) ;
     }
 
     /**
@@ -171,7 +175,7 @@ public abstract class Node implements Comparable<Node> {
     private static SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat(mDateFormat);
 
     public static String formatDate(Date date) {
-        return mSimpleDateFormat.format(date);
+        return (date == null) ? "<null-date>" : mSimpleDateFormat.format(date);
     }
 
     public static Date parseDate(String timeStamp) {

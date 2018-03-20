@@ -14,6 +14,7 @@ import com.lsmvp.simplemvp.ModelUpdater;
 import com.lsmvp.simplemvp.ObjectRegistry;
 import com.wolfbang.fsync.R;
 import com.wolfbang.fsync.application.FsyncApplication;
+import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.mission.EndPoint;
 import com.wolfbang.fsync.ftpservice.model.mission.FtpEndPoint;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
@@ -24,6 +25,7 @@ import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Navigation;
 import com.wolfbang.fsync.missionsummary._di.DaggerMissionSummaryComponent;
 import com.wolfbang.fsync.missionsummary._di.MissionSummaryComponent;
 import com.wolfbang.fsync.missionsummary._di.MissionSummaryModule;
+import com.wolfbang.fsync.treebrowse.impl.TreeBrowseFragment;
 import com.wolfbang.shared.BackClickHandler;
 import com.wolfbang.shared.EndPointDetailView;
 import com.wolfbang.shared.LabelValueRowView;
@@ -164,6 +166,19 @@ public class MissionSummaryFragment
                 } else {
                     hideProgressDialog();
                 }
+            }
+        });
+    }
+    //endregion
+
+    //region MissionSummaryContract.Navigation
+    @Override
+    public void navigateToBrowseTree(final DirNode dirNode) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+//                ((BaseActivity) getActivity()).useStartAnimations();
+                startActivity(TreeBrowseFragment.createIntent(getContext(), dirNode));
             }
         });
     }

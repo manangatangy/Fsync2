@@ -33,7 +33,7 @@ public class MissionSummaryModel
     private int mRequestCount = 0;
     private MissionData mMissionData;
 
-    private String mSomeValue = "Initial model value";
+    private FileNode mFileNode;
 
     @VisibleForTesting
     ModelState mModelState = ModelState.IDLE;
@@ -59,8 +59,8 @@ public class MissionSummaryModel
     }
 
     @Override
-    public String getSomeValue() {
-        return mSomeValue;
+    public FileNode getSuccessResponse() {
+        return mFileNode;
     }
 
     @Override
@@ -103,11 +103,11 @@ public class MissionSummaryModel
                         }
                     } else {
                         mModelState = ModelState.SUCCESS;
-                        FileNode fileNode = ftpResponse.getResponse();
-                        Log.d("ftpFile", fileNode.getName());
-                        fileNode.dump("mission");
+                        mFileNode = ftpResponse.getResponse();
+                        Log.d("ftpFile", mFileNode.getName());
+                        mFileNode.dump("mission");
                         if (listener != null) {
-                            listener.onRetrieveSomeResult(fileNode.getName());
+                            listener.onRetrieveSucceeded(mFileNode);
                         }
                     }
                 }
@@ -135,6 +135,11 @@ public class MissionSummaryModel
     @Override
     public ModelState getModelState() {
         return mModelState;
+    }
+
+    @Override
+    public void resetModelState() {
+        mModelState = ModelState.IDLE;
     }
     //endregion
 

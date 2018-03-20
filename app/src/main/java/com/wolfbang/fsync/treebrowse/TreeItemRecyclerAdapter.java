@@ -71,7 +71,13 @@ public class TreeItemRecyclerAdapter
         public void bind(FileNode fileNode) {
             mFileNode = fileNode;
             // TODO set fields in mItemRowView from fields in mFileNode
-
+            mItemRowView.setChevronVisibility(ItemRowView.VISIBILITY_NO);
+            mItemRowView.setTitleText(mFileNode.getName());
+            mItemRowView.setDescriptionText(mFileNode.getTimeStampAsText());
+            if (mFileNode instanceof DirNode) {
+                DirNode dirNode = (DirNode)fileNode;
+                mItemRowView.setExtraDataText("[ " + dirNode.size() + " children]");
+            }
             mItemRowView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {

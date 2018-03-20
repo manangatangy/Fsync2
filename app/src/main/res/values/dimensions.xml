@@ -5,6 +5,7 @@
     <dimen name="default_value_size">16sp</dimen>
 
     <dimen name="default_padding">8dp</dimen>
+    <dimen name="one_padding">8dp</dimen>
 
     <dimen name="half_padding">4dp</dimen>
     <dimen name="single_padding">8dp</dimen>

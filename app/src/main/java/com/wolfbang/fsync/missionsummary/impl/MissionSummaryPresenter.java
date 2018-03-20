@@ -3,6 +3,8 @@ package com.wolfbang.fsync.missionsummary.impl;
 import android.support.annotation.NonNull;
 
 import com.lsmvp.simplemvp.BaseMvpPresenter;
+import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
+import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.View;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Navigation;
@@ -37,8 +39,12 @@ public class MissionSummaryPresenter
                     view.setMissionName(model.getMissionData().getMissionName());
                     view.setEndPointDetailsA(model.getMissionData().getEndPointA());
                     view.setEndPointDetailsB(model.getMissionData().getEndPointB());
+                    break;
                 case SUCCESS:
-                    handleSuccess(view, model.getSomeValue());
+                    Navigation navigation = getNavigation();
+                    if (navigation != null) {
+                        handleSuccess(navigation, model.getSuccessResponse());
+                    }
                     break;
                 case ERROR:
                     handleError(view, model.getErrorMsg());
@@ -75,10 +81,10 @@ public class MissionSummaryPresenter
     }
 
     @Override
-    public void onRetrieveSomeResult(@NonNull String resultValue) {
-        View view = getView();
-        if (view != null) {
-            handleSuccess(view, resultValue);
+    public void onRetrieveSucceeded(@NonNull FileNode fileNode) {
+        Navigation navigation = getNavigation();
+        if (navigation != null) {
+            handleSuccess(navigation, fileNode);
         }
     }
 
@@ -91,8 +97,11 @@ public class MissionSummaryPresenter
     }
     //endregion
 
-    private void handleSuccess(@NonNull View view, @NonNull String resultValue) {
-        view.setSomeField(resultValue);
+    private void handleSuccess(@NonNull Navigation navigation, @NonNull FileNode fileNode) {
+        if (fileNode instanceof DirNode) {
+            getModel().resetModelState();
+            navigation.navigateToBrowseTree((DirNode)fileNode);
+        }
     }
 
     private void handleError(@NonNull View view, String errorMsg) {

@@ -1,21 +1,35 @@
 package com.wolfbang.fsync.treebrowse.impl;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.widget.TextView;
 
 import com.lsmvp.simplemvp.AbstractMvpViewFragment;
 import com.lsmvp.simplemvp.ModelUpdater;
+import com.lsmvp.simplemvp.ObjectRegistry;
 import com.wolfbang.fsync.R;
 import com.wolfbang.fsync.application.FsyncApplication;
+import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
+import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Model;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Navigation;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Presenter;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.View;
+import com.wolfbang.fsync.treebrowse.TreeItemRecyclerAdapter;
+import com.wolfbang.fsync.treebrowse.TreeItemRecyclerAdapter.TreeItemClickListener;
 import com.wolfbang.fsync.treebrowse._di.DaggerTreeBrowseComponent;
 import com.wolfbang.fsync.treebrowse._di.TreeBrowseComponent;
 import com.wolfbang.fsync.treebrowse._di.TreeBrowseModule;
 import com.wolfbang.shared.BackClickHandler;
+import com.wolfbang.shared.DefaultLayoutManager;
+import com.wolfbang.shared.SingleFragActivity;
+
+import butterknife.BindView;
 
 /**
  * @author david
@@ -25,8 +39,6 @@ import com.wolfbang.shared.BackClickHandler;
 /*
 implements TreeItemClickListener
 
-@BindView(R.id.recycler_view)
-    RecyclerView mRecyclerView;
 
 
     @Override
@@ -41,15 +53,6 @@ implements TreeItemClickListener
         getAdapter().setDirNode(stuff);
     }
 
-    private NavMenuRecyclerAdapter getAdapter() {
-        NavMenuRecyclerAdapter adapter = (NavMenuRecyclerAdapter)mRecyclerView.getAdapter();
-        if (adapter == null) {
-            adapter = new NavMenuRecyclerAdapter(getContext());
-            adapter.setNavMenuItemClickListener(this);
-            mRecyclerView.setAdapter(adapter);
-        }
-        return adapter;
-    }
 
     void onItemClicked() {
     }
@@ -57,9 +60,27 @@ implements TreeItemClickListener
  */
 public class TreeBrowseFragment
         extends AbstractMvpViewFragment<Presenter, Model, TreeBrowseComponent>
-        implements View,
-                   Navigation,
-                   BackClickHandler {
+        implements View, Navigation, BackClickHandler, TreeItemClickListener {
+
+    private static final String TBF_DIRNODE = "TBF_DIRNODE";
+
+    @BindView(R.id.title_text)
+    TextView mTextView;
+    @BindView(R.id.recycler_view)
+    RecyclerView mRecyclerView;
+
+    public static Intent createIntent(Context context, @NonNull DirNode dirNode) {
+        Intent intent = new SingleFragActivity.Builder(context, TreeBrowseFragment.class.getName())
+                .setDisplayHomeAsUpEnabled(true)
+                .setTitle("Browse")
+                .build();
+
+        ObjectRegistry objectRegistry = FsyncApplication.getFsyncApplicationComponent().getObjectRegistry();
+        String key = objectRegistry.put(dirNode);
+        intent.putExtra(TBF_DIRNODE, key);
+
+        return intent;
+    }
 
     //region SimpleMVP
     @NonNull
@@ -84,12 +105,17 @@ public class TreeBrowseFragment
 
     @Override
     protected int getLayoutResource() {
-        return R.layout.fragment_mission_summary;
+        return R.layout.fragment_tree_browse;
     }
 
     @Override
     protected void onBound() {
         super.onBound();
+        Log.d("xxx", this + ":onBound");
+        mRecyclerView.setLayoutManager(new DefaultLayoutManager(getContext()));
+        DirNode dirNode = getPresenter().getDirNode();
+        mTextView.setText(dirNode.getName());
+        getAdapter().setDirNode(dirNode);
     }
 
     @Nullable
@@ -100,15 +126,53 @@ public class TreeBrowseFragment
             public void updateModel(Model model) {
                 Bundle args = getArguments();
 
-//                String key = args.getString(MSF_MISSION_DATA, "");
-//                MissionData missionData = getObjectRegistry().get(key);
-//                model.setMissionData(missionData);
+                String key = args.getString(TBF_DIRNODE, "");
+                DirNode dirNode = getObjectRegistry().get(key);
+                model.setDirNode(dirNode);
             }
         };
     }
+
+    @Override
+    public boolean onBackPressed() {
+        Log.d("xxx", this + ":onBackClicked");
+        getPresenter().onBackClicked();
+        return false;
+    }
     //endregion
 
-    //region MissionSummaryContract.View
+    //region TreeBrowseContract.View
+    //endregion
+
+    //region TreeBrowseContract.Navigation
+    @Override
+    public void navigateToBrowseTree(final DirNode dirNode) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+//                ((BaseActivity) getActivity()).useStartAnimations();
+                startActivity(TreeBrowseFragment.createIntent(getContext(), dirNode));
+            }
+        });
+    }
+    //endregion
+
+    private TreeItemRecyclerAdapter getAdapter() {
+        TreeItemRecyclerAdapter adapter = (TreeItemRecyclerAdapter)mRecyclerView.getAdapter();
+        if (adapter == null) {
+            adapter = new TreeItemRecyclerAdapter();
+            adapter.setTreeItemClickListener(this);
+            mRecyclerView.setAdapter(adapter);
+        }
+        return adapter;
+    }
+
+    @Override
+    public void onTreeItemClick(FileNode fileNode) {
+        getPresenter().onItemClicked(fileNode);
+    }
+}
+
 //    @Override
 //    public void setMissionName(String missionName) {
 //        mHeadingRowView.setValue(missionName);
@@ -163,18 +227,12 @@ public class TreeBrowseFragment
 //            }
 //        });
 //    }
-    //endregion
 
 //    @OnClick(R.id.sync_scan_button)
 //    public void onButtonClick() {
 //        getPresenter().onSyncScanButtonClicked();
 //    }
 //
-    @Override
-    public boolean onBackPressed() {
-        getPresenter().onBackClicked();
-        return false;
-    }
 //
 //    private void setEndPointDetails(String name, FtpEndPoint endPoint, EndPointDetailView view) {
 //        view.getHeadingRowView().setLabel("End Point " + name);
@@ -185,4 +243,3 @@ public class TreeBrowseFragment
 //        view.getRootDirRowView().setValue(endPoint.getRootDir());
 //    }
 
-}

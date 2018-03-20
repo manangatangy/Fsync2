@@ -3,6 +3,8 @@ package com.wolfbang.fsync.missionsummary;
 import android.support.annotation.NonNull;
 
 import com.lsmvp.simplemvp.AbstractMvpContract;
+import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
+import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
 import com.wolfbang.fsync.ftpservice.model.mission.EndPoint;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
 
@@ -14,6 +16,7 @@ import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
 public interface MissionSummaryContract extends AbstractMvpContract {
 
     interface Navigation extends BasicNavigation {
+        void navigateToBrowseTree(DirNode dirNode);
     }
 
     interface View extends AbstractView {
@@ -34,12 +37,13 @@ public interface MissionSummaryContract extends AbstractMvpContract {
         void setMissionData(MissionData missionData);
         MissionData getMissionData();
 
-        String getSomeValue();
+        FileNode getSuccessResponse();
         void doSyncScan();
 
         String getErrorMsg();
         boolean isBusy();
         ModelState getModelState();
+        void resetModelState();
     }
 
     enum ModelState {
@@ -49,7 +53,7 @@ public interface MissionSummaryContract extends AbstractMvpContract {
     }
     interface ModelListener extends AbstractModelListener {
         void onBusyChanged(boolean busy);
-        void onRetrieveSomeResult(@NonNull String resultValue);
+        void onRetrieveSucceeded(@NonNull FileNode fileNode);
         void onRetrieveFailed(String errorMsg);
     }
 }

@@ -6,11 +6,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginTop="@dimen/half_padding"
-    android:layout_marginLeft="@dimen/one_and_half_padding"
-    android:layout_marginRight="@dimen/one_and_half_padding"
-    android:paddingLeft="@dimen/one_and_half_padding"
-    android:paddingRight="@dimen/one_and_half_padding"
+    android:paddingLeft="@dimen/one_padding"
+    android:paddingRight="@dimen/one_padding"
     android:orientation="vertical"
     android:background="@drawable/file_item"
     >
@@ -30,7 +27,7 @@
 
             android:textSize="16sp"
             android:textColor="@color/black"
-            tools:text="TXT \nandroid:textAppearance=BOLD TRANSACTION history description TXT TRANSACTION history description"/>
+            tools:text="TXT  TRANSACTION history  TXT   description"/>
 
         <ImageView
             android:id="@+id/item_image_chevron"
