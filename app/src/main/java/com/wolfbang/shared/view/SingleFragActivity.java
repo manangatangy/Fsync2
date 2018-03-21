@@ -1,4 +1,4 @@
-package com.wolfbang.shared;
+package com.wolfbang.shared.view;
 
 import android.content.Context;
 import android.content.Intent;
@@ -15,7 +15,7 @@ import android.widget.FrameLayout;
 import com.lsmvp.simplemvp.NestedViewHost;
 import com.lsmvp.simplemvp.ProgressDialogProvider;
 import com.wolfbang.fsync.R;
-import com.wolfbang.shared.view.AnimatingActivity;
+import com.wolfbang.shared.BackClickHandler;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

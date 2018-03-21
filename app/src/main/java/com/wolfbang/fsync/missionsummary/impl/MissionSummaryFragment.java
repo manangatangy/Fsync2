@@ -26,9 +26,9 @@ import com.wolfbang.fsync.missionsummary._di.MissionSummaryComponent;
 import com.wolfbang.fsync.missionsummary._di.MissionSummaryModule;
 import com.wolfbang.fsync.treebrowse.impl.TreeBrowseFragment;
 import com.wolfbang.shared.BackClickHandler;
-import com.wolfbang.shared.EndPointDetailView;
-import com.wolfbang.shared.LabelValueRowView;
-import com.wolfbang.shared.SingleFragActivity;
+import com.wolfbang.fsync.view.EndPointDetailView;
+import com.wolfbang.shared.view.LabelValueRowView;
+import com.wolfbang.shared.view.SingleFragActivity;
 import com.wolfbang.shared.view.AnimatingActivity;
 
 import butterknife.BindView;

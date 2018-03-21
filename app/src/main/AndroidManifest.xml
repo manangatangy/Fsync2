@@ -20,7 +20,7 @@
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name="com.wolfbang.shared.SingleFragActivity"/>
+        <activity android:name="com.wolfbang.shared.view.SingleFragActivity"/>
         <activity android:name="com.wolfbang.fsync.feature2.impl.Feature2Activity"/>
 
     </application>

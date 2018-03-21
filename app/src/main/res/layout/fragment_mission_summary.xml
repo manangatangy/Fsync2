@@ -15,7 +15,7 @@
         android:layout_margin="@dimen/single_padding"
         >
 
-        <com.wolfbang.shared.LabelValueRowView
+        <com.wolfbang.shared.view.LabelValueRowView
             android:id="@+id/heading_row_view"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/single_padding"
             >
-            <com.wolfbang.shared.EndPointDetailView
+            <com.wolfbang.fsync.view.EndPointDetailView
                 android:id="@+id/end_point_view_a"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/single_padding"
             >
-            <com.wolfbang.shared.EndPointDetailView
+            <com.wolfbang.fsync.view.EndPointDetailView
                 android:id="@+id/end_point_view_b"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

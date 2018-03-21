@@ -8,7 +8,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="@color/grey_medium"
-    tools:context="com.wolfbang.shared.SingleFragActivity"
+    tools:context="com.wolfbang.shared.view.SingleFragActivity"
     >
 
     <RelativeLayout

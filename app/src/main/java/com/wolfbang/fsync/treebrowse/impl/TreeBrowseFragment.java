@@ -19,14 +19,14 @@ import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Model;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Navigation;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Presenter;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.View;
-import com.wolfbang.fsync.treebrowse.TreeItemRecyclerAdapter;
-import com.wolfbang.fsync.treebrowse.TreeItemRecyclerAdapter.TreeItemClickListener;
+import com.wolfbang.fsync.adapter.TreeItemRecyclerAdapter;
+import com.wolfbang.fsync.adapter.TreeItemRecyclerAdapter.TreeItemClickListener;
 import com.wolfbang.fsync.treebrowse._di.DaggerTreeBrowseComponent;
 import com.wolfbang.fsync.treebrowse._di.TreeBrowseComponent;
 import com.wolfbang.fsync.treebrowse._di.TreeBrowseModule;
 import com.wolfbang.shared.BackClickHandler;
 import com.wolfbang.shared.DefaultLayoutManager;
-import com.wolfbang.shared.SingleFragActivity;
+import com.wolfbang.shared.view.SingleFragActivity;
 import com.wolfbang.shared.view.AnimatingActivity;
 
 import butterknife.BindView;

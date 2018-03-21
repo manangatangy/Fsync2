@@ -1,12 +1,12 @@
-package com.wolfbang.shared;
+package com.wolfbang.fsync.view;
 
 import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
-import android.widget.TextView;
 
 import com.wolfbang.fsync.R;
+import com.wolfbang.shared.view.LabelValueRowView;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;

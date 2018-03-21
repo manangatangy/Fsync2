@@ -1,4 +1,4 @@
-package com.wolfbang.shared;
+package com.wolfbang.shared.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;

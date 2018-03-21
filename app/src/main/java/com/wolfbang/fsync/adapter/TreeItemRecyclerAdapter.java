@@ -1,4 +1,4 @@
-package com.wolfbang.fsync.treebrowse;
+package com.wolfbang.fsync.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -11,7 +11,7 @@ import com.wolfbang.fsync.R;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.Node;
-import com.wolfbang.shared.ItemRowView;
+import com.wolfbang.fsync.view.ItemRowView;
 
 /**
  * @author david

@@ -1,4 +1,4 @@
-package com.wolfbang.shared;
+package com.wolfbang.fsync.view;
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -12,6 +12,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.wolfbang.fsync.R;
+import com.wolfbang.shared.view.LabelValueRowView;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
