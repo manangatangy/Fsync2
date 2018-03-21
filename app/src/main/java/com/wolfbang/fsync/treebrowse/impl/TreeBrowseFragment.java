@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.widget.TextView;
 
 import com.lsmvp.simplemvp.AbstractMvpViewFragment;
@@ -28,6 +27,7 @@ import com.wolfbang.fsync.treebrowse._di.TreeBrowseModule;
 import com.wolfbang.shared.BackClickHandler;
 import com.wolfbang.shared.DefaultLayoutManager;
 import com.wolfbang.shared.SingleFragActivity;
+import com.wolfbang.shared.view.AnimatingActivity;
 
 import butterknife.BindView;
 
@@ -111,7 +111,6 @@ public class TreeBrowseFragment
     @Override
     protected void onBound() {
         super.onBound();
-        Log.d("xxx", this + ":onBound");
         mRecyclerView.setLayoutManager(new DefaultLayoutManager(getContext()));
         DirNode dirNode = getPresenter().getDirNode();
         mTextView.setText(dirNode.getName());
@@ -135,7 +134,6 @@ public class TreeBrowseFragment
 
     @Override
     public boolean onBackPressed() {
-        Log.d("xxx", this + ":onBackClicked");
         getPresenter().onBackClicked();
         return false;
     }
@@ -150,10 +148,16 @@ public class TreeBrowseFragment
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                ((BaseActivity) getActivity()).useStartAnimations();
+                ((AnimatingActivity) getActivity()).useStartAnimations();
                 startActivity(TreeBrowseFragment.createIntent(getContext(), dirNode));
             }
         });
+    }
+
+    @Override
+    public void navigateBack() {
+        ((AnimatingActivity) getActivity()).useFinishAnimations();
+        navigateExit();
     }
     //endregion
 

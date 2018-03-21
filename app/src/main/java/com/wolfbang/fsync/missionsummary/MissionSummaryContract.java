@@ -17,6 +17,7 @@ public interface MissionSummaryContract extends AbstractMvpContract {
 
     interface Navigation extends BasicNavigation {
         void navigateToBrowseTree(DirNode dirNode);
+        void navigateBack();
     }
 
     interface View extends AbstractView {

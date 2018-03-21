@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.app.AlertDialog;
 import android.widget.Button;
-import android.widget.TextView;
 
 import com.lsmvp.simplemvp.AbstractMvpViewFragment;
 import com.lsmvp.simplemvp.ModelUpdater;
@@ -19,9 +18,9 @@ import com.wolfbang.fsync.ftpservice.model.mission.EndPoint;
 import com.wolfbang.fsync.ftpservice.model.mission.FtpEndPoint;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
+import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Navigation;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Presenter;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.View;
-import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Navigation;
 import com.wolfbang.fsync.missionsummary._di.DaggerMissionSummaryComponent;
 import com.wolfbang.fsync.missionsummary._di.MissionSummaryComponent;
 import com.wolfbang.fsync.missionsummary._di.MissionSummaryModule;
@@ -30,6 +29,7 @@ import com.wolfbang.shared.BackClickHandler;
 import com.wolfbang.shared.EndPointDetailView;
 import com.wolfbang.shared.LabelValueRowView;
 import com.wolfbang.shared.SingleFragActivity;
+import com.wolfbang.shared.view.AnimatingActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -177,10 +177,16 @@ public class MissionSummaryFragment
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-//                ((BaseActivity) getActivity()).useStartAnimations();
+                ((AnimatingActivity) getActivity()).useStartAnimations();
                 startActivity(TreeBrowseFragment.createIntent(getContext(), dirNode));
             }
         });
+    }
+
+    @Override
+    public void navigateBack() {
+        ((AnimatingActivity) getActivity()).useFinishAnimations();
+        navigateExit();
     }
     //endregion
 

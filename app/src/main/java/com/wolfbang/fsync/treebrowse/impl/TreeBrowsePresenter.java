@@ -44,7 +44,7 @@ public class TreeBrowsePresenter
     public void onBackClicked() {
         Navigation navigation = getNavigation();
         if (navigation != null) {
-            navigation.navigateExit();
+            navigation.navigateBack();
         }
     }
 

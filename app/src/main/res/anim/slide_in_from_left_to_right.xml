@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  ~ /**
+  ~ * (C) 2016. National Australia Bank [All rights reserved]. This product and related documentation
+  ~ * are protected by copyright restricting its use, copying, distribution, and decompilation. No part
+  ~ * of this product or related documentation may be reproduced in any form by any means without prior
+  ~ * written authorization of National Australia Bank. Unless otherwise arranged, third parties may
+  ~ * not have access to this product or related documents.
+  ~  */
+  -->
+
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <translate
+        android:fromXDelta="-100%"
+        android:toXDelta="0%"
+        android:duration="@integer/activity_transition_animation_duration"/>
+</set>
