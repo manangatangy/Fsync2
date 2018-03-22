@@ -53,4 +53,19 @@
             <enum name="right" value="1"/>
         </attr>
     </declare-styleable>
+
+    <declare-styleable name="TextButtonView">
+        <attr name="text" format="string"/>
+        <attr name="text_color" format="color"/>
+        <attr name="text_font" format="string"/>
+        <attr name="text_font_size" format="dimension"/>
+        <attr name="text_style">
+            <enum name="normal" value="0"/>
+            <enum name="bold" value="1"/>
+            <enum name="italic" value="2"/>
+            <enum name="bold_italic" value="3"/>
+        </attr>
+        <attr name="button" format="string"/>
+    </declare-styleable>
+
 </resources>

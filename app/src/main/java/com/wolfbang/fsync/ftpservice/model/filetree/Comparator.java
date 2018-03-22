@@ -19,17 +19,23 @@ public class Comparator {
      * present in both trees as either; both file-types, or a file-type and a dir-type.
      *
      */
-    protected DirNode uniqueTolist1 = new DirNode("uniqueTolist1", null, null);
-    protected DirNode uniqueTolist2 = new DirNode("uniqueTolist2", null, null);
-    protected List<Pair<Node, Node>> presentAndFile     = new ArrayList<>();
-    // todo this list prob not needed
-    @Deprecated
-    protected List<Node> presentAndDir                  = new ArrayList<>();
+    public DirNode uniqueTolist1 = new DirNode("uniqueTolist1", null, null);
+    public DirNode uniqueTolist2 = new DirNode("uniqueTolist2", null, null);
 
-    protected List<Pair<Node, Node>> nodeTypeMismatch   = new ArrayList<>();
+    public DirNode olderInList1 = new DirNode("olderInList1", null, null);
+    public DirNode olderInList2 = new DirNode("olderInList2", null, null);
+
+//    protected List<Pair<Node, Node>> presentAndFile     = new ArrayList<>();
+
+//    protected List<Pair<Node, Node>> nodeTypeMismatchx   = new ArrayList<>();
+    public DirNode nodeTypeMismatch = new DirNode("nodeTypeMismatch", null, null);
 
     private DirNode mEmptyDir = new DirNode(null, null, null);
 
+    // TODO temp ctor
+    public Comparator(@NonNull DirNode dir1) {
+        compare(dir1, mEmptyDir);
+    }
     /**
      * Performs a depth-first tree traversal comparing the Nodes at each level
      * and placing the results of the comparison in the list members.
@@ -74,16 +80,21 @@ public class Comparator {
                 if (node1.getNodeType() != node2.getNodeType()) {
                     // ==> 5. in both lists and have different types
                     // This conflict blocks further descending to discover more paths.
-                    nodeTypeMismatch.add(new Pair(node1, node2));
+
+
+//                    nodeTypeMismatch.add(new Pair(node1, node2));
+                    // TODO process mismatches ^
                 } else if (node1.getNodeType() == Node.NodeType.DIR) {
                     // ==> 4. in both lists and both have type DIR
                     // Continue to recurse and discover more paths.
                     compare((DirNode)node1, (DirNode)node2);
-                    presentAndDir.add(node1);
                 } else if (node1.getNodeType() == Node.NodeType.FILE) {
                     // ==> 3. in both lists and both have type FILE
                     // Probably compare further on basis of timestamp
-                    presentAndFile.add(new Pair(node1, node2));
+
+
+//                    presentAndFile.add(new Pair(node1, node2));
+                    // TODO process based on timestamps  ^
                 }
             }
         }

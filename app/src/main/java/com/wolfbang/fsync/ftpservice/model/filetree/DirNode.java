@@ -58,6 +58,29 @@ public class DirNode extends FileNode  implements Iterable<Node> {
         return mChildren.toArray();
     }
 
+    public int getFileCount() {
+        int count = 0;
+        for (Node child : getChildren()) {
+            if (child instanceof DirNode) {
+                count += ((DirNode) child).getFileCount();
+            } else {
+                count++;
+            }
+        }
+        return count;
+    }
+
+    public int getDirCount() {
+        int count = 0;      // Exclude the root dir from the count.
+        for (Node child : getChildren()) {
+            if (child instanceof DirNode) {
+                count++;
+                count += ((DirNode) child).getDirCount();
+            }
+        }
+        return count;
+    }
+
     /**
      * Remove the node from it's current parent and place it into this tree, preserving
      * it's heritage (creating intermediate descendants as necessary). This means that

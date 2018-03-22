@@ -7,9 +7,12 @@ import android.util.Log;
 import com.lsmvp.simplemvp.BaseMvpModel;
 import com.wolfbang.fsync.ftpservice.FtpRecursiveList;
 import com.wolfbang.fsync.ftpservice.FtpResponse;
+import com.wolfbang.fsync.ftpservice.model.filetree.Comparator;
+import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
 import com.wolfbang.fsync.ftpservice.model.mission.FtpEndPoint;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
+import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelListener;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelState;
@@ -33,7 +36,7 @@ public class MissionSummaryModel
     private int mRequestCount = 0;
     private MissionData mMissionData;
 
-    private FileNode mFileNode;
+    private ScanResult mScanResult;
 
     @VisibleForTesting
     ModelState mModelState = ModelState.IDLE;
@@ -59,8 +62,8 @@ public class MissionSummaryModel
     }
 
     @Override
-    public FileNode getSuccessResponse() {
-        return mFileNode;
+    public ScanResult getScanResult() {
+        return mScanResult;
     }
 
     @Override
@@ -102,12 +105,28 @@ public class MissionSummaryModel
                             listener.onRetrieveFailed(mErrorMsg);
                         }
                     } else {
-                        mModelState = ModelState.SUCCESS;
-                        mFileNode = ftpResponse.getResponse();
-                        Log.d("ftpFile", mFileNode.getName());
-                        mFileNode.dump("mission");
-                        if (listener != null) {
-                            listener.onRetrieveSucceeded(mFileNode);
+                        FileNode fileNode = ftpResponse.getResponse();
+                        Log.d("ftpFile", fileNode.getName());
+                        fileNode.dump("mission");
+
+                        if (fileNode instanceof DirNode) {
+                            mScanResult = new ScanResult(
+                                    new Comparator((DirNode)fileNode),
+                                    mMissionData.getMissionName(),
+                                    mMissionData.getEndPointA().getEndPointName(),
+                                    mMissionData.getEndPointB().getEndPointName()
+                            );
+                            mModelState = ModelState.SUCCESS;
+                            if (listener != null) {
+                                listener.onRetrieveSucceeded(mScanResult);
+                            }
+
+                        } else {
+                            mModelState = ModelState.ERROR;
+                            mErrorMsg = "path is not a directory (maybe a symlink?)";
+                            if (listener != null) {
+                                listener.onRetrieveFailed(mErrorMsg);
+                            }
                         }
                     }
                 }
@@ -115,11 +134,6 @@ public class MissionSummaryModel
 
         }
     }
-
-    public void dump(FileNode fileNode) {
-
-    }
-
 
     private String mErrorMsg;
     @Override

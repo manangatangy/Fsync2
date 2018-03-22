@@ -17,6 +17,8 @@ import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.mission.EndPoint;
 import com.wolfbang.fsync.ftpservice.model.mission.FtpEndPoint;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
+import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
+import com.wolfbang.fsync.missionconfirm.impl.MissionConfirmFragment;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Navigation;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Presenter;
@@ -57,7 +59,7 @@ public class MissionSummaryFragment
     public static Intent createIntent(Context context, MissionData missionData) {
         Intent intent = new SingleFragActivity.Builder(context, MissionSummaryFragment.class.getName())
                 .setDisplayHomeAsUpEnabled(true)
-                .setTitle("Mission")
+                .setTitle("Summary")
                 .build();
 
         ObjectRegistry objectRegistry = FsyncApplication.getFsyncApplicationComponent().getObjectRegistry();
@@ -133,16 +135,6 @@ public class MissionSummaryFragment
     }
 
     @Override
-    public void setSomeField(final String someValue) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-//                mTextView.setText(someValue);
-            }
-        });
-    }
-
-    @Override
     public void showError(final String errorMsg) {
         runOnUiThread(new Runnable() {
             @Override
@@ -172,13 +164,24 @@ public class MissionSummaryFragment
     //endregion
 
     //region MissionSummaryContract.Navigation
+//    @Override
+//    public void navigateToBrowseTree(final DirNode dirNode) {
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                ((AnimatingActivity) getActivity()).useStartAnimations();
+//                startActivity(TreeBrowseFragment.createIntent(getContext(), dirNode));
+//            }
+//        });
+//    }
+
     @Override
-    public void navigateToBrowseTree(final DirNode dirNode) {
+    public void navigateToMissionConfirm(final ScanResult scanResult) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 ((AnimatingActivity) getActivity()).useStartAnimations();
-                startActivity(TreeBrowseFragment.createIntent(getContext(), dirNode));
+                startActivity(MissionConfirmFragment.createIntent(getContext(), scanResult));
             }
         });
     }

@@ -7,6 +7,7 @@ import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
 import com.wolfbang.fsync.ftpservice.model.mission.EndPoint;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
+import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
 
 /**
  * @author david
@@ -16,7 +17,8 @@ import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
 public interface MissionSummaryContract extends AbstractMvpContract {
 
     interface Navigation extends BasicNavigation {
-        void navigateToBrowseTree(DirNode dirNode);
+//        void navigateToBrowseTree(DirNode dirNode);
+        void navigateToMissionConfirm(ScanResult scanResult);
         void navigateBack();
     }
 
@@ -24,7 +26,6 @@ public interface MissionSummaryContract extends AbstractMvpContract {
         void setMissionName(String missionName);
         void setEndPointDetailsA(EndPoint endPoint);
         void setEndPointDetailsB(EndPoint endPoint);
-        void setSomeField(String someValue);
         void showError(String errorMsg);
         void showLoadingState(boolean show);
     }
@@ -38,8 +39,8 @@ public interface MissionSummaryContract extends AbstractMvpContract {
         void setMissionData(MissionData missionData);
         MissionData getMissionData();
 
-        FileNode getSuccessResponse();
         void doSyncScan();
+        ScanResult getScanResult();
 
         String getErrorMsg();
         boolean isBusy();
@@ -54,7 +55,7 @@ public interface MissionSummaryContract extends AbstractMvpContract {
     }
     interface ModelListener extends AbstractModelListener {
         void onBusyChanged(boolean busy);
-        void onRetrieveSucceeded(@NonNull FileNode fileNode);
+        void onRetrieveSucceeded(@NonNull ScanResult scanResult);
         void onRetrieveFailed(String errorMsg);
     }
 }

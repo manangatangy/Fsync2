@@ -3,8 +3,7 @@ package com.wolfbang.fsync.missionsummary.impl;
 import android.support.annotation.NonNull;
 
 import com.lsmvp.simplemvp.BaseMvpPresenter;
-import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
+import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.View;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Navigation;
@@ -43,7 +42,7 @@ public class MissionSummaryPresenter
                 case SUCCESS:
                     Navigation navigation = getNavigation();
                     if (navigation != null) {
-                        handleSuccess(navigation, model.getSuccessResponse());
+                        handleSuccess(navigation, model.getScanResult());
                     }
                     break;
                 case ERROR:
@@ -81,10 +80,10 @@ public class MissionSummaryPresenter
     }
 
     @Override
-    public void onRetrieveSucceeded(@NonNull FileNode fileNode) {
+    public void onRetrieveSucceeded(@NonNull ScanResult scanResult) {
         Navigation navigation = getNavigation();
         if (navigation != null) {
-            handleSuccess(navigation, fileNode);
+            handleSuccess(navigation, scanResult);
         }
     }
 
@@ -97,11 +96,9 @@ public class MissionSummaryPresenter
     }
     //endregion
 
-    private void handleSuccess(@NonNull Navigation navigation, @NonNull FileNode fileNode) {
-        if (fileNode instanceof DirNode) {
-            getModel().resetModelState();
-            navigation.navigateToBrowseTree((DirNode)fileNode);
-        }
+    private void handleSuccess(@NonNull Navigation navigation, @NonNull ScanResult scanResult) {
+        getModel().resetModelState();
+        navigation.navigateToMissionConfirm(scanResult);
     }
 
     private void handleError(@NonNull View view, String errorMsg) {
