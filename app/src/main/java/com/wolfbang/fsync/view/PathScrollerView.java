@@ -19,10 +19,9 @@ import butterknife.ButterKnife;
  * @date 28 Mar 2018.
  */
 
-public class PathScrollerView
-        extends HorizontalScrollView {
+public class PathScrollerView extends HorizontalScrollView {
 
-    @BindView(R.id.scroll_view_layout)
+    @BindView(R.id.path_scroll_layout)
     LinearLayout mLinearLayout;
 
     public PathScrollerView(Context context) {
@@ -48,6 +47,7 @@ public class PathScrollerView
     {
         init();
     }
+
     private void init() {
         inflate(getContext(), R.layout.view_path_scroller, this);
         ButterKnife.bind(this);

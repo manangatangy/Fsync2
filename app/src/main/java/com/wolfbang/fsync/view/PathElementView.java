@@ -6,7 +6,9 @@ import android.os.Build.VERSION_CODES;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.wolfbang.fsync.R;
 
@@ -20,8 +22,12 @@ import butterknife.ButterKnife;
 
 public class PathElementView extends LinearLayout {
 
-    @BindView(R.id.scroll_view_layout)
+    @BindView(R.id.path_element_layout)
     LinearLayout mLinearLayout;
+    @BindView(R.id.path_element_image)
+    ImageView mImageView;
+    @BindView(R.id.path_element_text)
+    TextView mTextView;
 
     public PathElementView(Context context) {
         super(context);
@@ -46,6 +52,7 @@ public class PathElementView extends LinearLayout {
     {
         init();
     }
+
     private void init() {
         inflate(getContext(), R.layout.view_path_element, this);
         ButterKnife.bind(this);

@@ -3,19 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/path_element_layout"
     android:layout_width="wrap_content"
-    android:layout_height="@dimen/path_element_height"
+    android:layout_height="wrap_content"
     android:orientation="horizontal"
+    android:paddingRight="@dimen/default_gap"
     >
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:src="@mipmap/ic_launcher"
+        android:id="@+id/path_element_image"
+        android:layout_width="@dimen/path_element_chevron_size"
+        android:layout_height="@dimen/path_element_chevron_size"
+        android:layout_gravity="center_vertical"
+        android:src="@drawable/red_right_chevron"
         />
     <TextView
+        android:id="@+id/path_element_text"
         android:layout_width="wrap_content"
-        android:layout_height="match_parent"
+        android:layout_height="@dimen/path_element_height"
         android:textSize="14sp"
+        android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
         android:text="Android\nline2\nline3"
         />
