@@ -1,8 +1,10 @@
 package com.wolfbang.shared.view;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.graphics.Typeface;
+import android.os.Build.VERSION_CODES;
 import android.support.annotation.ColorRes;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
@@ -66,14 +68,18 @@ public class LabelValueRowView extends FrameLayout {
     public LabelValueRowView(Context context) {
         super(context);
     }
+
     public LabelValueRowView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
+
     public LabelValueRowView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
+
+    @TargetApi(VERSION_CODES.LOLLIPOP)
     public LabelValueRowView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);

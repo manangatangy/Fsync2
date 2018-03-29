@@ -25,7 +25,7 @@ public class Comparator {
     public DirNode olderInList1 = new DirNode("olderInList1", null, null);
     public DirNode olderInList2 = new DirNode("olderInList2", null, null);
 
-//    protected List<Pair<Node, Node>> presentAndFile     = new ArrayList<>();
+    protected List<Pair<Node, Node>> presentAndFile     = new ArrayList<>();
 
 //    protected List<Pair<Node, Node>> nodeTypeMismatchx   = new ArrayList<>();
     public DirNode nodeTypeMismatch = new DirNode("nodeTypeMismatch", null, null);
@@ -36,13 +36,17 @@ public class Comparator {
     public Comparator(@NonNull DirNode dir1) {
         compare(dir1, mEmptyDir);
     }
+    public Comparator(@NonNull DirNode dir1, @NonNull DirNode dir2) {
+        compare(dir1, dir2);
+    }
+
     /**
      * Performs a depth-first tree traversal comparing the Nodes at each level
      * and placing the results of the comparison in the list members.
      * @param dir1
      * @param dir2
      */
-    public void compare(@NonNull DirNode dir1, @NonNull DirNode dir2) {
+    private void compare(@NonNull DirNode dir1, @NonNull DirNode dir2) {
 
         // Each item in these lists is either
         // 1. in only list1
@@ -93,7 +97,7 @@ public class Comparator {
                     // Probably compare further on basis of timestamp
 
 
-//                    presentAndFile.add(new Pair(node1, node2));
+                    presentAndFile.add(new Pair(node1, node2));
                     // TODO process based on timestamps  ^
                 }
             }

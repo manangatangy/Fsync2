@@ -1,7 +1,9 @@
 package com.wolfbang.fsync.view;
 
+import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
+import android.os.Build.VERSION_CODES;
 import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -51,10 +53,13 @@ public class ItemRowView extends LinearLayout {
         super(context, attrs);
         init(context, attrs);
     }
+
     public ItemRowView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
+
+    @TargetApi(VERSION_CODES.LOLLIPOP)
     public ItemRowView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);

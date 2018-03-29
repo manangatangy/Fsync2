@@ -3,16 +3,14 @@ package com.wolfbang.fsync.ftpservice.model.filetree;
 import android.support.v4.util.Pair;
 import android.util.Log;
 
-import com.wolfbang.fsync.ftpservice.model.filetree.Comparator;
-import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.Node;
-
 import org.junit.Test;
 
 import java.util.List;
 
-import static junit.framework.Assert.*;
+import static junit.framework.Assert.assertEquals;
+import static junit.framework.Assert.assertNotNull;
+import static junit.framework.Assert.assertNull;
+import static junit.framework.Assert.fail;
 
 /**
  * @author david
@@ -148,15 +146,14 @@ public class FileNodeTest {
         DirNode dir1 = inflateTree("root1", paths1);
         DirNode dir2 = inflateTree("root2", paths2);
 
-        Comparator comparator = new Comparator();
-        comparator.compare(dir1, dir2);
+        Comparator comparator = new Comparator(dir1, dir2);
 
         comparator.uniqueTolist1.dump("uniqueTolist1");
         comparator.uniqueTolist2.dump("uniqueTolist2");
         dumpList("uniqueTolist1", comparator.uniqueTolist1);
         dumpList("uniqueTolist2", comparator.uniqueTolist2);
         dumpPairList("presentAndFile", comparator.presentAndFile);
-        dumpPairList("nodeTypeMismatch", comparator.nodeTypeMismatch);
+        dumpList("nodeTypeMismatch", comparator.nodeTypeMismatch);
     }
 
     private DirNode inflateTree(String rootName, String[] paths) {

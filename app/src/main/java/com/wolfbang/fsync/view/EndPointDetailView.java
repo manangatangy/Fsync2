@@ -1,6 +1,8 @@
 package com.wolfbang.fsync.view;
 
+import android.annotation.TargetApi;
 import android.content.Context;
+import android.os.Build.VERSION_CODES;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
 import android.widget.LinearLayout;
@@ -36,9 +38,12 @@ public class EndPointDetailView extends LinearLayout {
     public EndPointDetailView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
     }
+
     public EndPointDetailView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
+
+    @TargetApi(VERSION_CODES.LOLLIPOP)
     public EndPointDetailView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr);
     }

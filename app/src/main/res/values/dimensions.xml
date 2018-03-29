@@ -13,4 +13,6 @@
     <dimen name="double_padding">16dp</dimen>
     <dimen name="quad_padding">32dp</dimen>
 
+    <dimen name="path_element_height">56dp</dimen>
+
 </resources>
