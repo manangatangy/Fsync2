@@ -26,7 +26,7 @@ public class FileNode extends Node {
 
     @Override
     public NodeType getNodeType() {
-        return Node.NodeType.FILE;
+        return NodeType.FILE;
     }
 
     @Override

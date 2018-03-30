@@ -112,9 +112,9 @@ public class TreeBrowseFragment
     protected void onBound() {
         super.onBound();
         mRecyclerView.setLayoutManager(new DefaultLayoutManager(getContext()));
-        DirNode dirNode = getPresenter().getDirNode();
-        mTextView.setText(dirNode.getName());
-        getAdapter().setDirNode(dirNode);
+//        DirNode dirNode = getPresenter().getDirNode();
+//        mTextView.setText(dirNode.getName());
+//        getAdapter().setDirNode(dirNode);
     }
 
     @Nullable
@@ -140,6 +140,13 @@ public class TreeBrowseFragment
     //endregion
 
     //region TreeBrowseContract.View
+
+    @Override
+    public void setDirNode(DirNode dirNode) {
+        mTextView.setText(dirNode.getName());
+        getAdapter().setDirNode(dirNode);
+    }
+
     //endregion
 
     //region TreeBrowseContract.Navigation
@@ -234,7 +241,7 @@ public class TreeBrowseFragment
 
 //    @OnClick(R.id.sync_scan_button)
 //    public void onButtonClick() {
-//        getPresenter().onSyncScanButtonClicked();
+//        getPresenter().onScanButtonClicked();
 //    }
 //
 //

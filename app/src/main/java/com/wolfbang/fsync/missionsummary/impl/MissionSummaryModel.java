@@ -67,7 +67,7 @@ public class MissionSummaryModel
     }
 
     @Override
-    public void doSyncScan() {
+    public void doScan() {
 
 //        java.util.TimeZone timeZone;
 //        timeZone.toZoneId()
@@ -111,6 +111,7 @@ public class MissionSummaryModel
 
                         if (fileNode instanceof DirNode) {
                             mScanResult = new ScanResult(
+                                    // TODO must call ctor with dirnode fro local scan also
                                     new Comparator((DirNode)fileNode),
                                     mMissionData.getMissionName(),
                                     mMissionData.getEndPointA().getEndPointName(),

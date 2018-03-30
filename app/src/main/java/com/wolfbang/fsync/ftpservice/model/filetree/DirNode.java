@@ -15,13 +15,13 @@ public class DirNode extends FileNode  implements Iterable<Node> {
 
     private NodeList mChildren = new NodeList();
 
-    public DirNode(String name, @NonNull DirNode parent, Date timeStamp) {
+    public DirNode(String name, DirNode parent, Date timeStamp) {
         super(name, parent, timeStamp);
     }
 
     @Override
     public NodeType getNodeType() {
-        return Node.NodeType.DIR;
+        return NodeType.DIR;
     }
 
     @Deprecated

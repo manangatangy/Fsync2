@@ -3,8 +3,6 @@ package com.wolfbang.fsync.missionsummary;
 import android.support.annotation.NonNull;
 
 import com.lsmvp.simplemvp.AbstractMvpContract;
-import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
 import com.wolfbang.fsync.ftpservice.model.mission.EndPoint;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
 import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
@@ -31,7 +29,7 @@ public interface MissionSummaryContract extends AbstractMvpContract {
     }
 
     interface Presenter extends AbstractPresenter<View, Model, Navigation> {
-        void onSyncScanButtonClicked();
+        void onScanButtonClicked();
         void onBackClicked();
     }
 
@@ -39,7 +37,7 @@ public interface MissionSummaryContract extends AbstractMvpContract {
         void setMissionData(MissionData missionData);
         MissionData getMissionData();
 
-        void doSyncScan();
+        void doScan();
         ScanResult getScanResult();
 
         String getErrorMsg();

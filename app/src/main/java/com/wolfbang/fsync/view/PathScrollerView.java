@@ -63,5 +63,8 @@ public class PathScrollerView extends HorizontalScrollView {
     }
 
 
+    interface PathElementSelectHandler {
+        void onSelectPathElement();
+    }
 
 }

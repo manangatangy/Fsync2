@@ -35,10 +35,10 @@ public class TreeBrowsePresenter
     //endregion
 
     //region TreeBrowseContract.Presenter
-    @Override
-    public DirNode getDirNode() {
-        return getModel().getDirNode();
-    }
+//    @Override
+//    public DirNode getDirNode() {
+//        return getModel().getDirNode();
+//    }
 
     @Override
     public void onBackClicked() {

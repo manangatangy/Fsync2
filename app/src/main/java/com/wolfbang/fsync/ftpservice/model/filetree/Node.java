@@ -14,12 +14,6 @@ import java.util.*;
 
 public abstract class Node implements Comparable<Node> {
 
-    enum NodeType {
-        FILE,
-        DIR,
-        SYMLINK
-    }
-
     public abstract NodeType getNodeType();
     public abstract String getName();
     public abstract DirNode getParent();
@@ -116,10 +110,10 @@ public abstract class Node implements Comparable<Node> {
                 // No more common ancestors; start creating dir nodes.
                 child = new DirNode(name, parent, null);
                 parent.add(child);
-                Log.d("ftp", "create-dir " + child.toStringWithPath());
+                Log.d("inflate", "create-dir " + child.toStringWithPath());
             }
             if (NodeType.DIR != child.getNodeType()) {
-                Log.d("ftp", "Mismatch on node type (expecting DIR) for same path, index:"
+                Log.d("inflate", "Mismatch on node type (expecting DIR) for same path, index:"
                         + index + ", path:" + path);
                 return null;          // Mismatch on node type for same path
             }
@@ -134,15 +128,15 @@ public abstract class Node implements Comparable<Node> {
         if (child == null) {
             child = new FileNode(name, parent, parseDate(createTimestamp));
             parent.add(child);
-            Log.d("ftp", "create-file" + child.toStringWithPath());
+            Log.d("inflate", "create-file" + child.toStringWithPath());
         } else if (NodeType.FILE != child.getNodeType()) {
-            Log.d("ftp", "Mismatch on node type (expecting FILE) for same path, index:"
+            Log.d("inflate", "Mismatch on node type (expecting FILE) for same path, index:"
                     + (names.length) + ", path:" + path);
             return null;          // Mismatch on node type for same path
         } else {
             String actualTimeStamp = formatDate(child.getTimeStamp());
             if (!createTimestamp.equals(actualTimeStamp)) {
-                Log.d("ftp", "Mismatch on last node timestamp, actual '"
+                Log.d("inflate", "Mismatch on last node timestamp, actual '"
                         + actualTimeStamp + "', expected '" + createTimestamp + "'");
                 return null;        // Mismatch on last node timestamp
             }

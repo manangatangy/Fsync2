@@ -13,7 +13,6 @@ import com.lsmvp.simplemvp.ModelUpdater;
 import com.lsmvp.simplemvp.ObjectRegistry;
 import com.wolfbang.fsync.R;
 import com.wolfbang.fsync.application.FsyncApplication;
-import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.mission.EndPoint;
 import com.wolfbang.fsync.ftpservice.model.mission.FtpEndPoint;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
@@ -26,12 +25,11 @@ import com.wolfbang.fsync.missionsummary.MissionSummaryContract.View;
 import com.wolfbang.fsync.missionsummary._di.DaggerMissionSummaryComponent;
 import com.wolfbang.fsync.missionsummary._di.MissionSummaryComponent;
 import com.wolfbang.fsync.missionsummary._di.MissionSummaryModule;
-import com.wolfbang.fsync.treebrowse.impl.TreeBrowseFragment;
-import com.wolfbang.shared.BackClickHandler;
 import com.wolfbang.fsync.view.EndPointDetailView;
+import com.wolfbang.shared.BackClickHandler;
+import com.wolfbang.shared.view.AnimatingActivity;
 import com.wolfbang.shared.view.LabelValueRowView;
 import com.wolfbang.shared.view.SingleFragActivity;
-import com.wolfbang.shared.view.AnimatingActivity;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -53,8 +51,8 @@ public class MissionSummaryFragment
     EndPointDetailView mEndPointA;
     @BindView(R.id.end_point_view_b)
     EndPointDetailView mEndPointB;
-    @BindView(R.id.sync_scan_button)
-    Button mSyncScanButton;
+    @BindView(R.id.scan_button)
+    Button mScanButton;
 
     public static Intent createIntent(Context context, MissionData missionData) {
         Intent intent = new SingleFragActivity.Builder(context, MissionSummaryFragment.class.getName())
@@ -193,9 +191,9 @@ public class MissionSummaryFragment
     }
     //endregion
 
-    @OnClick(R.id.sync_scan_button)
+    @OnClick(R.id.scan_button)
     public void onButtonClick() {
-        getPresenter().onSyncScanButtonClicked();
+        getPresenter().onScanButtonClicked();
     }
 
     @Override

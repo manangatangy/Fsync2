@@ -17,6 +17,7 @@ public interface TreeBrowseContract extends AbstractMvpContract {
     }
 
     interface View extends AbstractView {
+        void setDirNode(DirNode dirNode);
 //        void setSomeField(String someValue);
 //        void showError();
 //        void showLoadingState(boolean show);
@@ -24,7 +25,7 @@ public interface TreeBrowseContract extends AbstractMvpContract {
 
     interface Presenter extends AbstractPresenter<View, Model, Navigation> {
         //        void onSomeButtonClicked(int timePeriod);
-        DirNode getDirNode();
+//        DirNode getDirNode();
         void onBackClicked();
         void onItemClicked(FileNode fileNode);
     }

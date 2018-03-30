@@ -55,14 +55,14 @@
         </android.support.v7.widget.CardView>
 
         <Button
-            android:id="@+id/sync_scan_button"
+            android:id="@+id/scan_button"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/single_padding"
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/double_padding"
             android:layout_marginBottom="@dimen/single_padding"
-            android:text="Sync : Scan"
+            android:text="Scan"
             />
 
     </LinearLayout>

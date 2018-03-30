@@ -57,8 +57,8 @@ public class MissionSummaryPresenter
 
     //region MissionSummaryContract.Presenter
     @Override
-    public void onSyncScanButtonClicked() {
-        getModel().doSyncScan();
+    public void onScanButtonClicked() {
+        getModel().doScan();
     }
 
     @Override

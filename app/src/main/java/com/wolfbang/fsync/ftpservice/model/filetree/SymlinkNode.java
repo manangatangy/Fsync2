@@ -15,7 +15,7 @@ public class SymlinkNode extends FileNode {
 
     @Override
     public NodeType getNodeType() {
-        return Node.NodeType.SYMLINK;
+        return NodeType.SYMLINK;
     }
 
 }

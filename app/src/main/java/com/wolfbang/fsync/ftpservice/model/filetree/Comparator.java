@@ -12,6 +12,7 @@ import java.util.List;
  * @date 15 Mar 2018.
  */
 
+@Deprecated
 public class Comparator {
 
     /**
@@ -32,7 +33,7 @@ public class Comparator {
 
     private DirNode mEmptyDir = new DirNode(null, null, null);
 
-    // TODO temp ctor
+    // TODO temp ctor -
     public Comparator(@NonNull DirNode dir1) {
         compare(dir1, mEmptyDir);
     }
@@ -60,7 +61,7 @@ public class Comparator {
 
         for (Node node1 : dir1.toChildrenArray()) {
             if (dir2.findChild(node1.getName()) == null) {
-                if (node1.getNodeType() == Node.NodeType.FILE) {
+                if (node1.getNodeType() == NodeType.FILE) {
                     // ==> 1. in only list1
                     uniqueTolist1.adopt((FileNode)node1);
                     Log.d("add to uniqueTolist1", node1.toStringWithPath());
@@ -73,7 +74,7 @@ public class Comparator {
         for (Node node2 : dir2.toChildrenArray()) {
             Node node1 = dir1.findChild(node2.getName());
             if (node1 == null) {
-                if (node2.getNodeType() == Node.NodeType.FILE) {
+                if (node2.getNodeType() == NodeType.FILE) {
                     // ==> 2. in only list2
                     uniqueTolist2.adopt((FileNode)node2);
                     Log.d("add to uniqueTolist2", node2.toStringWithPath());
@@ -88,11 +89,11 @@ public class Comparator {
 
 //                    nodeTypeMismatch.add(new Pair(node1, node2));
                     // TODO process mismatches ^
-                } else if (node1.getNodeType() == Node.NodeType.DIR) {
+                } else if (node1.getNodeType() == NodeType.DIR) {
                     // ==> 4. in both lists and both have type DIR
                     // Continue to recurse and discover more paths.
                     compare((DirNode)node1, (DirNode)node2);
-                } else if (node1.getNodeType() == Node.NodeType.FILE) {
+                } else if (node1.getNodeType() == NodeType.FILE) {
                     // ==> 3. in both lists and both have type FILE
                     // Probably compare further on basis of timestamp
 

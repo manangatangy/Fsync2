@@ -12,6 +12,8 @@ import android.widget.TextView;
 
 import com.wolfbang.fsync.R;
 
+import org.apache.commons.text.WordUtils;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -21,6 +23,8 @@ import butterknife.ButterKnife;
  */
 
 public class PathElementView extends LinearLayout {
+
+    public static final int TEXT_LINE_LENGTH = 24;
 
     @BindView(R.id.path_element_layout)
     LinearLayout mLinearLayout;
@@ -66,5 +70,11 @@ public class PathElementView extends LinearLayout {
 //
 //        styledAttributes.recycle();
     }
+
+    public void setText(String text) {
+        String wrapped = WordUtils.wrap(text, TEXT_LINE_LENGTH, "\n", true);
+        mTextView.setText(wrapped);
+    }
+
 
 }
