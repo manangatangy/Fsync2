@@ -3,6 +3,7 @@ package com.wolfbang.fsync.missionconfirm;
 import android.support.annotation.Nullable;
 
 import com.lsmvp.simplemvp.AbstractMvpContract;
+import com.wolfbang.fsync.ftpservice.model.compare.ActionableDirNode;
 import com.wolfbang.fsync.ftpservice.model.compare.Precedence;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
@@ -21,15 +22,17 @@ public interface MissionConfirmContract {
     }
 
     interface View extends AbstractMvpContract.AbstractView {
+        void setPrecedence(Precedence precedence);
         void setMissionName(String missionName);
         void setEndPointNameA(String endPointNameA);
         void setEndPointNameB(String endPointNameB);
-        void setPrecedence(Precedence precedence);
-        void setConflict(@Nullable String text, boolean buttonEnabled);
-        void setCopied1(@Nullable String text, boolean buttonEnabled);
-        void setCopied2(@Nullable String text, boolean buttonEnabled);
-        void setOverridden1(@Nullable String text, boolean buttonEnabled);
-        void setOverridden2(@Nullable String text, boolean buttonEnabled);
+
+        void setClashSubHeading(@Nullable String text);
+        void setCopiedSubHeadingA(@Nullable String text);
+        void setCopiedSubHeadingB(@Nullable String text);
+        void setOverriddenSubHeadingA(@Nullable String text);
+        void setOverriddenSubHeadingB(@Nullable String text);
+
         void setSyncButtonEnabled(boolean visible);
 
         //        void setSomeField(String someValue);
@@ -49,7 +52,7 @@ public interface MissionConfirmContract {
         void setPrecedence(Precedence precedence);      // And perform comparison
         Precedence getPrecedence();
 
-        DirNode getComparisonTree();
+        ActionableDirNode getComparisonTree();
 
         void setMissionNameData(MissionNameData missionNameData);
         MissionNameData getMissionNameData();
@@ -75,7 +78,7 @@ public interface MissionConfirmContract {
     }
     interface ModelListener extends AbstractMvpContract.AbstractModelListener {
         void onBusyChanged(boolean busy);
-        void onCompared(DirNode comparisonTree);
+        void onCompared(ActionableDirNode comparisonTree);
 //        void onRetrieveSucceeded(@NonNull FileNode fileNode);
 //        void onRetrieveFailed(String errorMsg);
     }

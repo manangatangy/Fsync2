@@ -3,8 +3,9 @@ package com.wolfbang.fsync.missionconfirm.impl;
 import android.support.annotation.NonNull;
 
 import com.lsmvp.simplemvp.BaseMvpPresenter;
+import com.wolfbang.fsync.ftpservice.model.compare.Action;
+import com.wolfbang.fsync.ftpservice.model.compare.ActionableDirNode;
 import com.wolfbang.fsync.ftpservice.model.compare.Precedence;
-import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Model;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.ModelListener;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Navigation;
@@ -119,7 +120,7 @@ public class MissionConfirmPresenter
     }
 
     @Override
-    public void onCompared(DirNode comparisonTree) {
+    public void onCompared(ActionableDirNode comparisonTree) {
         View view = getView();
         if (view != null) {
             handleCompared(view, comparisonTree);
@@ -158,59 +159,40 @@ public class MissionConfirmPresenter
         view.showLoadingState(busy);
     }
 
-    private void handleCompared(@NonNull View view, DirNode comparisonTree) {
+    private void handleCompared(@NonNull View view, ActionableDirNode comparisonTree) {
+        Precedence precedence = getModel().getPrecedence();
 
-    }
-
-    private void setConflict(@NonNull View view, DirNode dirNode) {
-
-        int fileCount = dirNode.getFileCount();
-        int dirCount = dirNode.getDirCount();
-        String text = (dirNode.getFileCount() == 0)
-                ? null
-                : (makeDescription(fileCount, dirCount) + "\nhave mismatching types\nand require resolution");
-        view.setConflict(text, true);
-    }
-
-    private void setCopiedToA(@NonNull View view, DirNode dirNode,
-                              String endPointNameA, String endPointNameB) {
-        String text = makeDescription("will be copied", dirNode, endPointNameB, endPointNameA);
-        view.setCopied1(text, (dirNode.getFileCount() > 0));
-    }
-
-    private void setCopiedToB(@NonNull View view, DirNode dirNode,
-                              String endPointNameA, String endPointNameB) {
-        String text = makeDescription("will be copied", dirNode, endPointNameA, endPointNameB);
-        view.setCopied2(text, (dirNode.getFileCount() > 0));
-    }
-
-    private void setOverriddenOnA(@NonNull View view, DirNode dirNode,
-                                  String endPointNameA, String endPointNameB) {
-        String text = makeDescription("are older and will be overridden", dirNode, null, endPointNameA);
-        view.setOverridden1(text, (dirNode.getFileCount() > 0));
-    }
-
-    private void setOverriddenOnB(@NonNull View view, DirNode dirNode,
-                                  String endPointNameA, String endPointNameB) {
-        String text = makeDescription("are older and will be overridden", dirNode, null, endPointNameB);
-        view.setOverridden2(text, (dirNode.getFileCount() > 0));
-    }
-
-    private String makeDescription(String action, DirNode dirNode,
-                                   String fromEndPointName, String toEndPointName) {
-        int fileCount = dirNode.getFileCount();
-        int dirCount = dirNode.getDirCount();
-        String text = makeDescription(fileCount, dirCount) + "\n" + action;
-        if (fromEndPointName == null) {
-            text = text + "\non: " + toEndPointName;
+        if (precedence == Precedence.A) {
+            view.setCopiedSubHeadingA(null);
+            view.setOverriddenSubHeadingA(null);
         } else {
-            text = text + "\nfrom: " + fromEndPointName + "\nto: " + toEndPointName;
+            view.setCopiedSubHeadingA(makeSubHeading(comparisonTree, Action.COPY_TO_A));
+            view.setOverriddenSubHeadingA(makeSubHeading(comparisonTree, Action.OVERWRITE_ON_A));
         }
 
+        if (precedence == Precedence.B) {
+            view.setCopiedSubHeadingB(null);
+            view.setOverriddenSubHeadingB(null);
+        } else {
+            view.setCopiedSubHeadingB(makeSubHeading(comparisonTree, Action.COPY_TO_B));
+            view.setOverriddenSubHeadingB(makeSubHeading(comparisonTree, Action.OVERWRITE_ON_B));
+        }
+
+        if (precedence == Precedence.NEWEST) {
+            view.setClashSubHeading(makeSubHeading(comparisonTree, Action.DO_NOTHING));
+        } else {
+            view.setClashSubHeading(null);
+        }
+    }
+
+    private String makeSubHeading(ActionableDirNode actionableDirNode, Action action) {
+        int fileCount = actionableDirNode.getFileCount(action);
+        int dirCount = actionableDirNode.getDirCount(action);
+        String text = makeCountDescription(fileCount, dirCount);
         return text;
     }
 
-    private String makeDescription(int fileCount, int dirCount) {
+    private String makeCountDescription(int fileCount, int dirCount) {
         return fileCount + (fileCount > 1 ? " files in " : " file in ")
                 + dirCount + (dirCount > 1 ? " folders" : " folder");
     }

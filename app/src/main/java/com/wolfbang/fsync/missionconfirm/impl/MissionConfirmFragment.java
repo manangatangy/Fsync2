@@ -33,7 +33,6 @@ import com.wolfbang.shared.view.LabelValueRowView;
 import com.wolfbang.shared.view.NestedRadioButton;
 import com.wolfbang.shared.view.NestedRadioGroup;
 import com.wolfbang.shared.view.SingleFragActivity;
-import com.wolfbang.shared.view.TextButtonView;
 
 import butterknife.BindView;
 import butterknife.OnClick;
@@ -62,16 +61,20 @@ public class MissionConfirmFragment
     @BindView(R.id.radio_from_b)
     NestedRadioButton mRadioFromB;
 
-    @BindView(R.id.text_button_conflict)
-    TextButtonView mConflict;
-    @BindView(R.id.text_button_copied_1)
-    TextButtonView mCopied1;
-    @BindView(R.id.text_button_copied_2)
-    TextButtonView mCopied2;
-    @BindView(R.id.text_button_overridden_1)
-    TextButtonView mOverridden1;
-    @BindView(R.id.text_button_overridden_2)
-    TextButtonView mOverridden2;
+
+    @BindView(R.id.comparison_radio_group)
+    NestedRadioGroup mComparisonRadioGroup;
+    @BindView(R.id.radio_to_a)
+    NestedRadioButton mRadioToA;
+    @BindView(R.id.radio_to_b)
+    NestedRadioButton mRadioToB;
+    @BindView(R.id.radio_on_a)
+    NestedRadioButton mRadioOnA;
+    @BindView(R.id.radio_on_b)
+    NestedRadioButton mRadioOnB;
+    @BindView(R.id.radio_clash)
+    NestedRadioButton mRadioClash;
+
     @BindView(R.id.sync_button)
     Button mSyncButton;
 
@@ -159,16 +162,13 @@ public class MissionConfirmFragment
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (!mInhibitPrecedenceCheckedNotification) {
             Precedence precedence = Precedence.NONE;
-            switch (checkedId) {
-            case R.id.radio_from_a:
+            //TODO the getRadioButtonId() value is the same for all views duh
+            if (checkedId == mRadioFromA.getRadioButtonId()) {
                 precedence = Precedence.A;
-                break;
-            case R.id.radio_both:
+            } else if (checkedId == mRadioBoth.getRadioButtonId()) {
                 precedence = Precedence.NEWEST;
-                break;
-            case R.id.radio_from_b:
+            } else if (checkedId == mRadioFromB.getRadioButtonId()) {
                 precedence = Precedence.B;
-                break;
             }
             if (precedence != Precedence.NONE) {
                 getPresenter().onPrecedenceChecked(precedence);
@@ -178,21 +178,6 @@ public class MissionConfirmFragment
     //endregion
 
     //region Contract.View
-    @Override
-    public void setMissionName(String missionName) {
-        mHeadingRowView.setValue(missionName);
-    }
-
-    @Override
-    public void setEndPointNameA(String endPointNameA) {
-        mRadioFromA.setHeadingText("from: " + endPointNameA);
-    }
-
-    @Override
-    public void setEndPointNameB(String endPointNameB) {
-        mRadioFromB.setHeadingText("from: " + endPointNameB);
-    }
-
     @Override
     public void setPrecedence(Precedence precedence) {
         mInhibitPrecedenceCheckedNotification = true;
@@ -211,28 +196,47 @@ public class MissionConfirmFragment
     }
 
     @Override
-    public void setConflict(@Nullable final String text, final boolean buttonEnabled) {
-        setTextButtonView(mConflict, text, "Resolve", buttonEnabled);
+    public void setMissionName(String missionName) {
+        mHeadingRowView.setValue(missionName);
     }
 
     @Override
-    public void setCopied1(@Nullable final String text, final boolean buttonEnabled) {
-        setTextButtonView(mCopied1, text, "Review", buttonEnabled);
+    public void setEndPointNameA(String endPointNameA) {
+        mRadioFromA.setHeadingText("from: " + endPointNameA);
+        mRadioToA.setHeadingText("copy to: " + endPointNameA);
+        mRadioOnA.setHeadingText("overwrite on: " + endPointNameA);
     }
 
     @Override
-    public void setCopied2(@Nullable final String text, final boolean buttonEnabled) {
-        setTextButtonView(mCopied2, text, "Review", buttonEnabled);
+    public void setEndPointNameB(String endPointNameB) {
+        mRadioFromB.setHeadingText("from: " + endPointNameB);
+        mRadioToB.setHeadingText("copy to: " + endPointNameB);
+        mRadioOnB.setHeadingText("overwrite on: " + endPointNameB);
     }
 
     @Override
-    public void setOverridden1(@Nullable final String text, final boolean buttonEnabled) {
-        setTextButtonView(mOverridden1, text, "Review", buttonEnabled);
+    public void setClashSubHeading(@Nullable final String text) {
+        setNestedRadioButtonSubHeadingAndVisibility(mRadioClash, text);
     }
 
     @Override
-    public void setOverridden2(@Nullable final String text, final boolean buttonEnabled) {
-        setTextButtonView(mOverridden2, text, "Review", buttonEnabled);
+    public void setCopiedSubHeadingA(@Nullable final String text) {
+        setNestedRadioButtonSubHeadingAndVisibility(mRadioToA, text);
+    }
+
+    @Override
+    public void setCopiedSubHeadingB(@Nullable final String text) {
+        setNestedRadioButtonSubHeadingAndVisibility(mRadioToB, text);
+    }
+
+    @Override
+    public void setOverriddenSubHeadingA(@Nullable final String text) {
+        setNestedRadioButtonSubHeadingAndVisibility(mRadioOnA, text);
+    }
+
+    @Override
+    public void setOverriddenSubHeadingB(@Nullable final String text) {
+        setNestedRadioButtonSubHeadingAndVisibility(mRadioOnB, text);
     }
 
     @Override
@@ -303,17 +307,14 @@ public class MissionConfirmFragment
         return false;
     }
 
-    private void setTextButtonView(final TextButtonView textButtonView,
-                                   @Nullable final String text,
-                                   @Nullable final String buttonText,
-                                   final boolean buttonEnabled) {
+    private void setNestedRadioButtonSubHeadingAndVisibility(
+            final NestedRadioButton nestedRadioButton, @Nullable final String text) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                textButtonView.setVisibility(text == null ? android.view.View.GONE : android.view.View.VISIBLE);
-                textButtonView.setLabel(text);
-                textButtonView.setButton(buttonText);
-                textButtonView.setButtonEnabled(buttonEnabled);
+                nestedRadioButton.setVisibility(text == null ?
+                                                android.view.View.GONE : android.view.View.VISIBLE);
+                nestedRadioButton.setSubheadingText(text);
             }
         });
     }

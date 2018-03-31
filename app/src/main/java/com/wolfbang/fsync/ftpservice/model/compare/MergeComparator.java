@@ -32,8 +32,8 @@ public class MergeComparator {
      * The nodes in this tree are all ActionableFileNode or ActionableDirNode, with Action values set
      * according to the specified Precedence as well as the node comparison.
      */
-    public DirNode compare(@NonNull final DirNode dir1, @NonNull final DirNode dir2) {
-        DirNode resultDir = new DirNode(null, null, null);
+    public ActionableDirNode compare(@NonNull final DirNode dir1, @NonNull final DirNode dir2) {
+        ActionableDirNode resultDir = new ActionableDirNode(null, null);
         compare(resultDir, dir1, dir2);
         return resultDir;
     }
@@ -53,7 +53,7 @@ public class MergeComparator {
                 if (node1.getNodeType() == NodeType.FILE) {
                     FileNode fileNode = new UniqueActionableFileNode(mPrecedence, node1.getName(), resultDir, UniqueTo.A);
                     resultDir.add(fileNode);
-                } else {
+                } else if (node1.getNodeType() == NodeType.DIR) {
                     DirNode dirNode = new UniqueActionableDirNode(mPrecedence, node1.getName(), resultDir, UniqueTo.A);
                     resultDir.add(dirNode);
                     // This compare call will recurse/traverse down the tree, adding in UniqueTo.A nodes only.
@@ -69,7 +69,7 @@ public class MergeComparator {
                 if (node2.getNodeType() == NodeType.FILE) {
                     FileNode fileNode = new UniqueActionableFileNode(mPrecedence, node2.getName(), resultDir, UniqueTo.B);
                     resultDir.add(fileNode);
-                } else {
+                } else if (node2.getNodeType() == NodeType.DIR) {
                     DirNode dirNode = new UniqueActionableDirNode(mPrecedence, node2.getName(), resultDir, UniqueTo.B);
                     resultDir.add(dirNode);
                     // This compare call will recurse/traverse down the tree, adding in UniqueTo.B nodes only.
@@ -81,13 +81,13 @@ public class MergeComparator {
                 if (node1.getNodeType() != node2.getNodeType()) {
                     // type clash
                     if (node1.getNodeType() == NodeType.DIR) {
-                        // node1 is the dir, node2 is the file
+                        // node1 is the dir, node2 is the non-dir   TODO - what if node2 is a symlink - can that be ignored ?
                         DirNode dirNode = new TypeClashActionableDirNode(mPrecedence, name, resultDir, DirectoryOn.A);
                         resultDir.add(dirNode);
                         // This compare call will recurse/traverse down the tree, adding in UniqueTo.A nodes only.
                         compare(dirNode, (DirNode)node1, mEmptyDir);
-                    } else {
-                        // node2 is DIR, node1 is the file
+                    } else if (node2.getNodeType() == NodeType.DIR) {
+                        // node2 is DIR, node1 is the non-dir   TODO same as above
                         DirNode dirNode = new TypeClashActionableDirNode(mPrecedence, name, resultDir, DirectoryOn.B);
                         resultDir.add(dirNode);
                         // This compare call will recurse/traverse down the tree, adding in UniqueTo.B nodes only.

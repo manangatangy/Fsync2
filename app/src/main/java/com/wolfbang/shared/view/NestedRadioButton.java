@@ -4,6 +4,7 @@ import android.annotation.TargetApi;
 import android.content.Context;
 import android.content.res.TypedArray;
 import android.os.Build.VERSION_CODES;
+import android.support.annotation.IdRes;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.AttributeSet;
@@ -72,6 +73,7 @@ public class NestedRadioButton extends LinearLayout {
         setButtonText(styledAttributes.getString(R.styleable.NestedRadioButton_button_text));
         setHeadingText(styledAttributes.getString(R.styleable.NestedRadioButton_heading_text));
         setSubheadingText(styledAttributes.getString(R.styleable.NestedRadioButton_subheading_text));
+        setButtonVisible(styledAttributes.getBoolean(R.styleable.NestedRadioButton_button_visible, true));
 
         styledAttributes.recycle();
     }
@@ -97,5 +99,14 @@ public class NestedRadioButton extends LinearLayout {
     public void setChevronOnClickListener(OnClickListener onClickListener) {
         mImageChevron.setVisibility(View.VISIBLE);
         mImageChevron.setOnClickListener(onClickListener);
+    }
+
+    public void setButtonVisible(boolean visible) {
+        mRadioButton.setVisibility(visible ? View.VISIBLE : View.GONE);
+    }
+
+    @IdRes
+    public int getRadioButtonId() {
+        return mRadioButton.getId();
     }
 }

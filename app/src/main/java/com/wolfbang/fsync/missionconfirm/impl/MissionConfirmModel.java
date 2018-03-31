@@ -4,9 +4,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
 import com.lsmvp.simplemvp.BaseMvpModel;
+import com.wolfbang.fsync.ftpservice.model.compare.ActionableDirNode;
 import com.wolfbang.fsync.ftpservice.model.compare.MergeComparator;
 import com.wolfbang.fsync.ftpservice.model.compare.Precedence;
-import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Model;
@@ -30,7 +30,7 @@ public class MissionConfirmModel
     private Precedence mPrecedence = Precedence.NONE;
     private MissionNameData mMissionNameData;
     private ScanResult mScanResult;
-    private DirNode mComparisonTree;
+    private ActionableDirNode mComparisonTree;
 
     @VisibleForTesting
     ModelState mModelState = ModelState.IDLE;
@@ -72,7 +72,7 @@ public class MissionConfirmModel
     }
 
     @Override
-    public DirNode getComparisonTree() {
+    public ActionableDirNode getComparisonTree() {
         return mComparisonTree;
     }
 

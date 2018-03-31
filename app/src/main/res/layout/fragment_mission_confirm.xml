@@ -29,6 +29,16 @@
             android:paddingBottom="@dimen/double_padding"
             />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/grey_dark"
+            android:text="Source"
+            />
+
         <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -75,46 +85,81 @@
 
         </android.support.v7.widget.CardView>
 
-        <com.wolfbang.shared.view.TextButtonView
-            android:id="@+id/text_button_conflict"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/single_padding"
-            app:button="Resolve"
-            app:text="X files in y dirs will be copied\nfrom Endpoina\nto endpintB"
+            android:layout_marginTop="@dimen/single_padding"
+            android:gravity="center"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            android:textColor="@color/grey_dark"
+            android:text="Comparison"
             />
-        <com.wolfbang.shared.view.TextButtonView
-            android:id="@+id/text_button_copied_1"
+
+        <android.support.v7.widget.CardView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="@dimen/single_padding"
-            app:button="Resolve"
-            app:text="X files in y dirs will be copied\nfrom Endpoina\nto endpintB"
-            />
-        <com.wolfbang.shared.view.TextButtonView
-            android:id="@+id/text_button_copied_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/single_padding"
-            app:button="Resolve"
-            app:text="X files in y dirs will be copied\nfrom Endpoina\nto endpintB"
-            />
-        <com.wolfbang.shared.view.TextButtonView
-            android:id="@+id/text_button_overridden_1"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/single_padding"
-            app:button="Resolve"
-            app:text="X files in y dirs will be copied\nfrom Endpoina\nto endpintB"
-            />
-        <com.wolfbang.shared.view.TextButtonView
-            android:id="@+id/text_button_overridden_2"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/single_padding"
-            app:button="Resolve"
-            app:text="X files in y dirs will be copied\nfrom Endpoina\nto endpintB"
-            />
+            android:layout_marginTop="@dimen/single_padding"
+            android:layout_marginBottom="@dimen/single_padding"
+            android:layout_marginLeft="@dimen/double_padding"
+            android:layout_marginRight="@dimen/double_padding"
+            >
+
+            <com.wolfbang.shared.view.NestedRadioGroup
+                android:id="@+id/comparison_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <com.wolfbang.shared.view.NestedRadioButton
+                    android:id="@+id/radio_to_a"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:button_visible="false"
+                    app:heading_text="Copy to: EndPointA-DELL"
+                    app:subheading_text="3 files in 4 directories"
+                    />
+                <com.wolfbang.shared.view.NestedRadioButton
+                    android:id="@+id/radio_to_b"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:button_visible="false"
+                    app:heading_text="Copy to: EndPointB"
+                    app:subheading_text="3 files in 4 directories"
+                    />
+                <com.wolfbang.shared.view.NestedRadioButton
+                    android:id="@+id/radio_on_a"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:button_visible="false"
+                    app:heading_text="Overwrite on: EndPointA-DELL"
+                    app:subheading_text="3 files in 4 directories"
+                    />
+                <com.wolfbang.shared.view.NestedRadioButton
+                    android:id="@+id/radio_on_b"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:button_visible="false"
+                    app:heading_text="Overwrite on: EndPointB"
+                    app:subheading_text="3 files in 4 directories"
+                    />
+                <com.wolfbang.shared.view.NestedRadioButton
+                    android:id="@+id/radio_clash"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:button_visible="false"
+                    app:heading_text="Clashes need resolving"
+                    app:subheading_text="3 files in 4 directories"
+                    />
+            </com.wolfbang.shared.view.NestedRadioGroup>
+
+        </android.support.v7.widget.CardView>
+
         <Button
             android:id="@+id/sync_button"
             android:layout_width="match_parent"
@@ -123,7 +168,7 @@
             android:layout_gravity="center"
             android:layout_marginTop="@dimen/double_padding"
             android:layout_marginBottom="@dimen/single_padding"
-            android:text="Synchronise"
+            android:text="Copy/Sync"
             />
     </LinearLayout>
 </ScrollView>

@@ -5,6 +5,7 @@
         <attr name="button_text" format="string"/>
         <attr name="heading_text" format="string"/>
         <attr name="subheading_text" format="string"/>
+        <attr name="button_visible" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="ItemRowView">
