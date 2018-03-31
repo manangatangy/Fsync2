@@ -8,6 +8,6 @@
         />
     <item
         android:state_checked="false"
-        android:drawable="@color/grey_f5"
+        android:drawable="@color/white"
         />
 </selector>

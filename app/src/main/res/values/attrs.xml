@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
 
+    <declare-styleable name="NestedRadioButton">
+        <attr name="button_text" format="string"/>
+        <attr name="heading_text" format="string"/>
+        <attr name="subheading_text" format="string"/>
+    </declare-styleable>
+
     <declare-styleable name="ItemRowView">
         <attr name="title" format="string"/>
         <attr name="description" format="string"/>

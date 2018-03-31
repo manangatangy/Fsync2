@@ -19,6 +19,7 @@
         android:layout_marginBottom="@dimen/default_padding"
         android:layout_marginLeft="@dimen/half_padding"
         android:layout_marginRight="@dimen/half_padding"
+        app:label_layout_weight="0.35"
         app:label_font_size="16sp"
         app:label_style="bold"
         app:value_style="bold"

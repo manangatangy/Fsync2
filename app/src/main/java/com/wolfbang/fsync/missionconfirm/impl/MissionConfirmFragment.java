@@ -5,8 +5,8 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View.OnClickListener;
 import android.widget.Button;
-import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
 
@@ -28,6 +28,8 @@ import com.wolfbang.fsync.missionconfirm._di.MissionConfirmModule;
 import com.wolfbang.shared.BackClickHandler;
 import com.wolfbang.shared.view.AnimatingActivity;
 import com.wolfbang.shared.view.LabelValueRowView;
+import com.wolfbang.shared.view.NestedRadioButton;
+import com.wolfbang.shared.view.NestedRadioGroup;
 import com.wolfbang.shared.view.SingleFragActivity;
 import com.wolfbang.shared.view.TextButtonView;
 
@@ -50,13 +52,13 @@ public class MissionConfirmFragment
     LabelValueRowView mHeadingRowView;
 
     @BindView(R.id.precedence_radio_group)
-    RadioGroup mPrecedenceRadioGroup;
+    NestedRadioGroup mPrecedenceRadioGroup;
     @BindView(R.id.radio_from_a)
-    RadioButton mRadioFromA;
-    @BindView(R.id.radio_both)
-    RadioButton mRadioBoth;
+    NestedRadioButton mRadioFromA;
+    @BindView(R.id.radio_bidirectional)
+    NestedRadioButton mRadioBoth;
     @BindView(R.id.radio_from_b)
-    RadioButton mRadioFromB;
+    NestedRadioButton mRadioFromB;
 
     @BindView(R.id.text_button_conflict)
     TextButtonView mConflict;
@@ -114,6 +116,18 @@ public class MissionConfirmFragment
     protected void onBound() {
         super.onBound();
         mPrecedenceRadioGroup.setOnCheckedChangeListener(this);
+        mRadioFromA.setChevronOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(android.view.View v) {
+
+            }
+        });
+        mRadioFromB.setChevronOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(android.view.View v) {
+
+            }
+        });
     }
 
     @Nullable
@@ -169,12 +183,12 @@ public class MissionConfirmFragment
 
     @Override
     public void setEndPointNameA(String endPointNameA) {
-        mRadioFromA.setText("from\n" + endPointNameA);
+        mRadioFromA.setHeadingText("from: " + endPointNameA);
     }
 
     @Override
     public void setEndPointNameB(String endPointNameB) {
-        mRadioFromB.setText("from\n" + endPointNameB);
+        mRadioFromB.setHeadingText("from: " + endPointNameB);
     }
 
     @Override

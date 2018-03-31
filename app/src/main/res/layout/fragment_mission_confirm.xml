@@ -29,51 +29,51 @@
             android:paddingBottom="@dimen/double_padding"
             />
 
-        <RadioGroup
-            android:id="@+id/precedence_radio_group"
-            android:layout_width="fill_parent"
-            android:layout_height="60dp"
-            android:orientation="horizontal"
-            android:padding="@dimen/single_padding"
+        <android.support.v7.widget.CardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/single_padding"
+            android:layout_marginBottom="@dimen/single_padding"
+            android:layout_marginLeft="@dimen/double_padding"
+            android:layout_marginRight="@dimen/double_padding"
             >
-            <RadioButton
-                android:id="@+id/radio_from_a"
-                android:layout_width="1dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:gravity="center"
 
-                android:background="@drawable/radio_background2"
-                android:button="@android:color/transparent"
+            <com.wolfbang.shared.view.NestedRadioGroup
+                android:id="@+id/precedence_radio_group"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+                <com.wolfbang.shared.view.NestedRadioButton
+                    android:id="@+id/radio_from_a"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:button_text="Copy"
+                    app:heading_text="From: EndPointA-DELL"
+                    app:subheading_text="3 files in 4 directories"
+                    />
+                <com.wolfbang.shared.view.NestedRadioButton
+                    android:id="@+id/radio_bidirectional"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:button_text="Sync"
+                    app:heading_text="In both directions"
+                    app:subheading_text=""
+                    />
+                <com.wolfbang.shared.view.NestedRadioButton
+                    android:id="@+id/radio_from_b"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    app:button_text="Copy"
+                    app:heading_text="From: EndPointA-DELL"
+                    app:subheading_text="3 files in 4 directories"
+                    />
+            </com.wolfbang.shared.view.NestedRadioGroup>
 
-                android:text="from A\nto B"
-                />
-            <RadioButton
-                android:id="@+id/radio_both"
-                android:layout_width="1dp"
-                android:layout_weight="0.55"
-                android:layout_height="match_parent"
-                android:gravity="center"
-
-                android:background="@drawable/radio_background2"
-                android:button="@android:color/transparent"
-                android:checked="true"
-
-                android:text="Both\ndirections"
-                />
-            <RadioButton
-                android:id="@+id/radio_from_b"
-                android:layout_width="1dp"
-                android:layout_weight="1"
-                android:layout_height="match_parent"
-                android:gravity="center"
-
-                android:background="@drawable/radio_background2"
-                android:button="@android:color/transparent"
-
-                android:text="from B\nto A"
-                />
-        </RadioGroup>
+        </android.support.v7.widget.CardView>
 
         <com.wolfbang.shared.view.TextButtonView
             android:id="@+id/text_button_conflict"

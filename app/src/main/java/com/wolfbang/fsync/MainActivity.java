@@ -54,7 +54,7 @@ public class MainActivity extends AnimatingActivity {
                                 "192.168.0.9",
                                 "music",
                                 "music",
-                                "Music/."
+                                "test"        // was "Music/."
                         ),
                         new FtpEndPoint(
                                 "Local-Android-Music",
