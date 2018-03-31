@@ -30,7 +30,7 @@ public class TreeBrowsePresenter
     //region SimpleMVP
     @Override
     protected void refreshView(@NonNull View view) {
-
+        view.setDirNode(getModel().getDirNode());
     }
     //endregion
 

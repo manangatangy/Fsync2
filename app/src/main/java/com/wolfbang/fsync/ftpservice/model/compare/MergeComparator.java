@@ -28,6 +28,10 @@ public class MergeComparator {
         mPrecedence = precedence;
     }
 
+    /**
+     * The nodes in this tree are all ActionableFileNode or ActionableDirNode, with Action values set
+     * according to the specified Precedence as well as the node comparison.
+     */
     public DirNode compare(@NonNull final DirNode dir1, @NonNull final DirNode dir2) {
         DirNode resultDir = new DirNode(null, null, null);
         compare(resultDir, dir1, dir2);

@@ -4,7 +4,9 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
 import com.lsmvp.simplemvp.BaseMvpModel;
+import com.wolfbang.fsync.ftpservice.model.compare.MergeComparator;
 import com.wolfbang.fsync.ftpservice.model.compare.Precedence;
+import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Model;
@@ -25,9 +27,10 @@ public class MissionConfirmModel
         extends BaseMvpModel
         implements Model {
 
-    private Precedence mPrecedence = Precedence.NEWEST;
+    private Precedence mPrecedence = Precedence.NONE;
     private MissionNameData mMissionNameData;
     private ScanResult mScanResult;
+    private DirNode mComparisonTree;
 
     @VisibleForTesting
     ModelState mModelState = ModelState.IDLE;
@@ -43,18 +46,34 @@ public class MissionConfirmModel
 
     //region MissionConfirmContract.Contract
     @Override
-    public void setPrecedence(Precedence precedence) {
-        mPrecedence = precedence;
-        // TODO compare . this will also set the busy spinner etc and then populate the counts fields.
-
-//                            MergeComparator mergeComparator = new MergeComparator(precedence);
-//                                    mergeComparator.compare((DirNode)fileNodeA, dirNodeB),
-
+    public void setPrecedence(final Precedence precedence) {
+        if (mBusy.compareAndSet(false, true)) {
+            busyChanged(true);
+            getExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+                    mPrecedence = precedence;
+                    MergeComparator mergeComparator = new MergeComparator(precedence);
+                    mComparisonTree = mergeComparator.compare(mScanResult.getDirA(), mScanResult.getDirB());
+                    mModelState = ModelState.COMPARED;
+                    mBusy.set(false);
+                    ModelListener listener = busyChanged(false);
+                    if (listener != null) {
+                        listener.onCompared(mComparisonTree);
+                    }
+                }
+            });
+        }
     }
 
     @Override
     public Precedence getPrecedence() {
         return mPrecedence;
+    }
+
+    @Override
+    public DirNode getComparisonTree() {
+        return mComparisonTree;
     }
 
     @Override
@@ -87,46 +106,19 @@ public class MissionConfirmModel
 
         if (mBusy.compareAndSet(false, true)) {
 
-            ModelListener listener = getListener();
-            if (listener != null) {
-                listener.onBusyChanged(true);
-            }
+            busyChanged(true);
 
             getExecutor().execute(new Runnable() {
                 @Override
                 public void run() {
 
-//                    FtpEndPoint ftpEndPoint = (FtpEndPoint)mMissionData.getEndPointA();
-//                    FtpResponse<FileNode> ftpResponse = new FtpRecursiveList(
-//                            new SymLinkParsingFtpClient(), ftpEndPoint.getRootDir())
-//                            .setShowProtocolTrace(true)
-//                            .execute(
-//                                    ftpEndPoint.getHost(),
-//                                    ftpEndPoint.getUserName(),
-//                                    ftpEndPoint.getPassword()
-//                            );
+                    // DO STUFF
 
                     mBusy.set(false);
-                    ModelListener listener = getListener();
-                    if (listener != null) {
-                        listener.onBusyChanged(false);
-                    }
+                    busyChanged(false);
 
-//                    if (ftpResponse.isErrored()) {
-//                        mModelState = ModelState.ERROR;
-//                        mErrorMsg = ftpResponse.getErrorText();
-//                        if (listener != null) {
-//                            listener.onRetrieveFailed(mErrorMsg);
-//                        }
-//                    } else {
-//                        mModelState = ModelState.SUCCESS;
-//                        mFileNode = ftpResponse.getResponse();
-//                        Log.d("ftpFile", mFileNode.getName());
-//                        mFileNode.dump("mission");
-//                        if (listener != null) {
-//                            listener.onRetrieveSucceeded(mFileNode);
-//                        }
-//                    }
+
+                    // NOTIFY LISTENER
                 }
             });
 
@@ -155,5 +147,13 @@ public class MissionConfirmModel
         mModelState = ModelState.IDLE;
     }
     //endregion
+
+    private ModelListener busyChanged(boolean busy) {
+        ModelListener listener = getListener();
+        if (listener != null) {
+            listener.onBusyChanged(busy);
+        }
+        return listener;
+    }
 
 }

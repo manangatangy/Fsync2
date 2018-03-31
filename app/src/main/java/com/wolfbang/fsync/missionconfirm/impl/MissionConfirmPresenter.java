@@ -34,14 +34,25 @@ public class MissionConfirmPresenter
 
         if (!busy) {
             switch (model.getModelState()) {
-                case IDLE:
-                    // Display the initial value of the model values.
-                    String endPointA = model.getMissionNameData().getEndPointA().getEndPointName();
-                    String endPointB = model.getMissionNameData().getEndPointB().getEndPointName();
-                    view.setMissionName(model.getMissionNameData().getMissionName());
-                    view.setEndPointNameA(endPointA);
-                    view.setEndPointNameB(endPointB);
-                    view.setPrecedence(model.getPrecedence());
+            case IDLE:
+                // Display the initial value of the model values.
+                String endPointA = model.getMissionNameData().getEndPointA().getEndPointName();
+                String endPointB = model.getMissionNameData().getEndPointB().getEndPointName();
+                view.setMissionName(model.getMissionNameData().getMissionName());
+                view.setEndPointNameA(endPointA);
+                view.setEndPointNameB(endPointB);
+                view.setPrecedence(model.getPrecedence());
+                break;
+            case COMPARED:
+                handleCompared(view, model.getComparisonTree());
+                break;
+            default:
+                throw new IllegalStateException("Unsupported model state");
+            }
+        }
+    }
+    //endregion
+
 
 //                    setConflict(view, model.getScanResult().getNameConflict());
 //                    setCopiedToA(view, model.getScanResult().getCopiedToA(), endPointA, endPointB);
@@ -49,7 +60,6 @@ public class MissionConfirmPresenter
 //                    setOverriddenOnA(view, model.getScanResult().getOverriddenOnA(), endPointA, endPointB);
 //                    setOverriddenOnB(view, model.getScanResult().getOverriddenOnB(), endPointA, endPointB);
 
-                    break;
 //                case SUCCESS:
 //                    Navigation navigation = getNavigation();
 //                    if (navigation != null) {
@@ -59,17 +69,30 @@ public class MissionConfirmPresenter
 //                case ERROR:
 //                    handleError(view, model.getErrorMsg());
 //                    break;
-                default:
-                    throw new IllegalStateException("Unsupported model state");
-            }
-        }
-    }
-    //endregion
+
 
     //region MissionConfirmContract.Presenter
     @Override
     public void onPrecedenceChecked(Precedence precedence) {
         getModel().setPrecedence(precedence);
+    }
+
+    @Override
+    public void onShowTreeEndPointA() {
+        Navigation navigation = getNavigation();
+        if (navigation != null) {
+            navigation.navigateToBrowseTree(getModel().getScanResult().getDirA(),
+                                            getModel().getMissionNameData().getEndPointA().getEndPointName());
+        }
+    }
+
+    @Override
+    public void onShowTreeEndPointB() {
+        Navigation navigation = getNavigation();
+        if (navigation != null) {
+            navigation.navigateToBrowseTree(getModel().getScanResult().getDirB(),
+                                            getModel().getMissionNameData().getEndPointB().getEndPointName());
+        }
     }
 
     @Override
@@ -95,7 +118,15 @@ public class MissionConfirmPresenter
         }
     }
 
-//    @Override
+    @Override
+    public void onCompared(DirNode comparisonTree) {
+        View view = getView();
+        if (view != null) {
+            handleCompared(view, comparisonTree);
+        }
+    }
+
+    //    @Override
 //    public void onRetrieveSucceeded(@NonNull FileNode fileNode) {
 //        Navigation navigation = getNavigation();
 //        if (navigation != null) {
@@ -125,6 +156,10 @@ public class MissionConfirmPresenter
 //
     private void handleBusyChanged(@NonNull View view, boolean busy) {
         view.showLoadingState(busy);
+    }
+
+    private void handleCompared(@NonNull View view, DirNode comparisonTree) {
+
     }
 
     private void setConflict(@NonNull View view, DirNode dirNode) {

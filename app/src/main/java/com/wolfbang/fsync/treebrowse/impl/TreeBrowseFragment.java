@@ -69,10 +69,10 @@ public class TreeBrowseFragment
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
-    public static Intent createIntent(Context context, @NonNull DirNode dirNode) {
+    public static Intent createIntent(Context context, @NonNull DirNode dirNode, String title) {
         Intent intent = new SingleFragActivity.Builder(context, TreeBrowseFragment.class.getName())
                 .setDisplayHomeAsUpEnabled(true)
-                .setTitle("Browse")
+                .setTitle(title)
                 .build();
 
         ObjectRegistry objectRegistry = FsyncApplication.getFsyncApplicationComponent().getObjectRegistry();
@@ -140,7 +140,6 @@ public class TreeBrowseFragment
     //endregion
 
     //region TreeBrowseContract.View
-
     @Override
     public void setDirNode(DirNode dirNode) {
         mTextView.setText(dirNode.getName());
@@ -156,7 +155,7 @@ public class TreeBrowseFragment
             @Override
             public void run() {
                 ((AnimatingActivity) getActivity()).useStartAnimations();
-                startActivity(TreeBrowseFragment.createIntent(getContext(), dirNode));
+                startActivity(TreeBrowseFragment.createIntent(getContext(), dirNode, "title"));
             }
         });
     }

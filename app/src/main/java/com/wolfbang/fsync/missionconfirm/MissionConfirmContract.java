@@ -4,6 +4,7 @@ import android.support.annotation.Nullable;
 
 import com.lsmvp.simplemvp.AbstractMvpContract;
 import com.wolfbang.fsync.ftpservice.model.compare.Precedence;
+import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
 
@@ -15,7 +16,7 @@ import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
 public interface MissionConfirmContract {
 
     interface Navigation extends AbstractMvpContract.BasicNavigation {
-//        void navigateToBrowseTree(DirNode dirNode);
+        void navigateToBrowseTree(DirNode dirNode, String title);
         void navigateBack();
     }
 
@@ -38,13 +39,17 @@ public interface MissionConfirmContract {
 
     interface Presenter extends AbstractMvpContract.AbstractPresenter<View, Model, Navigation> {
         void onPrecedenceChecked(Precedence precedence);
+        void onShowTreeEndPointA();
+        void onShowTreeEndPointB();
         void onSyncButtonClicked();
         void onBackClicked();
     }
 
     interface Model extends AbstractMvpContract.AbstractModel {
-        void setPrecedence(Precedence precedence);
+        void setPrecedence(Precedence precedence);      // And perform comparison
         Precedence getPrecedence();
+
+        DirNode getComparisonTree();
 
         void setMissionNameData(MissionNameData missionNameData);
         MissionNameData getMissionNameData();
@@ -63,12 +68,14 @@ public interface MissionConfirmContract {
     }
 
     enum ModelState {
-        IDLE,
+        IDLE,           // means: scan results are available
+        COMPARED,       // means: comparisonTree is available
         ERROR,
         SUCCESS
     }
     interface ModelListener extends AbstractMvpContract.AbstractModelListener {
         void onBusyChanged(boolean busy);
+        void onCompared(DirNode comparisonTree);
 //        void onRetrieveSucceeded(@NonNull FileNode fileNode);
 //        void onRetrieveFailed(String errorMsg);
     }

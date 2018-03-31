@@ -16,6 +16,7 @@ import com.lsmvp.simplemvp.ObjectRegistry;
 import com.wolfbang.fsync.R;
 import com.wolfbang.fsync.application.FsyncApplication;
 import com.wolfbang.fsync.ftpservice.model.compare.Precedence;
+import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Model;
@@ -25,6 +26,7 @@ import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.View;
 import com.wolfbang.fsync.missionconfirm._di.DaggerMissionConfirmComponent;
 import com.wolfbang.fsync.missionconfirm._di.MissionConfirmComponent;
 import com.wolfbang.fsync.missionconfirm._di.MissionConfirmModule;
+import com.wolfbang.fsync.treebrowse.impl.TreeBrowseFragment;
 import com.wolfbang.shared.BackClickHandler;
 import com.wolfbang.shared.view.AnimatingActivity;
 import com.wolfbang.shared.view.LabelValueRowView;
@@ -119,13 +121,13 @@ public class MissionConfirmFragment
         mRadioFromA.setChevronOnClickListener(new OnClickListener() {
             @Override
             public void onClick(android.view.View v) {
-
+                getPresenter().onShowTreeEndPointA();
             }
         });
         mRadioFromB.setChevronOnClickListener(new OnClickListener() {
             @Override
             public void onClick(android.view.View v) {
-
+                getPresenter().onShowTreeEndPointB();
             }
         });
     }
@@ -272,16 +274,16 @@ public class MissionConfirmFragment
     //endregion
 
     //region Contract.Navigation
-//    @Override
-//    public void navigateToBrowseTree(final DirNode dirNode) {
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                ((AnimatingActivity) getActivity()).useStartAnimations();
-//                startActivity(TreeBrowseFragment.createIntent(getContext(), dirNode));
-//            }
-//        });
-//    }
+    @Override
+    public void navigateToBrowseTree(final DirNode dirNode, final String title) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                ((AnimatingActivity) getActivity()).useStartAnimations();
+                startActivity(TreeBrowseFragment.createIntent(getContext(), dirNode, title));
+            }
+        });
+    }
 
     @Override
     public void navigateBack() {
