@@ -2,16 +2,14 @@ package com.wolfbang.fsync.missionsummary.impl;
 
 import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
-import android.util.Log;
 
 import com.lsmvp.simplemvp.BaseMvpModel;
 import com.wolfbang.fsync.ftpservice.FtpRecursiveList;
 import com.wolfbang.fsync.ftpservice.FtpResponse;
-import com.wolfbang.fsync.ftpservice.model.filetree.Comparator;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
 import com.wolfbang.fsync.ftpservice.model.mission.FtpEndPoint;
-import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
+import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelListener;
@@ -34,7 +32,7 @@ public class MissionSummaryModel
         implements Model {
 
     private int mRequestCount = 0;
-    private MissionData mMissionData;
+    private MissionNameData mMissionNameData;
 
     private ScanResult mScanResult;
 
@@ -52,13 +50,13 @@ public class MissionSummaryModel
 
     //region MissionSummaryContract.Contract
     @Override
-    public void setMissionData(MissionData missionData) {
-        this.mMissionData = missionData;
+    public void setMissionNameData(MissionNameData missionNameData) {
+        this.mMissionNameData = missionNameData;
     }
 
     @Override
-    public MissionData getMissionData() {
-        return mMissionData;
+    public MissionNameData getMissionNameData() {
+        return mMissionNameData;
     }
 
     @Override
@@ -69,6 +67,7 @@ public class MissionSummaryModel
     @Override
     public void doScan() {
 
+        // TODO time zone stuff
 //        java.util.TimeZone timeZone;
 //        timeZone.toZoneId()
         if (mBusy.compareAndSet(false, true)) {
@@ -82,10 +81,9 @@ public class MissionSummaryModel
                 @Override
                 public void run() {
 
-                    FtpEndPoint ftpEndPoint = (FtpEndPoint)mMissionData.getEndPointA();
+                    FtpEndPoint ftpEndPoint = (FtpEndPoint) mMissionNameData.getEndPointA();
                     ModelListener listener = getListener();
-                    FtpResponse<FileNode> ftpResponse = new FtpRecursiveList(
-                            new SymLinkParsingFtpClient(), ftpEndPoint.getRootDir())
+                    FtpResponse<FileNode> ftpResponse = new FtpRecursiveList(new SymLinkParsingFtpClient(), ftpEndPoint.getRootDir())
                             .setShowProtocolTrace(true)
                             .execute(
                                     ftpEndPoint.getHost(),
@@ -105,21 +103,14 @@ public class MissionSummaryModel
                             listener.onRetrieveFailed(mErrorMsg);
                         }
                     } else {
-                        FileNode fileNode = ftpResponse.getResponse();
-                        Log.d("ftpFile", fileNode.getName());
-                        fileNode.dump("mission");
+                        FileNode fileNodeA = ftpResponse.getResponse();
 
-                        if (fileNode instanceof DirNode) {
-                            mScanResult = new ScanResult(
-                                    // TODO must call ctor with dirnode fro local scan also
-                                    new Comparator((DirNode)fileNode),
-                                    mMissionData.getMissionName(),
-                                    mMissionData.getEndPointA().getEndPointName(),
-                                    mMissionData.getEndPointB().getEndPointName()
-                            );
+                        if (fileNodeA instanceof DirNode) {
+                            // TODO now get the other endpoint
+                            DirNode dirNodeB = new DirNode(null, null, null);
                             mModelState = ModelState.SUCCESS;
                             if (listener != null) {
-                                listener.onRetrieveSucceeded(mScanResult);
+                                listener.onRetrieveSucceeded(mMissionNameData, new ScanResult((DirNode)fileNodeA, dirNodeB));
                             }
 
                         } else {

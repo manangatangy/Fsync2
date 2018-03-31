@@ -1,13 +1,10 @@
 package com.wolfbang.fsync.missionconfirm;
 
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 import com.lsmvp.simplemvp.AbstractMvpContract;
-import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
-import com.wolfbang.fsync.ftpservice.model.mission.EndPoint;
-import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
+import com.wolfbang.fsync.ftpservice.model.compare.Precedence;
+import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
 
 /**
@@ -24,6 +21,9 @@ public interface MissionConfirmContract {
 
     interface View extends AbstractMvpContract.AbstractView {
         void setMissionName(String missionName);
+        void setEndPointNameA(String endPointNameA);
+        void setEndPointNameB(String endPointNameB);
+        void setPrecedence(Precedence precedence);
         void setConflict(@Nullable String text, boolean buttonEnabled);
         void setCopied1(@Nullable String text, boolean buttonEnabled);
         void setCopied2(@Nullable String text, boolean buttonEnabled);
@@ -37,11 +37,18 @@ public interface MissionConfirmContract {
     }
 
     interface Presenter extends AbstractMvpContract.AbstractPresenter<View, Model, Navigation> {
+        void onPrecedenceChecked(Precedence precedence);
         void onSyncButtonClicked();
         void onBackClicked();
     }
 
     interface Model extends AbstractMvpContract.AbstractModel {
+        void setPrecedence(Precedence precedence);
+        Precedence getPrecedence();
+
+        void setMissionNameData(MissionNameData missionNameData);
+        MissionNameData getMissionNameData();
+
         void setScanResult(ScanResult scanResult);
         ScanResult getScanResult();
 

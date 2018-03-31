@@ -10,7 +10,7 @@ import android.view.View;
 import com.wolfbang.fsync.feature2.impl.Feature2Activity;
 import com.wolfbang.fsync.feature2.impl.Feature2Data;
 import com.wolfbang.fsync.ftpservice.model.mission.FtpEndPoint;
-import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
+import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.fsync.missionsummary.impl.MissionSummaryFragment;
 import com.wolfbang.shared.view.AnimatingActivity;
 
@@ -47,9 +47,8 @@ public class MainActivity extends AnimatingActivity {
     public void onMissionSummaryButtonClick() {
         useStartAnimations();
         startActivity(MissionSummaryFragment.createIntent(this,
-                new MissionData(
+                new MissionNameData(
                         "Mission-One",
-                        MissionData.Direction.A_BI_B,
                         new FtpEndPoint(
                                 "Dell-Mint-Music",
                                 "192.168.0.9",

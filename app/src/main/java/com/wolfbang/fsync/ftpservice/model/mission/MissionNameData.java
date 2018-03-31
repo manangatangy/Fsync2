@@ -5,22 +5,14 @@ package com.wolfbang.fsync.ftpservice.model.mission;
  * @date 18 Mar 2018.
  */
 
-public class MissionData {
-
-    public enum Direction {
-        A_TO_B,
-        B_TO_A,
-        A_BI_B      // Bidirectional
-    }
+public class MissionNameData {
 
     private String mMissionName;
-    private Direction mDirection;
     private EndPoint mEndPointA;
     private EndPoint mEndPointB;
 
-    public MissionData(String missionName, Direction direction, EndPoint endPointA, EndPoint endPointB) {
+    public MissionNameData(String missionName, EndPoint endPointA, EndPoint endPointB) {
         this.mMissionName = missionName;
-        this.mDirection = direction;
         this.mEndPointA = endPointA;
         this.mEndPointB = endPointB;
     }
@@ -31,14 +23,6 @@ public class MissionData {
 
     public void setMissionName(String mMissionName) {
         this.mMissionName = mMissionName;
-    }
-
-    public Direction getDirection() {
-        return mDirection;
-    }
-
-    public void setDirection(Direction mDirection) {
-        this.mDirection = mDirection;
     }
 
     public EndPoint getEndPointA() {
@@ -56,6 +40,5 @@ public class MissionData {
     public void setEndPointB(EndPoint mEndPointB) {
         this.mEndPointB = mEndPointB;
     }
-
 
 }

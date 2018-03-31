@@ -4,6 +4,8 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
 import com.lsmvp.simplemvp.BaseMvpModel;
+import com.wolfbang.fsync.ftpservice.model.compare.Precedence;
+import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Model;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.ModelListener;
@@ -23,7 +25,8 @@ public class MissionConfirmModel
         extends BaseMvpModel
         implements Model {
 
-    private int mRequestCount = 0;
+    private Precedence mPrecedence = Precedence.NEWEST;
+    private MissionNameData mMissionNameData;
     private ScanResult mScanResult;
 
     @VisibleForTesting
@@ -39,6 +42,30 @@ public class MissionConfirmModel
     }
 
     //region MissionConfirmContract.Contract
+    @Override
+    public void setPrecedence(Precedence precedence) {
+        mPrecedence = precedence;
+        // TODO compare . this will also set the busy spinner etc and then populate the counts fields.
+
+//                            MergeComparator mergeComparator = new MergeComparator(precedence);
+//                                    mergeComparator.compare((DirNode)fileNodeA, dirNodeB),
+
+    }
+
+    @Override
+    public Precedence getPrecedence() {
+        return mPrecedence;
+    }
+
+    @Override
+    public void setMissionNameData(MissionNameData missionNameData) {
+        mMissionNameData = missionNameData;
+    }
+
+    @Override
+    public MissionNameData getMissionNameData() {
+        return mMissionNameData;
+    }
 
     @Override
     public void setScanResult(ScanResult scanResult) {

@@ -5,26 +5,19 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.RadioGroup.OnCheckedChangeListener;
 
 import com.lsmvp.simplemvp.AbstractMvpViewFragment;
 import com.lsmvp.simplemvp.ModelUpdater;
 import com.lsmvp.simplemvp.ObjectRegistry;
 import com.wolfbang.fsync.R;
 import com.wolfbang.fsync.application.FsyncApplication;
-import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
-import com.wolfbang.fsync.ftpservice.model.mission.EndPoint;
-import com.wolfbang.fsync.ftpservice.model.mission.FtpEndPoint;
-import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
+import com.wolfbang.fsync.ftpservice.model.compare.Precedence;
+import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
-import com.wolfbang.fsync.treebrowse.impl.TreeBrowseFragment;
-import com.wolfbang.fsync.view.EndPointDetailView;
-import com.wolfbang.shared.BackClickHandler;
-import com.wolfbang.shared.view.AnimatingActivity;
-import com.wolfbang.shared.view.LabelValueRowView;
-import com.wolfbang.shared.view.SingleFragActivity;
-
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Model;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Navigation;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Presenter;
@@ -32,6 +25,10 @@ import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.View;
 import com.wolfbang.fsync.missionconfirm._di.DaggerMissionConfirmComponent;
 import com.wolfbang.fsync.missionconfirm._di.MissionConfirmComponent;
 import com.wolfbang.fsync.missionconfirm._di.MissionConfirmModule;
+import com.wolfbang.shared.BackClickHandler;
+import com.wolfbang.shared.view.AnimatingActivity;
+import com.wolfbang.shared.view.LabelValueRowView;
+import com.wolfbang.shared.view.SingleFragActivity;
 import com.wolfbang.shared.view.TextButtonView;
 
 import butterknife.BindView;
@@ -44,12 +41,23 @@ import butterknife.OnClick;
 
 public class MissionConfirmFragment
         extends AbstractMvpViewFragment<Presenter, Model, MissionConfirmComponent>
-        implements View, Navigation, BackClickHandler {
+        implements View, Navigation, OnCheckedChangeListener, BackClickHandler {
 
+    private static final String MCF_MISSION_NAME_DATA = "MCF_MISSION_NAME_DATA";
     private static final String MCF_SCAN_RESULT = "MCF_SCAN_RESULT";
 
     @BindView(R.id.heading_row_view)
     LabelValueRowView mHeadingRowView;
+
+    @BindView(R.id.precedence_radio_group)
+    RadioGroup mPrecedenceRadioGroup;
+    @BindView(R.id.radio_from_a)
+    RadioButton mRadioFromA;
+    @BindView(R.id.radio_both)
+    RadioButton mRadioBoth;
+    @BindView(R.id.radio_from_b)
+    RadioButton mRadioFromB;
+
     @BindView(R.id.text_button_conflict)
     TextButtonView mConflict;
     @BindView(R.id.text_button_copied_1)
@@ -63,15 +71,15 @@ public class MissionConfirmFragment
     @BindView(R.id.sync_button)
     Button mSyncButton;
 
-    public static Intent createIntent(Context context, ScanResult scanResult) {
+    public static Intent createIntent(Context context, MissionNameData missionNameData, ScanResult scanResult) {
         Intent intent = new SingleFragActivity.Builder(context, MissionConfirmFragment.class.getName())
                 .setDisplayHomeAsUpEnabled(true)
                 .setTitle("Confirm")
                 .build();
 
         ObjectRegistry objectRegistry = FsyncApplication.getFsyncApplicationComponent().getObjectRegistry();
-        String key = objectRegistry.put(scanResult);
-        intent.putExtra(MCF_SCAN_RESULT, key);
+        intent.putExtra(MCF_MISSION_NAME_DATA, objectRegistry.put(missionNameData));
+        intent.putExtra(MCF_SCAN_RESULT, objectRegistry.put(scanResult));
 
         return intent;
     }
@@ -105,6 +113,7 @@ public class MissionConfirmFragment
     @Override
     protected void onBound() {
         super.onBound();
+        mPrecedenceRadioGroup.setOnCheckedChangeListener(this);
     }
 
     @Nullable
@@ -115,11 +124,40 @@ public class MissionConfirmFragment
             public void updateModel(Model model) {
                 Bundle args = getArguments();
 
-                String key = args.getString(MCF_SCAN_RESULT, "");
-                ScanResult scanResult = getObjectRegistry().get(key);
+                String key1 = args.getString(MCF_MISSION_NAME_DATA, "");
+                MissionNameData missionNameData = getObjectRegistry().get(key1);
+                model.setMissionNameData(missionNameData);
+
+                String key2 = args.getString(MCF_SCAN_RESULT, "");
+                ScanResult scanResult = getObjectRegistry().get(key2);
                 model.setScanResult(scanResult);
             }
         };
+    }
+    //endregion
+
+    private boolean mInhibitPrecedenceCheckedNotification = false;
+
+    //region RadioGroup.OnCheckedChangeListener
+    @Override
+    public void onCheckedChanged(RadioGroup group, int checkedId) {
+        if (!mInhibitPrecedenceCheckedNotification) {
+            Precedence precedence = Precedence.NONE;
+            switch (checkedId) {
+            case R.id.radio_from_a:
+                precedence = Precedence.A;
+                break;
+            case R.id.radio_both:
+                precedence = Precedence.NEWEST;
+                break;
+            case R.id.radio_from_b:
+                precedence = Precedence.B;
+                break;
+            }
+            if (precedence != Precedence.NONE) {
+                getPresenter().onPrecedenceChecked(precedence);
+            }
+        }
     }
     //endregion
 
@@ -127,6 +165,33 @@ public class MissionConfirmFragment
     @Override
     public void setMissionName(String missionName) {
         mHeadingRowView.setValue(missionName);
+    }
+
+    @Override
+    public void setEndPointNameA(String endPointNameA) {
+        mRadioFromA.setText("from\n" + endPointNameA);
+    }
+
+    @Override
+    public void setEndPointNameB(String endPointNameB) {
+        mRadioFromB.setText("from\n" + endPointNameB);
+    }
+
+    @Override
+    public void setPrecedence(Precedence precedence) {
+        mInhibitPrecedenceCheckedNotification = true;
+        switch (precedence) {
+        case A:
+            mRadioFromA.setChecked(true);
+            break;
+        case NEWEST:
+            mRadioBoth.setChecked(true);
+            break;
+        case B:
+            mRadioFromB.setChecked(true);
+            break;
+        }
+        mInhibitPrecedenceCheckedNotification = false;
     }
 
     @Override

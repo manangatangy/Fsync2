@@ -15,7 +15,7 @@ import com.wolfbang.fsync.R;
 import com.wolfbang.fsync.application.FsyncApplication;
 import com.wolfbang.fsync.ftpservice.model.mission.EndPoint;
 import com.wolfbang.fsync.ftpservice.model.mission.FtpEndPoint;
-import com.wolfbang.fsync.ftpservice.model.mission.MissionData;
+import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
 import com.wolfbang.fsync.missionconfirm.impl.MissionConfirmFragment;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
@@ -54,14 +54,14 @@ public class MissionSummaryFragment
     @BindView(R.id.scan_button)
     Button mScanButton;
 
-    public static Intent createIntent(Context context, MissionData missionData) {
+    public static Intent createIntent(Context context, MissionNameData missionNameData) {
         Intent intent = new SingleFragActivity.Builder(context, MissionSummaryFragment.class.getName())
                 .setDisplayHomeAsUpEnabled(true)
                 .setTitle("Summary")
                 .build();
 
         ObjectRegistry objectRegistry = FsyncApplication.getFsyncApplicationComponent().getObjectRegistry();
-        String key = objectRegistry.put(missionData);
+        String key = objectRegistry.put(missionNameData);
         intent.putExtra(MSF_MISSION_DATA, key);
 
         return intent;
@@ -107,8 +107,8 @@ public class MissionSummaryFragment
                 Bundle args = getArguments();
 
                 String key = args.getString(MSF_MISSION_DATA, "");
-                MissionData missionData = getObjectRegistry().get(key);
-                model.setMissionData(missionData);
+                MissionNameData missionNameData = getObjectRegistry().get(key);
+                model.setMissionNameData(missionNameData);
             }
         };
     }
@@ -174,12 +174,12 @@ public class MissionSummaryFragment
 //    }
 
     @Override
-    public void navigateToMissionConfirm(final ScanResult scanResult) {
+    public void navigateToMissionConfirm(final MissionNameData missionNameData, final ScanResult scanResult) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 ((AnimatingActivity) getActivity()).useStartAnimations();
-                startActivity(MissionConfirmFragment.createIntent(getContext(), scanResult));
+                startActivity(MissionConfirmFragment.createIntent(getContext(), missionNameData, scanResult));
             }
         });
     }

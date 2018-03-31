@@ -3,13 +3,13 @@ package com.wolfbang.fsync.missionconfirm.impl;
 import android.support.annotation.NonNull;
 
 import com.lsmvp.simplemvp.BaseMvpPresenter;
+import com.wolfbang.fsync.ftpservice.model.compare.Precedence;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
-import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.View;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Model;
-import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Navigation;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.ModelListener;
+import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Navigation;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Presenter;
+import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.View;
 
 /**
  * @author david
@@ -35,15 +35,19 @@ public class MissionConfirmPresenter
         if (!busy) {
             switch (model.getModelState()) {
                 case IDLE:
-                    String endPointA = model.getScanResult().getEndPointNameA();
-                    String endPointB = model.getScanResult().getEndPointNameB();
-                    // Display the initial value of the model value.
-                    view.setMissionName(model.getScanResult().getMissionName());
-                    setConflict(view, model.getScanResult().getNameConflict());
-                    setCopiedToA(view, model.getScanResult().getCopiedToA(), endPointA, endPointB);
-                    setCopiedToB(view, model.getScanResult().getCopiedToB(), endPointA, endPointB);
-                    setOverriddenOnA(view, model.getScanResult().getOverriddenOnA(), endPointA, endPointB);
-                    setOverriddenOnB(view, model.getScanResult().getOverriddenOnB(), endPointA, endPointB);
+                    // Display the initial value of the model values.
+                    String endPointA = model.getMissionNameData().getEndPointA().getEndPointName();
+                    String endPointB = model.getMissionNameData().getEndPointB().getEndPointName();
+                    view.setMissionName(model.getMissionNameData().getMissionName());
+                    view.setEndPointNameA(endPointA);
+                    view.setEndPointNameB(endPointB);
+                    view.setPrecedence(model.getPrecedence());
+
+//                    setConflict(view, model.getScanResult().getNameConflict());
+//                    setCopiedToA(view, model.getScanResult().getCopiedToA(), endPointA, endPointB);
+//                    setCopiedToB(view, model.getScanResult().getCopiedToB(), endPointA, endPointB);
+//                    setOverriddenOnA(view, model.getScanResult().getOverriddenOnA(), endPointA, endPointB);
+//                    setOverriddenOnB(view, model.getScanResult().getOverriddenOnB(), endPointA, endPointB);
 
                     break;
 //                case SUCCESS:
@@ -63,6 +67,11 @@ public class MissionConfirmPresenter
     //endregion
 
     //region MissionConfirmContract.Presenter
+    @Override
+    public void onPrecedenceChecked(Precedence precedence) {
+        getModel().setPrecedence(precedence);
+    }
+
     @Override
     public void onSyncButtonClicked() {
         getModel().doSync();

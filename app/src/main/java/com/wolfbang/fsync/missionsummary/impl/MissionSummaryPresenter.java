@@ -3,12 +3,13 @@ package com.wolfbang.fsync.missionsummary.impl;
 import android.support.annotation.NonNull;
 
 import com.lsmvp.simplemvp.BaseMvpPresenter;
+import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
-import com.wolfbang.fsync.missionsummary.MissionSummaryContract.View;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
-import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Navigation;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelListener;
+import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Navigation;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Presenter;
+import com.wolfbang.fsync.missionsummary.MissionSummaryContract.View;
 
 /**
  * @author david
@@ -35,14 +36,14 @@ public class MissionSummaryPresenter
             switch (model.getModelState()) {
                 case IDLE:
                     // Display the initial value of the model value.
-                    view.setMissionName(model.getMissionData().getMissionName());
-                    view.setEndPointDetailsA(model.getMissionData().getEndPointA());
-                    view.setEndPointDetailsB(model.getMissionData().getEndPointB());
+                    view.setMissionName(model.getMissionNameData().getMissionName());
+                    view.setEndPointDetailsA(model.getMissionNameData().getEndPointA());
+                    view.setEndPointDetailsB(model.getMissionNameData().getEndPointB());
                     break;
                 case SUCCESS:
                     Navigation navigation = getNavigation();
                     if (navigation != null) {
-                        handleSuccess(navigation, model.getScanResult());
+                        handleSuccess(navigation, model.getMissionNameData(), model.getScanResult());
                     }
                     break;
                 case ERROR:
@@ -80,10 +81,10 @@ public class MissionSummaryPresenter
     }
 
     @Override
-    public void onRetrieveSucceeded(@NonNull ScanResult scanResult) {
+    public void onRetrieveSucceeded(@NonNull MissionNameData missionNameData, @NonNull ScanResult scanResult) {
         Navigation navigation = getNavigation();
         if (navigation != null) {
-            handleSuccess(navigation, scanResult);
+            handleSuccess(navigation, missionNameData, scanResult);
         }
     }
 
@@ -96,9 +97,11 @@ public class MissionSummaryPresenter
     }
     //endregion
 
-    private void handleSuccess(@NonNull Navigation navigation, @NonNull ScanResult scanResult) {
+    private void handleSuccess(@NonNull Navigation navigation,
+                               @NonNull MissionNameData missionNameData,
+                               @NonNull ScanResult scanResult) {
         getModel().resetModelState();
-        navigation.navigateToMissionConfirm(scanResult);
+        navigation.navigateToMissionConfirm(missionNameData, scanResult);
     }
 
     private void handleError(@NonNull View view, String errorMsg) {
