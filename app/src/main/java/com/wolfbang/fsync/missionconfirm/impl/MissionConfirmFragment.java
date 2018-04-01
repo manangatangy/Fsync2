@@ -161,14 +161,20 @@ public class MissionConfirmFragment
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
         if (!mInhibitPrecedenceCheckedNotification) {
-            Precedence precedence = Precedence.NONE;
-            //TODO the getRadioButtonId() value is the same for all views duh
-            if (checkedId == mRadioFromA.getRadioButtonId()) {
+            Precedence precedence;
+            switch (checkedId) {
+            case R.id.radio_from_a:
                 precedence = Precedence.A;
-            } else if (checkedId == mRadioBoth.getRadioButtonId()) {
+                break;
+            case R.id.radio_bidirectional:
                 precedence = Precedence.NEWEST;
-            } else if (checkedId == mRadioFromB.getRadioButtonId()) {
+                break;
+            case R.id.radio_from_b:
                 precedence = Precedence.B;
+                break;
+            default:
+                precedence = Precedence.NONE;
+                break;
             }
             if (precedence != Precedence.NONE) {
                 getPresenter().onPrecedenceChecked(precedence);

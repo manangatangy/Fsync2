@@ -2,6 +2,7 @@ package com.wolfbang.shared.view;
 
 import android.content.Context;
 import android.os.Build;
+import android.support.annotation.IdRes;
 import android.support.annotation.RequiresApi;
 import android.util.AttributeSet;
 import android.view.View;
@@ -14,7 +15,8 @@ import java.util.ArrayList;
 
 public class NestedRadioGroup extends LinearLayout {
 
-    private ArrayList<View> mCheckables = new ArrayList<View>();
+    private ArrayList<Checkable> mCheckables = new ArrayList<>();
+    private ArrayList<Integer> mNotifyIds = new ArrayList<>();
     private OnCheckedChangeListener mOnCheckedChangeListener;
 
     public NestedRadioGroup(Context context) {
@@ -42,24 +44,27 @@ public class NestedRadioGroup extends LinearLayout {
     @Override
     public void addView(View child, int index, ViewGroup.LayoutParams params) {
         super.addView(child, index, params);
-        findNestedCheckables(child);
+        findNestedCheckables(child.getId(), child);
     }
 
-    private void findNestedCheckables(final View child) {
+    private void findNestedCheckables(@IdRes int notifyId, final View child) {
         if (child instanceof Checkable) {
-            mCheckables.add(child);
+            mCheckables.add((Checkable)child);
+            mNotifyIds.add(notifyId);
             child.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
+                    int notifyId = -1;
                     for (int i = 0; i < mCheckables.size(); i++) {
-                        Checkable view = (Checkable)mCheckables.get(i);
-                        if (view == v) {
-                            view.setChecked(true);
+                        Checkable checkable = mCheckables.get(i);
+                        if (checkable == v) {
+                            checkable.setChecked(true);
+                            notifyId = mNotifyIds.get(i);
                         } else {
-                            view.setChecked(false);
+                            checkable.setChecked(false);
                         }
                     }
                     if (mOnCheckedChangeListener != null) {
-                        mOnCheckedChangeListener.onCheckedChanged(null, v.getId());
+                        mOnCheckedChangeListener.onCheckedChanged(null, notifyId);
                     }
 
                 }
@@ -67,7 +72,7 @@ public class NestedRadioGroup extends LinearLayout {
         } else if (child instanceof ViewGroup) {
             ViewGroup viewGroup = (ViewGroup) child;
             for (int i = 0; i < viewGroup.getChildCount(); i++) {
-                findNestedCheckables(viewGroup.getChildAt(i));
+                findNestedCheckables(notifyId, viewGroup.getChildAt(i));
             }
         }
     }
