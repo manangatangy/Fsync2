@@ -193,7 +193,7 @@ public class MissionConfirmPresenter
     }
 
     private String makeCountDescription(int fileCount, int dirCount) {
-        return fileCount + (fileCount > 1 ? " files in " : " file in ")
-                + dirCount + (dirCount > 1 ? " folders" : " folder");
+        return fileCount + (fileCount > 1 ? " files/in " : " file/in ")
+                + dirCount + (dirCount > 1 ? " dirs" : " dir");
     }
 }

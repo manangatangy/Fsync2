@@ -2,10 +2,16 @@
 <resources>
 
     <declare-styleable name="NestedRadioButton">
-        <attr name="button_text" format="string"/>
+        <attr name="radio_state">
+            <enum name="radio_none" value="0"/>
+            <enum name="radio_off" value="1"/>
+            <enum name="radio_on" value="2"/>
+        </attr>
         <attr name="heading_text" format="string"/>
         <attr name="subheading_text" format="string"/>
-        <attr name="button_visible" format="boolean"/>
+        <attr name="files_text" format="string"/>
+        <attr name="dirs_text" format="string"/>
+        <attr name="is_radio_button" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="ItemRowView">

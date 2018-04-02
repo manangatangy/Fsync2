@@ -41,52 +41,6 @@
         android:text="AbstractMvpView Activity demo"
         />
 
-    <com.wolfbang.shared.view.NestedRadioGroup
-        android:id="@+id/precedence_radio_group"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:padding="@dimen/single_padding"
-        >
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            >
-            <RadioButton
-                android:id="@+id/radio_from_a"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                android:background="@drawable/radio_background2"
-                android:button="@android:color/transparent"
-
-                android:text="from A\nto B"
-                />
-        </LinearLayout>
-        <RadioButton
-            android:id="@+id/radio_both"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:background="@drawable/radio_background2"
-            android:button="@android:color/transparent"
-            android:checked="true"
-
-            android:text="Both\ndirections"
-            />
-        <RadioButton
-            android:id="@+id/radio_from_b"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-
-            android:background="@drawable/radio_background2"
-            android:button="@android:color/transparent"
-
-            android:text="from B\nto A"
-            />
-    </com.wolfbang.shared.view.NestedRadioGroup>
-
-
 
     <HorizontalScrollView
         android:layout_width="wrap_content"

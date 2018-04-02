@@ -34,8 +34,7 @@ public class LabelValueRowView extends FrameLayout {
     public static final int GRAVITY_LEFT = 0;
     public static final int GRAVITY_RIGHT = 1;
 
-    @IntDef({GRAVITY_LEFT, GRAVITY_RIGHT}
-    )
+    @IntDef({GRAVITY_LEFT, GRAVITY_RIGHT})
     @Retention(RetentionPolicy.SOURCE)
     public @interface GravityMode {}
 

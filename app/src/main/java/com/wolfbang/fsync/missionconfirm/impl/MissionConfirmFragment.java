@@ -208,16 +208,16 @@ public class MissionConfirmFragment
 
     @Override
     public void setEndPointNameA(String endPointNameA) {
-        mRadioFromA.setHeadingText("from: " + endPointNameA);
-        mRadioToA.setHeadingText("copy to: " + endPointNameA);
-        mRadioOnA.setHeadingText("overwrite on: " + endPointNameA);
+        mRadioFromA.setSubheadingText(endPointNameA);
+        mRadioToA.setSubheadingText(endPointNameA);
+        mRadioOnA.setSubheadingText(endPointNameA);
     }
 
     @Override
     public void setEndPointNameB(String endPointNameB) {
-        mRadioFromB.setHeadingText("from: " + endPointNameB);
-        mRadioToB.setHeadingText("copy to: " + endPointNameB);
-        mRadioOnB.setHeadingText("overwrite on: " + endPointNameB);
+        mRadioFromB.setSubheadingText(endPointNameB);
+        mRadioToB.setSubheadingText(endPointNameB);
+        mRadioOnB.setSubheadingText(endPointNameB);
     }
 
     @Override
@@ -318,9 +318,14 @@ public class MissionConfirmFragment
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                nestedRadioButton.setVisibility(text == null ?
-                                                android.view.View.GONE : android.view.View.VISIBLE);
-                nestedRadioButton.setSubheadingText(text);
+                if (text == null) {
+                    nestedRadioButton.setVisibility(android.view.View.GONE);
+                } else {
+                    nestedRadioButton.setVisibility(android.view.View.VISIBLE);
+                    String[] counts = text.split("/");
+                    nestedRadioButton.setFilesText(counts[0]);
+                    nestedRadioButton.setDirsText(counts[1]);
+                }
             }
         });
     }
