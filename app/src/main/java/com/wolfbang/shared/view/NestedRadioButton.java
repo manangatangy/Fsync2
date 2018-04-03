@@ -54,6 +54,8 @@ public class NestedRadioButton extends LinearLayout implements Checkable {
     @BindView(R.id.image_chevron)
     ImageView mImageChevron;
 
+    private boolean mIsSwitchable;
+
     public NestedRadioButton(Context context) {
         super(context);
     }
@@ -89,17 +91,9 @@ public class NestedRadioButton extends LinearLayout implements Checkable {
 
         TypedArray styledAttributes = context.obtainStyledAttributes(attrs, R.styleable.NestedRadioButton);
 
-        if (styledAttributes.getBoolean(R.styleable.NestedRadioButton_is_radio_button, false)) {
-            int radioState = styledAttributes.getInteger(R.styleable.NestedRadioButton_radio_state, RADIO_OFF);
-            setRadioState(radioState);
-            setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    toggle();
-                }
-            });
-        }
-
+        mIsSwitchable = styledAttributes.getBoolean(R.styleable.NestedRadioButton_is_switchable, false);
+        int radioState = styledAttributes.getInteger(R.styleable.NestedRadioButton_radio_state, RADIO_NONE);
+        setRadioState(radioState);
 
         setHeadingText(styledAttributes.getString(R.styleable.NestedRadioButton_heading_text));
         setSubheadingText(styledAttributes.getString(R.styleable.NestedRadioButton_subheading_text));
@@ -143,7 +137,9 @@ public class NestedRadioButton extends LinearLayout implements Checkable {
     //region Checkable
     @Override
     public void setChecked(boolean checked) {
-        setRadioState(checked ? RADIO_ON : RADIO_OFF);
+        if (mIsSwitchable) {
+            setRadioState(checked ? RADIO_ON : RADIO_OFF);
+        }
     }
 
     @Override

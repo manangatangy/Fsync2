@@ -11,7 +11,7 @@
         <attr name="subheading_text" format="string"/>
         <attr name="files_text" format="string"/>
         <attr name="dirs_text" format="string"/>
-        <attr name="is_radio_button" format="boolean"/>
+        <attr name="is_switchable" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="ItemRowView">

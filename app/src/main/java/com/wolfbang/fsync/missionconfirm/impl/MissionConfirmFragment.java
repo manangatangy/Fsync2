@@ -293,7 +293,7 @@ public class MissionConfirmFragment
             @Override
             public void run() {
                 ((AnimatingActivity) getActivity()).useStartAnimations();
-                startActivity(TreeBrowseFragment.createIntent(getContext(), dirNode, title));
+                ((AnimatingActivity) getActivity()).startActivity(TreeBrowseFragment.createIntent(getContext(), dirNode, title));
             }
         });
     }

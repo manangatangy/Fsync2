@@ -179,7 +179,7 @@ public class MissionSummaryFragment
             @Override
             public void run() {
                 ((AnimatingActivity) getActivity()).useStartAnimations();
-                startActivity(MissionConfirmFragment.createIntent(getContext(), missionNameData, scanResult));
+                ((AnimatingActivity) getActivity()).startActivity(MissionConfirmFragment.createIntent(getContext(), missionNameData, scanResult));
             }
         });
     }
