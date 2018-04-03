@@ -6,11 +6,13 @@ import com.lsmvp.simplemvp.BaseMvpPresenter;
 import com.wolfbang.fsync.ftpservice.model.compare.Action;
 import com.wolfbang.fsync.ftpservice.model.compare.ActionableDirNode;
 import com.wolfbang.fsync.ftpservice.model.compare.Precedence;
+import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Model;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.ModelListener;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Navigation;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Presenter;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.View;
+import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.ViewFieldID;
 
 /**
  * @author david
@@ -41,7 +43,9 @@ public class MissionConfirmPresenter
                 String endPointB = model.getMissionNameData().getEndPointB().getEndPointName();
                 view.setMissionName(model.getMissionNameData().getMissionName());
                 view.setEndPointNameA(endPointA);
+                view.setFieldCountsAndVisibility(ViewFieldID.FIELD_FROM_A, makeCounts(model.getScanResult().getDirA()));
                 view.setEndPointNameB(endPointB);
+                view.setFieldCountsAndVisibility(ViewFieldID.FIELD_FROM_B, makeCounts(model.getScanResult().getDirB()));
                 view.setPrecedence(model.getPrecedence());
                 break;
             case COMPARED:
@@ -54,24 +58,6 @@ public class MissionConfirmPresenter
     }
     //endregion
 
-
-//                    setConflict(view, model.getScanResult().getNameConflict());
-//                    setCopiedToA(view, model.getScanResult().getCopiedToA(), endPointA, endPointB);
-//                    setCopiedToB(view, model.getScanResult().getCopiedToB(), endPointA, endPointB);
-//                    setOverriddenOnA(view, model.getScanResult().getOverriddenOnA(), endPointA, endPointB);
-//                    setOverriddenOnB(view, model.getScanResult().getOverriddenOnB(), endPointA, endPointB);
-
-//                case SUCCESS:
-//                    Navigation navigation = getNavigation();
-//                    if (navigation != null) {
-//                        handleSuccess(navigation, model.getSuccessResponse());
-//                    }
-//                    break;
-//                case ERROR:
-//                    handleError(view, model.getErrorMsg());
-//                    break;
-
-
     //region MissionConfirmContract.Presenter
     @Override
     public void onPrecedenceChecked(Precedence precedence) {
@@ -79,20 +65,30 @@ public class MissionConfirmPresenter
     }
 
     @Override
-    public void onShowTreeEndPointA() {
-        Navigation navigation = getNavigation();
-        if (navigation != null) {
-            navigation.navigateToBrowseTree(getModel().getScanResult().getDirA(),
-                                            getModel().getMissionNameData().getEndPointA().getEndPointName());
-        }
-    }
+    public void onShowTree(ViewFieldID viewFieldID) {
 
-    @Override
-    public void onShowTreeEndPointB() {
         Navigation navigation = getNavigation();
         if (navigation != null) {
-            navigation.navigateToBrowseTree(getModel().getScanResult().getDirB(),
-                                            getModel().getMissionNameData().getEndPointB().getEndPointName());
+            switch (viewFieldID) {
+            case FIELD_FROM_A:
+                navigation.navigateToBrowseTree(getModel().getScanResult().getDirA(),
+                                                getModel().getMissionNameData().getEndPointA().getEndPointName());
+                break;
+            case FIELD_FROM_B:
+                navigation.navigateToBrowseTree(getModel().getScanResult().getDirB(),
+                                                getModel().getMissionNameData().getEndPointB().getEndPointName());
+                break;
+            case FIELD_TO_A:
+//                return mRadioToA;
+            case FIELD_TO_B:
+//                return mRadioToB;
+            case FIELD_ON_A:
+//                return mRadioOnA;
+            case FIELD_ON_B:
+//                return mRadioOnB;
+            case FIELD_NAME_CLASH:
+//                return mRadioClash;
+            }
         }
     }
 
@@ -162,38 +158,49 @@ public class MissionConfirmPresenter
     private void handleCompared(@NonNull View view, ActionableDirNode comparisonTree) {
         Precedence precedence = getModel().getPrecedence();
 
+        int totalFiles = 0;
+
         if (precedence == Precedence.A) {
-            view.setCopiedSubHeadingA(null);
-            view.setOverriddenSubHeadingA(null);
+            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_TO_A, null);
+            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_ON_A, null);
         } else {
-            view.setCopiedSubHeadingA(makeSubHeading(comparisonTree, Action.COPY_TO_A));
-            view.setOverriddenSubHeadingA(makeSubHeading(comparisonTree, Action.OVERWRITE_ON_A));
+            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_TO_A, makeCounts(comparisonTree, Action.COPY_TO_A));
+            totalFiles += comparisonTree.getFileCount(Action.COPY_TO_A);
+            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_ON_A, makeCounts(comparisonTree, Action.OVERWRITE_ON_A));
+            totalFiles += comparisonTree.getFileCount(Action.OVERWRITE_ON_A);
         }
 
         if (precedence == Precedence.B) {
-            view.setCopiedSubHeadingB(null);
-            view.setOverriddenSubHeadingB(null);
+            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_TO_B, null);
+            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_ON_B, null);
         } else {
-            view.setCopiedSubHeadingB(makeSubHeading(comparisonTree, Action.COPY_TO_B));
-            view.setOverriddenSubHeadingB(makeSubHeading(comparisonTree, Action.OVERWRITE_ON_B));
+            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_TO_B, makeCounts(comparisonTree, Action.COPY_TO_B));
+            totalFiles += comparisonTree.getFileCount(Action.COPY_TO_B);
+            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_ON_B, makeCounts(comparisonTree, Action.OVERWRITE_ON_B));
+            totalFiles += comparisonTree.getFileCount(Action.OVERWRITE_ON_B);
         }
 
-        if (precedence == Precedence.NEWEST) {
-            view.setClashSubHeading(makeSubHeading(comparisonTree, Action.DO_NOTHING));
+        if (precedence != Precedence.NEWEST) {
+            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_NAME_CLASH, null);
         } else {
-            view.setClashSubHeading(null);
+            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_NAME_CLASH, makeCounts(comparisonTree, Action.DO_NOTHING));
+            totalFiles += comparisonTree.getFileCount(Action.DO_NOTHING);
         }
+        view.setComparisonAndSyncButton(true, totalFiles != 0);
     }
 
-    private String makeSubHeading(ActionableDirNode actionableDirNode, Action action) {
-        int fileCount = actionableDirNode.getFileCount(action);
-        int dirCount = actionableDirNode.getDirCount(action);
-        String text = makeCountDescription(fileCount, dirCount);
-        return text;
+    private int[] makeCounts(DirNode dirNode) {
+        return new int[] {
+                dirNode.getFileCount(),
+                dirNode.getDirCount()
+        };
     }
 
-    private String makeCountDescription(int fileCount, int dirCount) {
-        return fileCount + (fileCount > 1 ? " files/in " : " file/in ")
-                + dirCount + (dirCount > 1 ? " dirs" : " dir");
+    private int[] makeCounts(ActionableDirNode actionableDirNode, Action action) {
+        return new int[] {
+                actionableDirNode.getFileCount(action),
+                actionableDirNode.getDirCount(action)
+        };
     }
+
 }

@@ -134,10 +134,12 @@ public class NestedRadioButton extends LinearLayout implements Checkable {
     }
 
     public void setChevronOnClickListener(OnClickListener onClickListener) {
-        mImageChevron.setVisibility(View.VISIBLE);
         mImageChevron.setOnClickListener(onClickListener);
     }
 
+    public void setChevronVisible(boolean visible) {
+        mImageChevron.setVisibility(visible ? View.VISIBLE : View.INVISIBLE);
+    }
     //region Checkable
     @Override
     public void setChecked(boolean checked) {

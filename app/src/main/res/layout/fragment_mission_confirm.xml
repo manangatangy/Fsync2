@@ -29,17 +29,8 @@
             android:paddingBottom="@dimen/double_padding"
             />
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/grey_dark"
-            android:text="Source"
-            />
-
         <android.support.v7.widget.CardView
+            android:id="@+id/precedence_cardview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/single_padding"
@@ -54,6 +45,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/single_padding"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/grey_dark"
+                    android:text="SOURCE"
+                    />
+
                 <com.wolfbang.shared.view.NestedRadioButton
                     android:id="@+id/radio_from_a"
                     android:layout_width="match_parent"
@@ -91,24 +93,16 @@
 
         </android.support.v7.widget.CardView>
 
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/single_padding"
-            android:gravity="center"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            android:textColor="@color/grey_dark"
-            android:text="Comparison"
-            />
-
         <android.support.v7.widget.CardView
+            android:id="@+id/comparison_cardview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/single_padding"
             android:layout_marginBottom="@dimen/single_padding"
             android:layout_marginLeft="@dimen/double_padding"
             android:layout_marginRight="@dimen/double_padding"
+            android:visibility="gone"
+            tools:visibility="visible"
             >
 
             <com.wolfbang.shared.view.NestedRadioGroup
@@ -117,6 +111,17 @@
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
                 >
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/single_padding"
+                    android:gravity="center"
+                    android:textSize="14sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/grey_dark"
+                    android:text="COMPARISON"
+                    />
+
                 <com.wolfbang.shared.view.NestedRadioButton
                     android:id="@+id/radio_to_a"
                     android:layout_width="match_parent"

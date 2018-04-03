@@ -26,24 +26,24 @@ public interface MissionConfirmContract {
         void setMissionName(String missionName);
         void setEndPointNameA(String endPointNameA);
         void setEndPointNameB(String endPointNameB);
-
-        void setClashSubHeading(@Nullable String text);
-        void setCopiedSubHeadingA(@Nullable String text);
-        void setCopiedSubHeadingB(@Nullable String text);
-        void setOverriddenSubHeadingA(@Nullable String text);
-        void setOverriddenSubHeadingB(@Nullable String text);
-
-        void setSyncButtonEnabled(boolean visible);
-
-        //        void setSomeField(String someValue);
-//        void showError(String errorMsg);
+        void setFieldCountsAndVisibility(final ViewFieldID viewFieldID, @Nullable final int[] counts);
+        void setComparisonAndSyncButton(boolean comparisonVisible, boolean syncButtonEnabled);
         void showLoadingState(boolean show);
+    }
+
+    enum ViewFieldID {
+        FIELD_FROM_A,
+        FIELD_FROM_B,
+        FIELD_TO_A,
+        FIELD_TO_B,
+        FIELD_ON_A,
+        FIELD_ON_B,
+        FIELD_NAME_CLASH
     }
 
     interface Presenter extends AbstractMvpContract.AbstractPresenter<View, Model, Navigation> {
         void onPrecedenceChecked(Precedence precedence);
-        void onShowTreeEndPointA();
-        void onShowTreeEndPointB();
+        void onShowTree(ViewFieldID viewFieldID);
         void onSyncButtonClicked();
         void onBackClicked();
     }
