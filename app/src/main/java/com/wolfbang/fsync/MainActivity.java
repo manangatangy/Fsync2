@@ -7,11 +7,12 @@ import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
 
-import com.wolfbang.fsync.feature2.impl.Feature2Activity;
-import com.wolfbang.fsync.feature2.impl.Feature2Data;
 import com.wolfbang.fsync.ftpservice.model.mission.FtpEndPoint;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.fsync.missionsummary.impl.MissionSummaryFragment;
+import com.wolfbang.fsync.view.PathElementView;
+import com.wolfbang.fsync.view.PathScrollerView;
+import com.wolfbang.fsync.view.PathScrollerView.OnPathElementClickListener;
 import com.wolfbang.shared.view.AnimatingActivity;
 
 import butterknife.BindView;
@@ -28,6 +29,9 @@ public class MainActivity extends AnimatingActivity {
     @BindView(R.id.my_toolbar)
     Toolbar mToolbar;
 
+    @BindView(R.id.path_scroller_view)
+    PathScrollerView mPathScrollerView;
+
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +40,13 @@ public class MainActivity extends AnimatingActivity {
         // Note that the Toolbar defined in the layout has the id "my_toolbar"
         setSupportActionBar(mToolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(false);
+
+        mPathScrollerView.setOnPathElementClickListener(new OnPathElementClickListener() {
+            @Override
+            public void onPathElementClick(int index, PathElementView pathElementView) {
+                mPathScrollerView.pop(index);
+            }
+        });
     }
 
     @Override
@@ -69,7 +80,7 @@ public class MainActivity extends AnimatingActivity {
 
     @OnClick(R.id.feature2_button)
     public void onFeature2ButtonClick() {
-        startActivity(Feature2Activity.createIntent(this, new Feature2Data()));
+        mPathScrollerView.push(new PathElementView(this));
     }
 
 }

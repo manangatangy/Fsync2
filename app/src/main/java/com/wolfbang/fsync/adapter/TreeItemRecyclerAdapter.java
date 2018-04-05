@@ -21,7 +21,6 @@ import com.wolfbang.fsync.view.ItemRowView;
 public class TreeItemRecyclerAdapter
         extends RecyclerView.Adapter<TreeItemRecyclerAdapter.TreeItemViewHolder> {
 
-    private DirNode mDirNode;
     private Node[] mChildren;
     private FileNode mSelected;
 
@@ -42,9 +41,8 @@ public class TreeItemRecyclerAdapter
         return new TreeItemViewHolder(view);
     }
 
-    public void setDirNode(DirNode dirNode) {
-        mDirNode = dirNode;
-        mChildren = mDirNode.getChildren().toArray();
+    public void setNodeItems(Node[] nodes) {
+        mChildren = nodes;
     }
 
     @Override
@@ -74,10 +72,13 @@ public class TreeItemRecyclerAdapter
             mItemRowView.setChevronVisibility(ItemRowView.VISIBILITY_NO);
             mItemRowView.setTitleText(mFileNode.getName());
             mItemRowView.setDescriptionText(mFileNode.getTimeStampAsText());
+            String extraData = "";
             if (mFileNode instanceof DirNode) {
                 DirNode dirNode = (DirNode)fileNode;
-                mItemRowView.setExtraDataText("[ " + dirNode.size() + " children]");
+                extraData = "[ " + dirNode.size() + " children]";
             }
+            mItemRowView.setExtraDataText(extraData);
+
             mItemRowView.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {

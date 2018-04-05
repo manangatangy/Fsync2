@@ -6,28 +6,31 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
-import android.widget.TextView;
 
 import com.lsmvp.simplemvp.AbstractMvpViewFragment;
 import com.lsmvp.simplemvp.ModelUpdater;
 import com.lsmvp.simplemvp.ObjectRegistry;
 import com.wolfbang.fsync.R;
+import com.wolfbang.fsync.adapter.TreeItemRecyclerAdapter;
+import com.wolfbang.fsync.adapter.TreeItemRecyclerAdapter.TreeItemClickListener;
 import com.wolfbang.fsync.application.FsyncApplication;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
+import com.wolfbang.fsync.ftpservice.model.filetree.Node;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Model;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Navigation;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Presenter;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.View;
-import com.wolfbang.fsync.adapter.TreeItemRecyclerAdapter;
-import com.wolfbang.fsync.adapter.TreeItemRecyclerAdapter.TreeItemClickListener;
 import com.wolfbang.fsync.treebrowse._di.DaggerTreeBrowseComponent;
 import com.wolfbang.fsync.treebrowse._di.TreeBrowseComponent;
 import com.wolfbang.fsync.treebrowse._di.TreeBrowseModule;
+import com.wolfbang.fsync.view.PathElementView;
+import com.wolfbang.fsync.view.PathScrollerView;
+import com.wolfbang.fsync.view.PathScrollerView.OnPathElementClickListener;
 import com.wolfbang.shared.BackClickHandler;
 import com.wolfbang.shared.DefaultLayoutManager;
-import com.wolfbang.shared.view.SingleFragActivity;
 import com.wolfbang.shared.view.AnimatingActivity;
+import com.wolfbang.shared.view.SingleFragActivity;
 
 import butterknife.BindView;
 
@@ -60,12 +63,13 @@ implements TreeItemClickListener
  */
 public class TreeBrowseFragment
         extends AbstractMvpViewFragment<Presenter, Model, TreeBrowseComponent>
-        implements View, Navigation, BackClickHandler, TreeItemClickListener {
+        implements View, Navigation, BackClickHandler, TreeItemClickListener,
+                   OnPathElementClickListener {
 
     private static final String TBF_DIRNODE = "TBF_DIRNODE";
 
-    @BindView(R.id.title_text)
-    TextView mTextView;
+    @BindView(R.id.path_scroller_view)
+    PathScrollerView mPathScrollerView;
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
@@ -112,6 +116,7 @@ public class TreeBrowseFragment
     protected void onBound() {
         super.onBound();
         mRecyclerView.setLayoutManager(new DefaultLayoutManager(getContext()));
+        mPathScrollerView.setOnPathElementClickListener(this);
 //        DirNode dirNode = getPresenter().getDirNode();
 //        mTextView.setText(dirNode.getName());
 //        getAdapter().setDirNode(dirNode);
@@ -127,23 +132,42 @@ public class TreeBrowseFragment
 
                 String key = args.getString(TBF_DIRNODE, "");
                 DirNode dirNode = getObjectRegistry().get(key);
-                model.setDirNode(dirNode);
+                model.setBaseDirNode(dirNode);
             }
         };
     }
 
     @Override
     public boolean onBackPressed() {
-        getPresenter().onBackClicked();
-        return false;
+        return getPresenter().onBackClicked();
     }
     //endregion
 
     //region TreeBrowseContract.View
     @Override
-    public void setDirNode(DirNode dirNode) {
-        mTextView.setText(dirNode.getName());
-        getAdapter().setDirNode(dirNode);
+    public void populatePathElements(String[] pathNames) {
+        mPathScrollerView.clear();
+        for (String pathName : pathNames) {
+            addPathElement(pathName);
+        }
+    }
+
+    @Override
+    public void addPathElement(String pathName) {
+        PathElementView pathElementView = new PathElementView(getContext());
+        pathElementView.setText(pathName);
+        mPathScrollerView.push(pathElementView);
+    }
+
+    @Override
+    public void popPathElement() {
+        mPathScrollerView.pop();
+    }
+
+    @Override
+    public void populateList(Node[] nodes) {
+        getAdapter().setNodeItems(nodes);
+        getAdapter().notifyDataSetChanged();
     }
 
     //endregion
@@ -177,10 +201,21 @@ public class TreeBrowseFragment
         return adapter;
     }
 
+    //region OnPathElementClickListener
+    @Override
+    public void onPathElementClick(int index, PathElementView pathElementView) {
+        getPresenter().onPathElementClicked(index);
+//        mPathScrollerView.pop(index);
+    }
+    //endregion
+
+    //region TreeItemClickListener
     @Override
     public void onTreeItemClick(FileNode fileNode) {
-        getPresenter().onItemClicked(fileNode);
+        getPresenter().onListItemClicked(fileNode);
     }
+    //endregion
+
 }
 
 //    @Override

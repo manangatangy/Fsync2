@@ -12,7 +12,8 @@
     <ImageView
         android:id="@+id/path_element_image"
         android:layout_width="@dimen/path_element_chevron_size"
-        android:layout_height="@dimen/path_element_chevron_size"
+        android:layout_height="match_parent"
+        android:scaleType="fitXY"
         android:layout_gravity="center_vertical"
         android:src="@drawable/red_right_chevron"
         />
@@ -23,6 +24,6 @@
         android:textSize="14sp"
         android:layout_gravity="center_vertical"
         android:gravity="center_vertical"
-        android:text="Android\nline2\nline3"
+        android:text="Androff dd id\nline line3"
         />
 </LinearLayout>

@@ -30,7 +30,10 @@ public class TreeBrowsePresenter
     //region SimpleMVP
     @Override
     protected void refreshView(@NonNull View view) {
-        view.setDirNode(getModel().getDirNode());
+        DirNode dirNode = getModel().getCurrentDirNode();
+        String[] pathNames = getModel().getParentNames();
+        view.populatePathElements(pathNames);
+        view.populateList(dirNode.toChildrenArray());
     }
     //endregion
 
@@ -41,22 +44,40 @@ public class TreeBrowsePresenter
 //    }
 
     @Override
-    public void onBackClicked() {
-        Navigation navigation = getNavigation();
-        if (navigation != null) {
-            navigation.navigateBack();
+    public boolean onBackClicked() {
+        if (getModel().goToParent()) {
+            DirNode dirNode = getModel().getCurrentDirNode();
+            View view = getView();
+            if (view != null) {
+                view.popPathElement();
+                view.populateList(dirNode.toChildrenArray());
+            }
+            return true;
+        }
+        return false;
+        // pop ?
+
+//        Navigation navigation = getNavigation();
+//        if (navigation != null) {
+//            navigation.navigateBack();
+//        }
+    }
+
+    @Override
+    public void onListItemClicked(FileNode fileNode) {
+        if (getModel().goToChild(fileNode.getName())) {
+            DirNode dirNode = getModel().getCurrentDirNode();
+            View view = getView();
+            if (view != null) {
+                view.addPathElement(dirNode.getName());
+                view.populateList(dirNode.toChildrenArray());
+            }
         }
     }
 
     @Override
-    public void onItemClicked(FileNode fileNode) {
-        if (fileNode instanceof DirNode) {
-            DirNode dirNode = (DirNode)fileNode;
-            Navigation navigation = getNavigation();
-            if (navigation != null) {
-                navigation.navigateToBrowseTree(dirNode);
-            }
-        }
+    public void onPathElementClicked(int index) {
+
     }
     //endregion
 

@@ -3,6 +3,7 @@ package com.wolfbang.fsync.treebrowse;
 import com.lsmvp.simplemvp.AbstractMvpContract;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
+import com.wolfbang.fsync.ftpservice.model.filetree.Node;
 
 /**
  * @author david
@@ -17,7 +18,12 @@ public interface TreeBrowseContract extends AbstractMvpContract {
     }
 
     interface View extends AbstractView {
-        void setDirNode(DirNode dirNode);
+        // Populate the path scroller with the specified elements
+        void populatePathElements(String[] pathNames);
+        void addPathElement(String pathName);
+        void popPathElement();
+
+        void populateList(Node[] nodes);
 //        void setSomeField(String someValue);
 //        void showError();
 //        void showLoadingState(boolean show);
@@ -26,13 +32,27 @@ public interface TreeBrowseContract extends AbstractMvpContract {
     interface Presenter extends AbstractPresenter<View, Model, Navigation> {
         //        void onSomeButtonClicked(int timePeriod);
 //        DirNode getDirNode();
-        void onBackClicked();
-        void onItemClicked(FileNode fileNode);
+        boolean onBackClicked();        // return true if consumed
+        void onListItemClicked(FileNode fileNode);
+        void onPathElementClicked(int index);
     }
 
     interface Model extends AbstractModel {
-        void setDirNode(DirNode dirNode);
-        DirNode getDirNode();
+        // Set the start of the browse tree.
+        void setBaseDirNode(DirNode dirNode);
+
+        // The dir currently shown in the fragment.
+        DirNode getCurrentDirNode();
+
+        // Names from base dir to the current dir.
+        String[] getParentNames();
+
+        // Shift the current node to it's parent, or return false if already at the base
+        boolean goToParent();
+
+        // return false if there is no such child name that is a dirNode
+        boolean goToChild(String childName);
+
 
 //        void setFeature2Data(Feature2Data feature2Data);
 //        Feature2Data getFeature2Data();
