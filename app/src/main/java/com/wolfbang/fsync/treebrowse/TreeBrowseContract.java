@@ -5,7 +5,6 @@ import android.support.annotation.Nullable;
 import com.lsmvp.simplemvp.AbstractMvpContract;
 import com.wolfbang.fsync.ftpservice.model.compare.Action;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.Node;
 
 /**
@@ -36,7 +35,7 @@ public interface TreeBrowseContract extends AbstractMvpContract {
         //        void onSomeButtonClicked(int timePeriod);
 //        DirNode getDirNode();
         boolean onBackClicked();        // return true if consumed
-        void onListItemClicked(FileNode fileNode);
+        void onListItemClicked(DirNode dirNode);
         void onPathElementClicked(int index);
     }
 

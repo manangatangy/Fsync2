@@ -11,12 +11,11 @@ import com.lsmvp.simplemvp.AbstractMvpViewFragment;
 import com.lsmvp.simplemvp.ModelUpdater;
 import com.lsmvp.simplemvp.ObjectRegistry;
 import com.wolfbang.fsync.R;
+import com.wolfbang.fsync.adapter.DirTreeItemViewHolder.DirTreeItemClickListener;
 import com.wolfbang.fsync.adapter.TreeItemRecyclerAdapter;
-import com.wolfbang.fsync.adapter.TreeItemRecyclerAdapter.TreeItemClickListener;
 import com.wolfbang.fsync.application.FsyncApplication;
 import com.wolfbang.fsync.ftpservice.model.compare.Action;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.Node;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Model;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Navigation;
@@ -64,7 +63,8 @@ implements TreeItemClickListener
  */
 public class TreeBrowseFragment
         extends AbstractMvpViewFragment<Presenter, Model, TreeBrowseComponent>
-        implements View, Navigation, BackClickHandler, TreeItemClickListener,
+        implements View, Navigation, BackClickHandler,
+                   DirTreeItemClickListener,
                    OnPathElementClickListener {
 
     private static final String TBF_ACTION = "TBF_ACTION";
@@ -203,7 +203,7 @@ public class TreeBrowseFragment
         TreeItemRecyclerAdapter adapter = (TreeItemRecyclerAdapter)mRecyclerView.getAdapter();
         if (adapter == null) {
             adapter = new TreeItemRecyclerAdapter();
-            adapter.setTreeItemClickListener(this);
+            adapter.setDirTreeItemClickListener(this);
             mRecyclerView.setAdapter(adapter);
         }
         return adapter;
@@ -219,8 +219,8 @@ public class TreeBrowseFragment
 
     //region TreeItemClickListener
     @Override
-    public void onTreeItemClick(FileNode fileNode) {
-        getPresenter().onListItemClicked(fileNode);
+    public void onDirTreeItemClick(DirNode dirNode) {
+        getPresenter().onListItemClicked(dirNode);
     }
     //endregion
 
