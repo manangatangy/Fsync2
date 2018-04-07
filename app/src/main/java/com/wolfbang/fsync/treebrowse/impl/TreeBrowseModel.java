@@ -30,33 +30,30 @@ public class TreeBrowseModel
     }
 
     @Override
-    public void setBaseDirNode(DirNode dirNode) {
+    public void setBaseAndCurrentDir(DirNode dirNode) {
         this.mBaseDirNode = dirNode;
         this.mCurrentDirNode = dirNode;
     }
 
     @Override
-    public DirNode getCurrentDirNode() {
+    public DirNode getCurrentDir() {
         return mCurrentDirNode;
     }
 
     @Override
-    public String[] getParentNames() {
+    public String[] getPathAsNameList() {
         // Names from base dir to the current dir.
         String[] pathNames = new String[mLevel + 1];
-        names(pathNames, mCurrentDirNode, mLevel);
+        DirNode dirNode = mCurrentDirNode;
+        for (int i = mLevel; i >= 0; i--) {
+            pathNames[i] =  dirNode.getName();
+            dirNode = dirNode.getParent();      // Will be null after last iteration.
+        }
         return pathNames;
     }
 
-    private void names(String[] names, DirNode dirNode, int i) {
-        if (i > 0) {
-            names(names, dirNode.getParent(), i - 1);
-        }
-        names[i] = dirNode.getName();
-    }
-
     @Override
-    public boolean goToParent() {
+    public boolean moveCurrentDirToParent() {
         // Shift the current node to it's parent, or return false if already at the base
         if (mLevel <= 0) {
             return false;
@@ -67,7 +64,7 @@ public class TreeBrowseModel
     }
 
     @Override
-    public boolean goToChild(String childName) {
+    public boolean moveCurrentDirToChild(String childName) {
         // return false if there is no such child name that is a dirNode
         for (Node child : mCurrentDirNode.toChildrenArray()) {
             if (childName.equals(child.getName())) {
@@ -79,5 +76,15 @@ public class TreeBrowseModel
             }
         }
         return false;
+    }
+
+    @Override
+    public boolean moveCurrentDirToLevel(int level) {
+        while (mLevel > level) {
+            if (!moveCurrentDirToParent()) {
+                return false;
+            }
+        }
+        return true;
     }
 }

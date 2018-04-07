@@ -30,43 +30,36 @@ public class TreeBrowsePresenter
     //region SimpleMVP
     @Override
     protected void refreshView(@NonNull View view) {
-        DirNode dirNode = getModel().getCurrentDirNode();
-        String[] pathNames = getModel().getParentNames();
+        DirNode dirNode = getModel().getCurrentDir();
+        String[] pathNames = getModel().getPathAsNameList();
         view.populatePathElements(pathNames);
         view.populateList(dirNode.toChildrenArray());
     }
     //endregion
 
     //region TreeBrowseContract.Presenter
-//    @Override
-//    public DirNode getDirNode() {
-//        return getModel().getDirNode();
-//    }
-
     @Override
     public boolean onBackClicked() {
-        if (getModel().goToParent()) {
-            DirNode dirNode = getModel().getCurrentDirNode();
+        if (getModel().moveCurrentDirToParent()) {
+            DirNode dirNode = getModel().getCurrentDir();
             View view = getView();
             if (view != null) {
                 view.popPathElement();
                 view.populateList(dirNode.toChildrenArray());
             }
-            return true;
+        } else {
+            Navigation navigation = getNavigation();
+            if (navigation != null) {
+                navigation.navigateBack();
+            }
         }
-        return false;
-        // pop ?
-
-//        Navigation navigation = getNavigation();
-//        if (navigation != null) {
-//            navigation.navigateBack();
-//        }
+        return true;
     }
 
     @Override
     public void onListItemClicked(FileNode fileNode) {
-        if (getModel().goToChild(fileNode.getName())) {
-            DirNode dirNode = getModel().getCurrentDirNode();
+        if (getModel().moveCurrentDirToChild(fileNode.getName())) {
+            DirNode dirNode = getModel().getCurrentDir();
             View view = getView();
             if (view != null) {
                 view.addPathElement(dirNode.getName());
@@ -77,7 +70,11 @@ public class TreeBrowsePresenter
 
     @Override
     public void onPathElementClicked(int index) {
-
+        getModel().moveCurrentDirToLevel(index);
+        View view = getView();
+        if (view != null) {
+            refreshView(view);
+        }
     }
     //endregion
 

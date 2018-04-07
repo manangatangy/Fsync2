@@ -132,7 +132,7 @@ public class TreeBrowseFragment
 
                 String key = args.getString(TBF_DIRNODE, "");
                 DirNode dirNode = getObjectRegistry().get(key);
-                model.setBaseDirNode(dirNode);
+                model.setBaseAndCurrentDir(dirNode);
             }
         };
     }

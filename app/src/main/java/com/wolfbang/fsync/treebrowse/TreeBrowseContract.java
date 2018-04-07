@@ -39,20 +39,22 @@ public interface TreeBrowseContract extends AbstractMvpContract {
 
     interface Model extends AbstractModel {
         // Set the start of the browse tree.
-        void setBaseDirNode(DirNode dirNode);
+        void setBaseAndCurrentDir(DirNode dirNode);
 
         // The dir currently shown in the fragment.
-        DirNode getCurrentDirNode();
+        DirNode getCurrentDir();
 
         // Names from base dir to the current dir.
-        String[] getParentNames();
+        String[] getPathAsNameList();
 
         // Shift the current node to it's parent, or return false if already at the base
-        boolean goToParent();
+        boolean moveCurrentDirToParent();
 
         // return false if there is no such child name that is a dirNode
-        boolean goToChild(String childName);
+        boolean moveCurrentDirToChild(String childName);
 
+        // level 0 is baseDir
+        boolean moveCurrentDirToLevel(int level);
 
 //        void setFeature2Data(Feature2Data feature2Data);
 //        Feature2Data getFeature2Data();
