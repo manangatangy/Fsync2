@@ -1,6 +1,10 @@
 package com.wolfbang.fsync.treebrowse.impl;
 
+import android.support.annotation.Nullable;
+
 import com.lsmvp.simplemvp.BaseMvpModel;
+import com.wolfbang.fsync.ftpservice.model.compare.Action;
+import com.wolfbang.fsync.ftpservice.model.compare.ActionableDirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.Node;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Model;
@@ -20,6 +24,7 @@ public class TreeBrowseModel
         implements Model
 {
 
+    private Action mAction = null;      // non-null means that mBaseDirNode is an ActionableDirNode
     private DirNode mBaseDirNode;       // The start of the browse tree - can't pop up above this.
     private DirNode mCurrentDirNode;    // Currently shown in the browse tree
     private int mLevel = 0;             // Number of subdirs below base, that the current dir is.
@@ -30,18 +35,31 @@ public class TreeBrowseModel
     }
 
     @Override
-    public void setBaseAndCurrentDir(DirNode dirNode) {
+    public void setBaseAndCurrentDir(@Nullable Action action, DirNode dirNode) {
         this.mBaseDirNode = dirNode;
         this.mCurrentDirNode = dirNode;
+        this.mAction = action;
+    }
+
+//    @Override
+//    public DirNode getCurrentDir() {
+//        return mCurrentDirNode;
+//    }
+
+    @Override
+    public String getCurrentDirName() {
+        return mCurrentDirNode.getName();
     }
 
     @Override
-    public DirNode getCurrentDir() {
-        return mCurrentDirNode;
+    public Node[] getCurrentDirChildren() {
+        return (mAction == null)
+               ? mCurrentDirNode.toChildrenArray()
+               : ((ActionableDirNode)mCurrentDirNode).toChildrenArray(mAction);
     }
 
     @Override
-    public String[] getPathAsNameList() {
+    public String[] getCurrentPathAsNameList() {
         // Names from base dir to the current dir.
         String[] pathNames = new String[mLevel + 1];
         DirNode dirNode = mCurrentDirNode;
@@ -66,7 +84,7 @@ public class TreeBrowseModel
     @Override
     public boolean moveCurrentDirToChild(String childName) {
         // return false if there is no such child name that is a dirNode
-        for (Node child : mCurrentDirNode.toChildrenArray()) {
+        for (Node child : mCurrentDirNode.getChildren()) {
             if (childName.equals(child.getName())) {
                 if (child instanceof DirNode) {
                     mCurrentDirNode = (DirNode)child;

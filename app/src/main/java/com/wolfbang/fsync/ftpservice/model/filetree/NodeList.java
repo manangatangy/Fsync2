@@ -38,6 +38,9 @@ public class NodeList implements Iterable<Node> {
         return mNodeTreeSet.remove(node);
     }
 
+    /**
+     * @return a new array of nodes, copied from this instance
+     */
     public Node[] toArray() {
         return mNodeTreeSet.toArray(new Node[size()]);
     }

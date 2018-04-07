@@ -185,8 +185,8 @@
                     android:visibility="gone"
                     tools:visibility="visible"
                     app:radio_state="radio_off"
-                    app:heading_text="Names clashes"
-                    tools:subheading_text="need resolving"
+                    app:heading_text="Files ignored or"
+                    tools:subheading_text="Clashes need resolving"
                     tools:files_text="33 files"
                     tools:dirs_text="44 dirs"
                     />

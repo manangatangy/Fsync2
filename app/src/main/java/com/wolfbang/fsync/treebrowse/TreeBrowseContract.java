@@ -1,6 +1,9 @@
 package com.wolfbang.fsync.treebrowse;
 
+import android.support.annotation.Nullable;
+
 import com.lsmvp.simplemvp.AbstractMvpContract;
+import com.wolfbang.fsync.ftpservice.model.compare.Action;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.Node;
@@ -13,7 +16,7 @@ import com.wolfbang.fsync.ftpservice.model.filetree.Node;
 public interface TreeBrowseContract extends AbstractMvpContract {
 
     interface Navigation extends BasicNavigation {
-        void navigateToBrowseTree(DirNode dirNode);
+//        void navigateToBrowseTree(DirNode dirNode);
         void navigateBack();
     }
 
@@ -38,14 +41,16 @@ public interface TreeBrowseContract extends AbstractMvpContract {
     }
 
     interface Model extends AbstractModel {
-        // Set the start of the browse tree.
-        void setBaseAndCurrentDir(DirNode dirNode);
+        // Set the start of the browse tree.  A non-null action causes filtered browsing.
+        void setBaseAndCurrentDir(@Nullable Action action, DirNode dirNode);
 
-        // The dir currently shown in the fragment.
-        DirNode getCurrentDir();
+//        // The dir currently shown in the fragment.
+//        DirNode getCurrentDir();
+        String getCurrentDirName();
+        Node[] getCurrentDirChildren();
 
         // Names from base dir to the current dir.
-        String[] getPathAsNameList();
+        String[] getCurrentPathAsNameList();
 
         // Shift the current node to it's parent, or return false if already at the base
         boolean moveCurrentDirToParent();

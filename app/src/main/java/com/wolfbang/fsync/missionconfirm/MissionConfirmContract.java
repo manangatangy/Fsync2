@@ -3,6 +3,7 @@ package com.wolfbang.fsync.missionconfirm;
 import android.support.annotation.Nullable;
 
 import com.lsmvp.simplemvp.AbstractMvpContract;
+import com.wolfbang.fsync.ftpservice.model.compare.Action;
 import com.wolfbang.fsync.ftpservice.model.compare.ActionableDirNode;
 import com.wolfbang.fsync.ftpservice.model.compare.Precedence;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
@@ -17,7 +18,7 @@ import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
 public interface MissionConfirmContract {
 
     interface Navigation extends AbstractMvpContract.BasicNavigation {
-        void navigateToBrowseTree(DirNode dirNode, String title);
+        void navigateToBrowseTree(@Nullable Action action, DirNode dirNode, String title);
         void navigateBack();
     }
 

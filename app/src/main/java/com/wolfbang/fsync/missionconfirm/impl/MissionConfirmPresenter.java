@@ -71,23 +71,40 @@ public class MissionConfirmPresenter
         if (navigation != null) {
             switch (viewFieldID) {
             case FIELD_FROM_A:
-                navigation.navigateToBrowseTree(getModel().getScanResult().getDirA(),
-                                                getModel().getMissionNameData().getEndPointA().getEndPointName());
+                navigation.navigateToBrowseTree(null,
+                                                getModel().getScanResult().getDirA(),
+                                                "copy from: " + getModel().getMissionNameData().getEndPointA().getEndPointName());
                 break;
             case FIELD_FROM_B:
-                navigation.navigateToBrowseTree(getModel().getScanResult().getDirB(),
-                                                getModel().getMissionNameData().getEndPointB().getEndPointName());
+                navigation.navigateToBrowseTree(null,
+                                                getModel().getScanResult().getDirB(),
+                                                "copy from: " + getModel().getMissionNameData().getEndPointB().getEndPointName());
                 break;
             case FIELD_TO_A:
-//                return mRadioToA;
+                navigation.navigateToBrowseTree(Action.COPY_TO_A,
+                                                getModel().getComparisonTree(),
+                                                "copy to: " + getModel().getMissionNameData().getEndPointA().getEndPointName());
+                break;
             case FIELD_TO_B:
-//                return mRadioToB;
+                navigation.navigateToBrowseTree(Action.COPY_TO_B,
+                                                getModel().getComparisonTree(),
+                                                "copy to: " + getModel().getMissionNameData().getEndPointB().getEndPointName());
+                break;
             case FIELD_ON_A:
-//                return mRadioOnA;
+                navigation.navigateToBrowseTree(Action.OVERWRITE_ON_A,
+                                                getModel().getComparisonTree(),
+                                                "overwrite on: " + getModel().getMissionNameData().getEndPointA().getEndPointName());
+                break;
             case FIELD_ON_B:
-//                return mRadioOnB;
+                navigation.navigateToBrowseTree(Action.OVERWRITE_ON_B,
+                                                getModel().getComparisonTree(),
+                                                "overwrite on: " + getModel().getMissionNameData().getEndPointB().getEndPointName());
+                break;
             case FIELD_NAME_CLASH:
-//                return mRadioClash;
+                navigation.navigateToBrowseTree(Action.DO_NOTHING,
+                                                getModel().getComparisonTree(),
+                                                "name clashes / ignore");
+                break;
             }
         }
     }

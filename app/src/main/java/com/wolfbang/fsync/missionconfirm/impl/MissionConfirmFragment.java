@@ -16,6 +16,7 @@ import com.lsmvp.simplemvp.ModelUpdater;
 import com.lsmvp.simplemvp.ObjectRegistry;
 import com.wolfbang.fsync.R;
 import com.wolfbang.fsync.application.FsyncApplication;
+import com.wolfbang.fsync.ftpservice.model.compare.Action;
 import com.wolfbang.fsync.ftpservice.model.compare.Precedence;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
@@ -196,6 +197,7 @@ public class MissionConfirmFragment
     @Override
     public void setMissionName(String missionName) {
         mHeadingRowView.setValue(missionName);
+        mRadioClash.setSubheadingText("Clashes need resolving");
     }
 
     @Override
@@ -288,12 +290,13 @@ public class MissionConfirmFragment
 
     //region Contract.Navigation
     @Override
-    public void navigateToBrowseTree(final DirNode dirNode, final String title) {
+    public void navigateToBrowseTree(final @Nullable Action action, final DirNode dirNode, final String title) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 ((AnimatingActivity) getActivity()).useStartAnimations();
-                ((AnimatingActivity) getActivity()).startActivity(TreeBrowseFragment.createIntent(getContext(), dirNode, title));
+                ((AnimatingActivity) getActivity()).startActivity(
+                        TreeBrowseFragment.createIntent(getContext(), action, dirNode, title));
             }
         });
     }

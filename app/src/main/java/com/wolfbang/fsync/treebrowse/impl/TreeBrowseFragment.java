@@ -14,6 +14,7 @@ import com.wolfbang.fsync.R;
 import com.wolfbang.fsync.adapter.TreeItemRecyclerAdapter;
 import com.wolfbang.fsync.adapter.TreeItemRecyclerAdapter.TreeItemClickListener;
 import com.wolfbang.fsync.application.FsyncApplication;
+import com.wolfbang.fsync.ftpservice.model.compare.Action;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.Node;
@@ -66,6 +67,7 @@ public class TreeBrowseFragment
         implements View, Navigation, BackClickHandler, TreeItemClickListener,
                    OnPathElementClickListener {
 
+    private static final String TBF_ACTION = "TBF_ACTION";
     private static final String TBF_DIRNODE = "TBF_DIRNODE";
 
     @BindView(R.id.path_scroller_view)
@@ -73,15 +75,19 @@ public class TreeBrowseFragment
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
-    public static Intent createIntent(Context context, @NonNull DirNode dirNode, String title) {
+    public static Intent createIntent(Context context, @Nullable Action action,
+                                      @NonNull DirNode dirNode, String title) {
         Intent intent = new SingleFragActivity.Builder(context, TreeBrowseFragment.class.getName())
                 .setDisplayHomeAsUpEnabled(true)
                 .setTitle(title)
                 .build();
 
         ObjectRegistry objectRegistry = FsyncApplication.getFsyncApplicationComponent().getObjectRegistry();
-        String key = objectRegistry.put(dirNode);
-        intent.putExtra(TBF_DIRNODE, key);
+
+        String key1 = objectRegistry.put(action);
+        intent.putExtra(TBF_ACTION, key1);
+        String key2 = objectRegistry.put(dirNode);
+        intent.putExtra(TBF_DIRNODE, key2);
 
         return intent;
     }
@@ -130,9 +136,11 @@ public class TreeBrowseFragment
             public void updateModel(Model model) {
                 Bundle args = getArguments();
 
-                String key = args.getString(TBF_DIRNODE, "");
-                DirNode dirNode = getObjectRegistry().get(key);
-                model.setBaseAndCurrentDir(dirNode);
+                String key1 = args.getString(TBF_ACTION, "");
+                Action action = getObjectRegistry().get(key1);
+                String key2 = args.getString(TBF_DIRNODE, "");
+                DirNode dirNode = getObjectRegistry().get(key2);
+                model.setBaseAndCurrentDir(action, dirNode);
             }
         };
     }
@@ -173,16 +181,16 @@ public class TreeBrowseFragment
     //endregion
 
     //region TreeBrowseContract.Navigation
-    @Override
-    public void navigateToBrowseTree(final DirNode dirNode) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                ((AnimatingActivity) getActivity()).useStartAnimations();
-                ((AnimatingActivity) getActivity()).startActivity(TreeBrowseFragment.createIntent(getContext(), dirNode, "title"));
-            }
-        });
-    }
+//    @Override
+//    public void navigateToBrowseTree(final DirNode dirNode) {
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                ((AnimatingActivity) getActivity()).useStartAnimations();
+//                ((AnimatingActivity) getActivity()).startActivity(TreeBrowseFragment.createIntent(getContext(), dirNode, "title"));
+//            }
+//        });
+//    }
 
     @Override
     public void navigateBack() {

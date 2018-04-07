@@ -3,7 +3,6 @@ package com.wolfbang.fsync.treebrowse.impl;
 import android.support.annotation.NonNull;
 
 import com.lsmvp.simplemvp.BaseMvpPresenter;
-import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Model;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.ModelListener;
@@ -30,10 +29,8 @@ public class TreeBrowsePresenter
     //region SimpleMVP
     @Override
     protected void refreshView(@NonNull View view) {
-        DirNode dirNode = getModel().getCurrentDir();
-        String[] pathNames = getModel().getPathAsNameList();
-        view.populatePathElements(pathNames);
-        view.populateList(dirNode.toChildrenArray());
+        view.populatePathElements(getModel().getCurrentPathAsNameList());
+        view.populateList(getModel().getCurrentDirChildren());
     }
     //endregion
 
@@ -41,11 +38,10 @@ public class TreeBrowsePresenter
     @Override
     public boolean onBackClicked() {
         if (getModel().moveCurrentDirToParent()) {
-            DirNode dirNode = getModel().getCurrentDir();
             View view = getView();
             if (view != null) {
                 view.popPathElement();
-                view.populateList(dirNode.toChildrenArray());
+                view.populateList(getModel().getCurrentDirChildren());
             }
         } else {
             Navigation navigation = getNavigation();
@@ -59,11 +55,10 @@ public class TreeBrowsePresenter
     @Override
     public void onListItemClicked(FileNode fileNode) {
         if (getModel().moveCurrentDirToChild(fileNode.getName())) {
-            DirNode dirNode = getModel().getCurrentDir();
             View view = getView();
             if (view != null) {
-                view.addPathElement(dirNode.getName());
-                view.populateList(dirNode.toChildrenArray());
+                view.addPathElement(getModel().getCurrentDirName());
+                view.populateList(getModel().getCurrentDirChildren());
             }
         }
     }

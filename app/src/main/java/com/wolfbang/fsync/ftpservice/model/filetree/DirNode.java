@@ -24,7 +24,9 @@ public class DirNode extends FileNode  implements Iterable<Node> {
         return NodeType.DIR;
     }
 
-    @Deprecated
+    /**
+     * @return the NodeList which should not be modified during iteration.
+     */
     public NodeList getChildren() {
         return mChildren;
     }
@@ -54,6 +56,9 @@ public class DirNode extends FileNode  implements Iterable<Node> {
         return mChildren.size();
     }
 
+    /**
+     * @return a new array of nodes, copied from this instance
+     */
     public Node[] toChildrenArray() {
         return mChildren.toArray();
     }
@@ -71,7 +76,7 @@ public class DirNode extends FileNode  implements Iterable<Node> {
     }
 
     public int getDirCount() {
-        int count = 0;      // Exclude the root dir from the count.
+        int count = 1;      // Include the root dir in the count.
         for (Node child : getChildren()) {
             if (child instanceof DirNode) {
                 count++;

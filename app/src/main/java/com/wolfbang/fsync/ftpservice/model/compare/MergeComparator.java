@@ -33,7 +33,7 @@ public class MergeComparator {
      * according to the specified Precedence as well as the node comparison.
      */
     public ActionableDirNode compare(@NonNull final DirNode dir1, @NonNull final DirNode dir2) {
-        ActionableDirNode resultDir = new ActionableDirNode(null, null);
+        ActionableDirNode resultDir = new ActionableDirNode("COMPARISON", null);
         compare(resultDir, dir1, dir2);
         return resultDir;
     }
