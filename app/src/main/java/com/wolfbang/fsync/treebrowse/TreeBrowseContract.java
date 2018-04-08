@@ -6,6 +6,7 @@ import com.lsmvp.simplemvp.AbstractMvpContract;
 import com.wolfbang.fsync.ftpservice.model.compare.Action;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.Node;
+import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 
 /**
  * @author david
@@ -32,6 +33,9 @@ public interface TreeBrowseContract extends AbstractMvpContract {
     }
 
     interface Presenter extends AbstractPresenter<View, Model, Navigation> {
+//        void setMissionNameData(MissionNameData missionNameData);
+        MissionNameData getMissionNameData();
+
         //        void onSomeButtonClicked(int timePeriod);
 //        DirNode getDirNode();
         boolean onBackClicked();        // return true if consumed
@@ -40,6 +44,9 @@ public interface TreeBrowseContract extends AbstractMvpContract {
     }
 
     interface Model extends AbstractModel {
+        void setMissionNameData(MissionNameData missionNameData);
+        MissionNameData getMissionNameData();
+
         // Set the start of the browse tree.  A non-null action causes filtered browsing.
         void setBaseAndCurrentDir(@Nullable Action action, DirNode dirNode);
 

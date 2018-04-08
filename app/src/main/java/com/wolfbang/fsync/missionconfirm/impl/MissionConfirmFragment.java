@@ -290,13 +290,14 @@ public class MissionConfirmFragment
 
     //region Contract.Navigation
     @Override
-    public void navigateToBrowseTree(final @Nullable Action action, final DirNode dirNode, final String title) {
+    public void navigateToBrowseTree(final @Nullable Action action, final DirNode dirNode,
+                                     final MissionNameData missionNameData, final String title) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 ((AnimatingActivity) getActivity()).useStartAnimations();
                 ((AnimatingActivity) getActivity()).startActivity(
-                        TreeBrowseFragment.createIntent(getContext(), action, dirNode, title));
+                        TreeBrowseFragment.createIntent(getContext(), action, dirNode, missionNameData, title));
             }
         });
     }

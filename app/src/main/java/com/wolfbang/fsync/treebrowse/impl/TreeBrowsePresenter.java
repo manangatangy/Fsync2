@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 
 import com.lsmvp.simplemvp.BaseMvpPresenter;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
+import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Model;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.ModelListener;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Navigation;
@@ -35,6 +36,16 @@ public class TreeBrowsePresenter
     //endregion
 
     //region TreeBrowseContract.Presenter
+//    @Override
+//    public void setMissionNameData(MissionNameData missionNameData) {
+//        getModel().setMissionNameData(missionNameData);
+//    }
+
+    @Override
+    public MissionNameData getMissionNameData() {
+        return getModel().getMissionNameData();
+    }
+
     @Override
     public boolean onBackClicked() {
         if (getModel().moveCurrentDirToParent()) {

@@ -106,8 +106,9 @@ public class MissionSummaryModel
                         FileNode fileNodeA = ftpResponse.getResponse();
 
                         if (fileNodeA instanceof DirNode) {
-                            // TODO now get the other endpoint
-                            DirNode dirNodeB = new DirNode(null, null, null);
+                            // TODO now get the other endpoint - temp copy of A
+//                            DirNode dirNodeB = new DirNode(null, null, null);
+                            DirNode dirNodeB = (DirNode)fileNodeA;
                             mModelState = ModelState.SUCCESS;
                             if (listener != null) {
                                 listener.onRetrieveSucceeded(mMissionNameData, new ScanResult((DirNode)fileNodeA, dirNodeB));

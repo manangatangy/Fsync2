@@ -7,6 +7,7 @@ import com.wolfbang.fsync.ftpservice.model.compare.Action;
 import com.wolfbang.fsync.ftpservice.model.compare.ActionableDirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.Node;
+import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Model;
 
 import java.util.concurrent.Executor;
@@ -21,9 +22,9 @@ import javax.inject.Inject;
 
 public class TreeBrowseModel
         extends BaseMvpModel
-        implements Model
-{
+        implements Model {
 
+    private MissionNameData mMissionNameData;
     private Action mAction = null;      // non-null means that mBaseDirNode is an ActionableDirNode
     private DirNode mBaseDirNode;       // The start of the browse tree - can't pop up above this.
     private DirNode mCurrentDirNode;    // Currently shown in the browse tree
@@ -32,6 +33,16 @@ public class TreeBrowseModel
     @Inject
     public TreeBrowseModel(Executor executor) {
         super(executor);
+    }
+
+    @Override
+    public void setMissionNameData(MissionNameData missionNameData) {
+        mMissionNameData = missionNameData;
+    }
+
+    @Override
+    public MissionNameData getMissionNameData() {
+        return mMissionNameData;
     }
 
     @Override

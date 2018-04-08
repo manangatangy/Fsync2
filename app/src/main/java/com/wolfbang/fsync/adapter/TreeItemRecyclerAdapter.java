@@ -5,9 +5,11 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.wolfbang.fsync.adapter.DirTreeItemViewHolder.DirTreeItemClickListener;
+import com.wolfbang.fsync.ftpservice.model.compare.CommonActionableFileNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.Node;
+import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 
 /**
  * @author david
@@ -18,12 +20,17 @@ public class TreeItemRecyclerAdapter
         extends RecyclerView.Adapter<BaseTreeItemViewHolder>
         implements DirTreeItemClickListener {
 
+    private MissionNameData mMissionNameData;
     private DirTreeItemClickListener mDirTreeItemClickListener;
     private Node[] mChildren;
     private FileNode mSelected;
 
     public void setDirTreeItemClickListener(DirTreeItemClickListener dirTreeItemClickListener) {
         mDirTreeItemClickListener = dirTreeItemClickListener;
+    }
+
+    public void setMissionNameData(MissionNameData missionNameData) {
+        mMissionNameData = missionNameData;
     }
 
     public void setNodeItems(Node[] nodes) {
@@ -33,7 +40,9 @@ public class TreeItemRecyclerAdapter
     //region RecyclerView.Adapter<TreeItemRecyclerAdapter.TreeItemViewHolder>
     @Override
     public int getItemViewType(int position) {
-        if (mChildren[position] instanceof DirNode) {
+        if (mChildren[position] instanceof CommonActionableFileNode) {
+            return BaseTreeItemViewHolder.ITEM_TYPE_COMMON;
+        } else if (mChildren[position] instanceof DirNode) {
             return BaseTreeItemViewHolder.ITEM_TYPE_DIR;
         } else if (mChildren[position] instanceof FileNode) {
             return BaseTreeItemViewHolder.ITEM_TYPE_FILE;
@@ -45,7 +54,7 @@ public class TreeItemRecyclerAdapter
     @NonNull
     @Override
     public BaseTreeItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        return BaseTreeItemViewHolder.makeViewHolder(parent, viewType);
+        return BaseTreeItemViewHolder.makeViewHolder(parent, viewType, mMissionNameData);
     }
 
     @Override
@@ -66,40 +75,5 @@ public class TreeItemRecyclerAdapter
             mDirTreeItemClickListener.onDirTreeItemClick(dirNode);
         }
     }
-
-//    public class TreeItemViewHolder extends RecyclerView.ViewHolder {
-//
-//        private ItemRowView mItemRowView;
-//        private FileNode mFileNode;
-//
-//        public TreeItemViewHolder(View itemView) {
-//            super(itemView);
-//            mItemRowView = (ItemRowView)itemView;
-//        }
-//
-//        public void bind(FileNode fileNode) {
-//            mFileNode = fileNode;
-//            // TODO set fields in mItemRowView from fields in mFileNode
-//            mItemRowView.setChevronVisibility(ItemRowView.VISIBILITY_NO);
-//            mItemRowView.setTitleText(mFileNode.getName());
-//            mItemRowView.setDescriptionText(mFileNode.getTimeStampAsText());
-//            String extraData = "";
-//            if (mFileNode instanceof DirNode) {
-//                DirNode dirNode = (DirNode)fileNode;
-//                extraData = "[ " + dirNode.size() + " children]";
-//            }
-//            mItemRowView.setExtraDataText(extraData);
-//
-//            mItemRowView.setOnClickListener(new OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    if (mTreeItemClickListener != null) {
-//                        mTreeItemClickListener.onTreeItemClick(mFileNode);
-//                    }
-//                }
-//            });
-//        }
-//
-//    }
 
 }

@@ -24,6 +24,7 @@ public class DirTreeItemViewHolder extends BaseTreeItemViewHolder implements OnC
 
     private DirTreeItemClickListener mDirTreeItemClickListener;
     private DirNode mDirNode;
+    private ItemRowView mItemRowView;
 
     public static DirTreeItemViewHolder makeViewHolder(@NonNull ViewGroup parent) {
         // TODO use correct layout
@@ -33,6 +34,7 @@ public class DirTreeItemViewHolder extends BaseTreeItemViewHolder implements OnC
 
     public DirTreeItemViewHolder(View itemView) {
         super(itemView);
+        mItemRowView = (ItemRowView)itemView;
     }
 
     public void bind(Node node, TreeItemRecyclerAdapter treeItemRecyclerAdapter) {

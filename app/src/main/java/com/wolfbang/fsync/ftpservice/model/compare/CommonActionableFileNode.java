@@ -41,4 +41,11 @@ public class CommonActionableFileNode extends ActionableFileNode {
         return "COMMON FILE" + ", action: " + getAction().name();
     }
 
+    public Date getTimeStampA() {
+        return mTimeStampA;
+    }
+
+    public Date getTimeStampB() {
+        return mTimeStampB;
+    }
 }

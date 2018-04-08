@@ -12,33 +12,33 @@ import butterknife.ButterKnife;
 
 /**
  * @author david
- * @date 12 Mar 2018.
+ * @date 8 Apr 2018.
  */
 
-public class LabelValueRowView extends LabelValueView  {
+public class LabelValueColumnView extends LabelValueView  {
 
     @Override
     protected void init() {
-        inflate(getContext(), R.layout.view_label_value_row, this);
+        inflate(getContext(), R.layout.view_label_value_column, this);
         ButterKnife.bind(this);
     }
 
-    public LabelValueRowView(Context context) {
+    public LabelValueColumnView(Context context) {
         super(context);
     }
 
-    public LabelValueRowView(Context context, @Nullable AttributeSet attrs) {
+    public LabelValueColumnView(Context context, @Nullable AttributeSet attrs) {
         super(context, attrs);
         init(context, attrs);
     }
 
-    public LabelValueRowView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
+    public LabelValueColumnView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }
 
     @TargetApi(VERSION_CODES.LOLLIPOP)
-    public LabelValueRowView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
+    public LabelValueColumnView(Context context, @Nullable AttributeSet attrs, int defStyleAttr, int defStyleRes) {
         super(context, attrs, defStyleAttr);
         init(context, attrs);
     }

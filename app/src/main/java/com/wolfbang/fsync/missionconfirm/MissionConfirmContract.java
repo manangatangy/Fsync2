@@ -18,7 +18,7 @@ import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
 public interface MissionConfirmContract {
 
     interface Navigation extends AbstractMvpContract.BasicNavigation {
-        void navigateToBrowseTree(@Nullable Action action, DirNode dirNode, String title);
+        void navigateToBrowseTree(@Nullable Action action, DirNode dirNode, MissionNameData missionNameData, String title);
         void navigateBack();
     }
 

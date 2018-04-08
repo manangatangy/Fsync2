@@ -17,6 +17,7 @@ import com.wolfbang.fsync.view.ItemRowView;
 
 public class FileTreeItemViewHolder extends BaseTreeItemViewHolder {
 
+    private ItemRowView mItemRowView;
     private FileNode mFileNode;
 
     public static FileTreeItemViewHolder makeViewHolder(@NonNull ViewGroup parent) {
@@ -27,6 +28,7 @@ public class FileTreeItemViewHolder extends BaseTreeItemViewHolder {
 
     public FileTreeItemViewHolder(View itemView) {
         super(itemView);
+        mItemRowView = (ItemRowView)itemView;
     }
 
     @Override

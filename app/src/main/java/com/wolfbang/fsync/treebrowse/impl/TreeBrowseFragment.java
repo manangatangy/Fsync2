@@ -17,6 +17,7 @@ import com.wolfbang.fsync.application.FsyncApplication;
 import com.wolfbang.fsync.ftpservice.model.compare.Action;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.Node;
+import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Model;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Navigation;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Presenter;
@@ -69,6 +70,7 @@ public class TreeBrowseFragment
 
     private static final String TBF_ACTION = "TBF_ACTION";
     private static final String TBF_DIRNODE = "TBF_DIRNODE";
+    private static final String TBF_MISSION_NAME_DATA = "TBF_MISSION_NAME_DATA";
 
     @BindView(R.id.path_scroller_view)
     PathScrollerView mPathScrollerView;
@@ -76,7 +78,8 @@ public class TreeBrowseFragment
     RecyclerView mRecyclerView;
 
     public static Intent createIntent(Context context, @Nullable Action action,
-                                      @NonNull DirNode dirNode, String title) {
+                                      @NonNull DirNode dirNode,
+                                      MissionNameData missionNameData, String title) {
         Intent intent = new SingleFragActivity.Builder(context, TreeBrowseFragment.class.getName())
                 .setDisplayHomeAsUpEnabled(true)
                 .setTitle(title)
@@ -88,6 +91,8 @@ public class TreeBrowseFragment
         intent.putExtra(TBF_ACTION, key1);
         String key2 = objectRegistry.put(dirNode);
         intent.putExtra(TBF_DIRNODE, key2);
+        String key3 = objectRegistry.put(missionNameData);
+        intent.putExtra(TBF_MISSION_NAME_DATA, key3);
 
         return intent;
     }
@@ -141,6 +146,9 @@ public class TreeBrowseFragment
                 String key2 = args.getString(TBF_DIRNODE, "");
                 DirNode dirNode = getObjectRegistry().get(key2);
                 model.setBaseAndCurrentDir(action, dirNode);
+                String key3 = args.getString(TBF_MISSION_NAME_DATA, "");
+                MissionNameData missionNameData = getObjectRegistry().get(key3);
+                model.setMissionNameData(missionNameData);
             }
         };
     }
@@ -204,6 +212,7 @@ public class TreeBrowseFragment
         if (adapter == null) {
             adapter = new TreeItemRecyclerAdapter();
             adapter.setDirTreeItemClickListener(this);
+            adapter.setMissionNameData(getPresenter().getMissionNameData());
             mRecyclerView.setAdapter(adapter);
         }
         return adapter;

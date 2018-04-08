@@ -73,36 +73,43 @@ public class MissionConfirmPresenter
             case FIELD_FROM_A:
                 navigation.navigateToBrowseTree(null,
                                                 getModel().getScanResult().getDirA(),
+                                                getModel().getMissionNameData(),
                                                 "copy from: " + getModel().getMissionNameData().getEndPointA().getEndPointName());
                 break;
             case FIELD_FROM_B:
                 navigation.navigateToBrowseTree(null,
                                                 getModel().getScanResult().getDirB(),
+                                                getModel().getMissionNameData(),
                                                 "copy from: " + getModel().getMissionNameData().getEndPointB().getEndPointName());
                 break;
             case FIELD_TO_A:
                 navigation.navigateToBrowseTree(Action.COPY_TO_A,
                                                 getModel().getComparisonTree(),
+                                                getModel().getMissionNameData(),
                                                 "copy to: " + getModel().getMissionNameData().getEndPointA().getEndPointName());
                 break;
             case FIELD_TO_B:
                 navigation.navigateToBrowseTree(Action.COPY_TO_B,
                                                 getModel().getComparisonTree(),
+                                                getModel().getMissionNameData(),
                                                 "copy to: " + getModel().getMissionNameData().getEndPointB().getEndPointName());
                 break;
             case FIELD_ON_A:
                 navigation.navigateToBrowseTree(Action.OVERWRITE_ON_A,
                                                 getModel().getComparisonTree(),
+                                                getModel().getMissionNameData(),
                                                 "overwrite on: " + getModel().getMissionNameData().getEndPointA().getEndPointName());
                 break;
             case FIELD_ON_B:
                 navigation.navigateToBrowseTree(Action.OVERWRITE_ON_B,
                                                 getModel().getComparisonTree(),
+                                                getModel().getMissionNameData(),
                                                 "overwrite on: " + getModel().getMissionNameData().getEndPointB().getEndPointName());
                 break;
             case FIELD_NAME_CLASH:
                 navigation.navigateToBrowseTree(Action.DO_NOTHING,
                                                 getModel().getComparisonTree(),
+                                                getModel().getMissionNameData(),
                                                 "name clashes / ignore");
                 break;
             }
