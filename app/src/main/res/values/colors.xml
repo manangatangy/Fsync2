@@ -17,5 +17,8 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
+    <color name="swipeBackgroundColor">#E8E8E0</color>
+    <color name="swipeBackgroundColorPress">#DBDBD3</color>
+
 
 </resources>

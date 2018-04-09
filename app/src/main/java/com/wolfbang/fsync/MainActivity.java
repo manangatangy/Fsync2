@@ -7,6 +7,9 @@ import android.support.v7.widget.Toolbar;
 import android.util.AttributeSet;
 import android.view.View;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
+import com.daimajia.swipe.SimpleSwipeListener;
 import com.daimajia.swipe.SwipeLayout;
 import com.wolfbang.fsync.ftpservice.model.mission.FtpEndPoint;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
@@ -49,12 +52,14 @@ public class MainActivity extends AnimatingActivity {
             }
         });
 
-
-        SwipeLayout swipeLayout =  (SwipeLayout)findViewById(R.id.swipe_layout);
-        //set show mode.
+        SwipeLayout swipeLayout =  (SwipeLayout)findViewById(R.id.swipe);
         swipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
-        //add drag edge.(If the BottomView has 'layout_gravity' attribute, this line is unnecessary)
-        swipeLayout.addDrag(SwipeLayout.DragEdge.Left, findViewById(R.id.bottom_wrapper));
+        swipeLayout.addSwipeListener(new SimpleSwipeListener() {
+            @Override
+            public void onOpen(SwipeLayout layout) {
+                YoYo.with(Techniques.Tada).duration(500).delay(100).playOn(layout.findViewById(R.id.trash));
+            }
+        });
 
     }
 
