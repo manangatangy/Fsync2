@@ -32,8 +32,9 @@ public abstract class LabelValueView extends FrameLayout {
 
     public static final int GRAVITY_LEFT = 0;
     public static final int GRAVITY_RIGHT = 1;
+    public static final int GRAVITY_CENTRE = 2;
 
-    @IntDef({GRAVITY_LEFT, GRAVITY_RIGHT})
+    @IntDef({GRAVITY_LEFT, GRAVITY_RIGHT, GRAVITY_CENTRE})
     @Retention(RetentionPolicy.SOURCE)
     public @interface GravityMode {}
 
@@ -139,12 +140,20 @@ public abstract class LabelValueView extends FrameLayout {
         mLabelTextView.setText(text);
     }
 
+    public String getLabel() {
+        return mLabelTextView.getText().toString();
+    }
+
     public void setValue(int textId) {
         mValueTextView.setText(textId);
     }
 
     public void setValue(String text) {
         mValueTextView.setText(text);
+    }
+
+    public String getValue() {
+        return mValueTextView.getText().toString();
     }
 
     /**
@@ -232,10 +241,14 @@ public abstract class LabelValueView extends FrameLayout {
     }
 
     public void setLabelGravity(@GravityMode int gravity) {
-        mLabelTextView.setGravity((gravity == GRAVITY_LEFT) ? Gravity.LEFT : Gravity.RIGHT);
+        mLabelTextView.setGravity((gravity == GRAVITY_LEFT)
+                                  ? Gravity.LEFT
+                                  : (gravity == GRAVITY_RIGHT ? Gravity.RIGHT : Gravity.CENTER));
     }
     public void setValueGravity(@GravityMode int gravity) {
-        mValueTextView.setGravity((gravity == GRAVITY_LEFT) ? Gravity.LEFT : Gravity.RIGHT);
+        mValueTextView.setGravity((gravity == GRAVITY_LEFT)
+                                  ? Gravity.LEFT
+                                  : (gravity == GRAVITY_RIGHT ? Gravity.RIGHT : Gravity.CENTER));
     }
 
 }

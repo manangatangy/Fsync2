@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
 
+    <declare-styleable name="LabelValueColumnView">
+        <attr name="select_state">
+            <enum name="select_none" value="0"/>
+            <enum name="select_off" value="1"/>
+            <enum name="select_on" value="2"/>
+        </attr>
+        <attr name="is_selectable" format="boolean"/>
+    </declare-styleable>
+
     <declare-styleable name="NestedRadioButton">
         <attr name="radio_state">
             <enum name="radio_none" value="0"/>
@@ -60,10 +69,12 @@
         <attr name="label_gravity" format="enum">
             <enum name="left" value="0"/>
             <enum name="right" value="1"/>
+            <enum name="centre" value="2"/>
         </attr>
         <attr name="value_gravity" format="enum">
             <enum name="left" value="0"/>
             <enum name="right" value="1"/>
+            <enum name="centre" value="2"/>
         </attr>
     </declare-styleable>
 
