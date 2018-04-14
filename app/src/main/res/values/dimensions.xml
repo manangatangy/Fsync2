@@ -16,4 +16,6 @@
     <dimen name="path_element_height">56dp</dimen>
     <dimen name="path_element_chevron_size">32dp</dimen>
 
+    <dimen name="tree_browse_item_height">80dp</dimen>
+
 </resources>

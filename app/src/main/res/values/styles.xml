@@ -8,4 +8,39 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.LabelValueColumn">
+        <item name="label_layout_weight">0.33</item>
+        <item name="label_font_size">14sp</item>
+        <item name="label_color">@color/black</item>
+        <item name="label_gravity">centre</item>
+        <item name="value_font_size">14sp</item>
+        <item name="value_color">@color/grey_dark_med</item>
+        <item name="value_gravity">centre</item>
+        <item name="label">"xxxxxaaaaaxxxxx"</item>
+        <item name="value">"30 Mar 2018\n00:00:00 +1100"</item>
+        <item name="android:paddingTop">@dimen/one_padding</item>
+    </style>
+
+    <style name="AppTheme.RadioLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/radio_background</item>
+        <item name="is_selectable">true</item>
+        <item name="select_state">select_off</item>
+    </style>
+
+    <style name="AppTheme.RadioLayout.Comparison" parent="AppTheme.RadioLayout">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:background">@drawable/radio_background</item>
+        <item name="is_selectable">false</item>
+        <item name="select_state">select_off</item>
+        <item name="android:visibility">gone</item>
+    </style>
+
+    <style name="AppTheme.VerticalPad">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/one_padding</item>
+    </style>
+
 </resources>

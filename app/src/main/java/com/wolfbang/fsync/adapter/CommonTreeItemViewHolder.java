@@ -17,6 +17,7 @@ import com.wolfbang.fsync.ftpservice.model.filetree.Node;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.shared.view.LabelValueColumnView;
 import com.wolfbang.shared.view.NestedRadioGroup;
+import com.wolfbang.shared.view.RadioLayout;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,8 +44,16 @@ public class CommonTreeItemViewHolder extends BaseTreeItemViewHolder implements 
 
     @BindView(R.id.layout_bottom)
     LinearLayout mLayoutBottom;
-    @BindView(R.id.option_radio_group)
+    @BindView(R.id.precedence_radio_group)
     NestedRadioGroup mRadioGroup;
+
+    @BindView(R.id.overwrite_a_radio)
+    RadioLayout mRadioLayoutA;
+    @BindView(R.id.overwrite_none_radio)
+    RadioLayout mRadioLayoutNone;
+    @BindView(R.id.overwrite_b_radio)
+    RadioLayout mRadioLayoutB;
+
     @BindView(R.id.overwrite_a_item_value_view)
     LabelValueColumnView mItemViewOverwriteA;
     @BindView(R.id.overwrite_none_item_value_view)
@@ -126,18 +135,18 @@ public class CommonTreeItemViewHolder extends BaseTreeItemViewHolder implements 
 
     public void setSelectedAction(Action action) {
         mAllowPrecedenceCheckedNotification = false;
-        mItemViewOverwriteA.setChecked(false);
-        mItemViewOverwriteB.setChecked(false);
-        mItemViewOverwriteNone.setChecked(false);
+        mRadioLayoutA.setChecked(false);
+        mRadioLayoutB.setChecked(false);
+        mRadioLayoutNone.setChecked(false);
         switch (action) {
         case OVERWRITE_ON_A:
-            mItemViewOverwriteA.setChecked(true);
+            mRadioLayoutA.setChecked(true);
             break;
         case OVERWRITE_ON_B:
-            mItemViewOverwriteB.setChecked(true);
+            mRadioLayoutB.setChecked(true);
             break;
         case DO_NOTHING:
-            mItemViewOverwriteNone.setChecked(true);
+            mRadioLayoutNone.setChecked(true);
             break;
         }
         mAllowPrecedenceCheckedNotification = true;
@@ -149,13 +158,13 @@ public class CommonTreeItemViewHolder extends BaseTreeItemViewHolder implements 
         if (mAllowPrecedenceCheckedNotification) {
             Action action = null;
             switch (checkedId) {
-            case R.id.overwrite_a_item_value_view:
+            case R.id.overwrite_a_radio:
                 action = Action.OVERWRITE_ON_A;
                 break;
-            case R.id.overwrite_none_item_value_view:
+            case R.id.overwrite_none_radio:
                 action = Action.DO_NOTHING;
                 break;
-            case R.id.overwrite_b_item_value_view:
+            case R.id.overwrite_b_radio:
                 action = Action.OVERWRITE_ON_B;
                 break;
             }

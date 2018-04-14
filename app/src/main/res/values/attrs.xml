@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <resources>
 
-    <declare-styleable name="LabelValueColumnView">
+    <declare-styleable name="RadioLayout">
         <attr name="select_state">
             <enum name="select_none" value="0"/>
             <enum name="select_off" value="1"/>
@@ -10,17 +10,11 @@
         <attr name="is_selectable" format="boolean"/>
     </declare-styleable>
 
-    <declare-styleable name="NestedRadioButton">
-        <attr name="radio_state">
-            <enum name="radio_none" value="0"/>
-            <enum name="radio_off" value="1"/>
-            <enum name="radio_on" value="2"/>
-        </attr>
+    <declare-styleable name="TextButtonChevron">
         <attr name="heading_text" format="string"/>
         <attr name="subheading_text" format="string"/>
         <attr name="files_text" format="string"/>
         <attr name="dirs_text" format="string"/>
-        <attr name="is_switchable" format="boolean"/>
     </declare-styleable>
 
     <declare-styleable name="ItemRowView">

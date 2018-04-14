@@ -33,8 +33,9 @@ import com.wolfbang.fsync.treebrowse.impl.TreeBrowseFragment;
 import com.wolfbang.shared.BackClickHandler;
 import com.wolfbang.shared.view.AnimatingActivity;
 import com.wolfbang.shared.view.LabelValueRowView;
-import com.wolfbang.shared.view.NestedRadioButton;
+import com.wolfbang.shared.view.TextButtonChevron;
 import com.wolfbang.shared.view.NestedRadioGroup;
+import com.wolfbang.shared.view.RadioLayout;
 import com.wolfbang.shared.view.SingleFragActivity;
 
 import butterknife.BindView;
@@ -57,28 +58,47 @@ public class MissionConfirmFragment
 
     @BindView(R.id.precedence_radio_group)
     NestedRadioGroup mPrecedenceRadioGroup;
-    @BindView(R.id.radio_from_a)
-    NestedRadioButton mRadioFromA;
-    @BindView(R.id.radio_bidirectional)
-    NestedRadioButton mRadioBoth;
-    @BindView(R.id.radio_from_b)
-    NestedRadioButton mRadioFromB;
 
+    @BindView(R.id.radio_layout_from_a)
+    RadioLayout mRadioLayoutFromA;
+    @BindView(R.id.radio_layout_from_bidirectional)
+    RadioLayout mRadioLayoutFromBoth;
+    @BindView(R.id.radio_layout_from_b)
+    RadioLayout mRadioLayoutFromB;
+
+    @BindView(R.id.radio_details_from_a)
+    TextButtonChevron mRadioDetailsFromA;
+    @BindView(R.id.radio_details_bidirectional)
+    TextButtonChevron mRadioDetailsFromBoth;
+    @BindView(R.id.radio_details_from_b)
+    TextButtonChevron mRadioDetailsFromB;
 
     @BindView(R.id.comparison_cardview)
     CardView mComparisonCardView;
     @BindView(R.id.comparison_radio_group)
     NestedRadioGroup mComparisonRadioGroup;
-    @BindView(R.id.radio_to_a)
-    NestedRadioButton mRadioToA;
-    @BindView(R.id.radio_to_b)
-    NestedRadioButton mRadioToB;
-    @BindView(R.id.radio_on_a)
-    NestedRadioButton mRadioOnA;
-    @BindView(R.id.radio_on_b)
-    NestedRadioButton mRadioOnB;
-    @BindView(R.id.radio_clash)
-    NestedRadioButton mRadioClash;
+
+    @BindView(R.id.radio_layout_to_a)
+    RadioLayout mRadioLayoutToA;
+    @BindView(R.id.radio_layout_to_b)
+    RadioLayout mRadioLayoutToB;
+    @BindView(R.id.radio_layout_on_a)
+    RadioLayout mRadioLayoutOnA;
+    @BindView(R.id.radio_layout_on_b)
+    RadioLayout mRadioLayoutOnB;
+    @BindView(R.id.radio_layout_clash)
+    RadioLayout mRadioLayoutClash;
+
+    @BindView(R.id.radio_details_to_a)
+    TextButtonChevron mRadioDetailsToA;
+    @BindView(R.id.radio_details_to_b)
+    TextButtonChevron mRadioDetailsToB;
+    @BindView(R.id.radio_details_on_a)
+    TextButtonChevron mRadioDetailsOnA;
+    @BindView(R.id.radio_details_on_b)
+    TextButtonChevron mRadioDetailsOnB;
+    @BindView(R.id.radio_details_clash)
+    TextButtonChevron mRadioDetailsClash;
 
     @BindView(R.id.sync_button)
     Button mSyncButton;
@@ -156,13 +176,13 @@ public class MissionConfirmFragment
         if (!mInhibitPrecedenceCheckedNotification) {
             Precedence precedence;
             switch (checkedId) {
-            case R.id.radio_from_a:
+            case R.id.radio_layout_from_a:
                 precedence = Precedence.A;
                 break;
-            case R.id.radio_bidirectional:
+            case R.id.radio_layout_from_bidirectional:
                 precedence = Precedence.NEWEST;
                 break;
-            case R.id.radio_from_b:
+            case R.id.radio_layout_from_b:
                 precedence = Precedence.B;
                 break;
             default:
@@ -182,13 +202,13 @@ public class MissionConfirmFragment
         mInhibitPrecedenceCheckedNotification = true;
         switch (precedence) {
         case A:
-            mRadioFromA.setChecked(true);
+            mRadioLayoutFromA.setChecked(true);
             break;
         case NEWEST:
-            mRadioBoth.setChecked(true);
+            mRadioLayoutFromBoth.setChecked(true);
             break;
         case B:
-            mRadioFromB.setChecked(true);
+            mRadioLayoutFromB.setChecked(true);
             break;
         }
         mInhibitPrecedenceCheckedNotification = false;
@@ -197,21 +217,21 @@ public class MissionConfirmFragment
     @Override
     public void setMissionName(String missionName) {
         mHeadingRowView.setValue(missionName);
-        mRadioClash.setSubheadingText("Clashes need resolving");
+        mRadioDetailsClash.setSubheadingText("Clashes need resolving");
     }
 
     @Override
     public void setEndPointNameA(String endPointNameA) {
-        mRadioFromA.setSubheadingText(endPointNameA);
-        mRadioToA.setSubheadingText(endPointNameA);
-        mRadioOnA.setSubheadingText(endPointNameA);
+        mRadioDetailsFromA.setSubheadingText(endPointNameA);
+        mRadioDetailsToA.setSubheadingText(endPointNameA);
+        mRadioDetailsOnA.setSubheadingText(endPointNameA);
     }
 
     @Override
     public void setEndPointNameB(String endPointNameB) {
-        mRadioFromB.setSubheadingText(endPointNameB);
-        mRadioToB.setSubheadingText(endPointNameB);
-        mRadioOnB.setSubheadingText(endPointNameB);
+        mRadioDetailsFromB.setSubheadingText(endPointNameB);
+        mRadioDetailsToB.setSubheadingText(endPointNameB);
+        mRadioDetailsOnB.setSubheadingText(endPointNameB);
     }
 
     /**
@@ -226,18 +246,19 @@ public class MissionConfirmFragment
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                NestedRadioButton nestedRadioButton = getNestedRadioButton(viewFieldID);
+                RadioLayout radioLayout = getRadioLayout(viewFieldID);
                 if (counts == null) {
-                    nestedRadioButton.setVisibility(android.view.View.GONE);
+                    radioLayout.setVisibility(android.view.View.GONE);
                 } else {
-                    nestedRadioButton.setVisibility(android.view.View.VISIBLE);
+                    radioLayout.setVisibility(android.view.View.VISIBLE);
+                    TextButtonChevron textButtonChevron = getNestedRadioButton(viewFieldID);
                     int files = counts[0];
                     int dirs = counts[1];
-                    nestedRadioButton.setFilesText(files + (files != 1 ? " files" : " file"));
-                    nestedRadioButton.setDirsText("in " + dirs + (dirs != 1 ? " dirs" : " dir"));
-                    nestedRadioButton.setChevronVisible(files != 0);
+                    textButtonChevron.setFilesText(files + (files != 1 ? " files" : " file"));
+                    textButtonChevron.setDirsText("in " + dirs + (dirs != 1 ? " dirs" : " dir"));
+                    textButtonChevron.setChevronVisible(files != 0);
                     if (files != 0) {
-                        nestedRadioButton.setChevronOnClickListener(new OnClickListener() {
+                        textButtonChevron.setChevronOnClickListener(new OnClickListener() {
                             @Override
                             public void onClick(android.view.View v) {
                                 getPresenter().onShowTree(viewFieldID);
@@ -320,22 +341,42 @@ public class MissionConfirmFragment
         return false;
     }
 
-    private NestedRadioButton getNestedRadioButton(ViewFieldID viewFieldID) {
+    private RadioLayout getRadioLayout(ViewFieldID viewFieldID) {
         switch (viewFieldID) {
         case FIELD_FROM_A:
-            return mRadioFromA;
+            return mRadioLayoutFromA;
         case FIELD_FROM_B:
-            return mRadioFromB;
+            return mRadioLayoutFromB;
         case FIELD_TO_A:
-            return mRadioToA;
+            return mRadioLayoutToA;
         case FIELD_TO_B:
-            return mRadioToB;
+            return mRadioLayoutToB;
         case FIELD_ON_A:
-            return mRadioOnA;
+            return mRadioLayoutOnA;
         case FIELD_ON_B:
-            return mRadioOnB;
+            return mRadioLayoutOnB;
         case FIELD_NAME_CLASH:
-            return mRadioClash;
+            return mRadioLayoutClash;
+        }
+        return null;
+    }
+
+    private TextButtonChevron getNestedRadioButton(ViewFieldID viewFieldID) {
+        switch (viewFieldID) {
+        case FIELD_FROM_A:
+            return mRadioDetailsFromA;
+        case FIELD_FROM_B:
+            return mRadioDetailsFromB;
+        case FIELD_TO_A:
+            return mRadioDetailsToA;
+        case FIELD_TO_B:
+            return mRadioDetailsToB;
+        case FIELD_ON_A:
+            return mRadioDetailsOnA;
+        case FIELD_ON_B:
+            return mRadioDetailsOnB;
+        case FIELD_NAME_CLASH:
+            return mRadioDetailsClash;
         }
         return null;
     }

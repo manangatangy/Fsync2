@@ -15,6 +15,8 @@ import java.util.ArrayList;
 
 public class NestedRadioGroup extends LinearLayout {
 
+    // TODO remove this in favor of RadioGroup
+
     private ArrayList<Checkable> mCheckables = new ArrayList<>();
     private ArrayList<Integer> mNotifyIds = new ArrayList<>();
     private OnCheckedChangeListener mOnCheckedChangeListener;

@@ -6,18 +6,15 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="horizontal"
-    android:padding="@dimen/one_padding"
     >
 
     <LinearLayout
-        android:id="@+id/layout_main"
         android:layout_width="1dp"
         android:layout_height="wrap_content"
         android:padding="@dimen/half_padding"
         android:layout_weight="0.75"
         android:layout_gravity="center"
         android:orientation="vertical"
-        android:background="@drawable/radio_background"
         android:paddingLeft="@dimen/one_and_half_padding"
         android:layout_marginRight="@dimen/double_padding"
         >

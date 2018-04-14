@@ -56,42 +56,58 @@
                     android:text="SOURCE"
                     />
 
-                <com.wolfbang.shared.view.NestedRadioButton
-                    android:id="@+id/radio_from_a"
+                <com.wolfbang.shared.view.RadioLayout
+                    android:id="@+id/radio_layout_from_a"
+                    style="@style/AppTheme.RadioLayout"
+                    >
+                    <com.wolfbang.shared.view.TextButtonChevron
+                        android:id="@+id/radio_details_from_a"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:heading_text="Copy from:"
+                        tools:subheading_text="EndPointA-DELL"
+                        tools:files_text="3 files"
+                        tools:dirs_text="4 dirs"
+                        />
+                </com.wolfbang.shared.view.RadioLayout>
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:is_switchable="true"
-                    app:radio_state="radio_off"
-                    app:heading_text="Copy from:"
-                    tools:subheading_text="EndPointA-DELL"
-                    tools:files_text="3 files"
-                    tools:dirs_text="4 dirs"
-                    />
-                <com.wolfbang.shared.view.NestedRadioButton
-                    android:id="@+id/radio_bidirectional"
+                    android:layout_height="@dimen/one_padding"/>
+                <com.wolfbang.shared.view.RadioLayout
+                    android:id="@+id/radio_layout_from_bidirectional"
+                    style="@style/AppTheme.RadioLayout"
+                    >
+                    <com.wolfbang.shared.view.TextButtonChevron
+                        android:id="@+id/radio_details_bidirectional"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:heading_text="Copy in both"
+                        app:subheading_text="directions"
+                        app:files_text=""
+                        app:dirs_text=""
+                        />
+                </com.wolfbang.shared.view.RadioLayout>
+                <View
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:is_switchable="true"
-                    app:radio_state="radio_off"
-                    app:heading_text="Copy in both"
-                    app:subheading_text="directions"
-                    app:files_text=""
-                    app:dirs_text=""
-                    />
-                <com.wolfbang.shared.view.NestedRadioButton
-                    android:id="@+id/radio_from_b"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    app:is_switchable="true"
-                    app:radio_state="radio_off"
-                    app:heading_text="Copy from:"
-                    tools:subheading_text="EndPointB-LOCAL"
-                    tools:files_text="33 files"
-                    tools:dirs_text="44 dirs"
-                    />
+                    android:layout_height="@dimen/one_padding"/>
+                <com.wolfbang.shared.view.RadioLayout
+                    android:id="@+id/radio_layout_from_b"
+                    style="@style/AppTheme.RadioLayout"
+                    >
+                    <com.wolfbang.shared.view.TextButtonChevron
+                        android:id="@+id/radio_details_from_b"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:heading_text="Copy from:"
+                        tools:subheading_text="EndPointB-LOCAL"
+                        tools:files_text="33 files"
+                        tools:dirs_text="44 dirs"
+                        />
+                </com.wolfbang.shared.view.RadioLayout>
+
             </com.wolfbang.shared.view.NestedRadioGroup>
 
         </android.support.v7.widget.CardView>
@@ -125,71 +141,89 @@
                     android:text="COMPARISON"
                     />
 
-                <com.wolfbang.shared.view.NestedRadioButton
-                    android:id="@+id/radio_to_a"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    tools:visibility="visible"
-                    app:radio_state="radio_off"
-                    app:heading_text="Copy to:"
-                    tools:subheading_text="EndPointA-DELL"
-                    tools:files_text="33 files"
-                    tools:dirs_text="44 dirs"
-                    />
-                <com.wolfbang.shared.view.NestedRadioButton
-                    android:id="@+id/radio_to_b"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    tools:visibility="visible"
-                    app:radio_state="radio_off"
-                    app:heading_text="Copy to:"
-                    tools:subheading_text="EndPointB-LOCAL"
-                    tools:files_text="33 files"
-                    tools:dirs_text="44 dirs"
-                    />
-                <com.wolfbang.shared.view.NestedRadioButton
-                    android:id="@+id/radio_on_a"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    tools:visibility="visible"
-                    app:radio_state="radio_off"
-                    app:heading_text="Overwrite on:"
-                    tools:subheading_text="EndPointA-DELL"
-                    tools:files_text="33 files"
-                    tools:dirs_text="44 dirs"
-                    />
-                <com.wolfbang.shared.view.NestedRadioButton
-                    android:id="@+id/radio_on_b"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    tools:visibility="visible"
-                    app:radio_state="radio_off"
-                    app:heading_text="Overwrite on:"
-                    tools:subheading_text="EndPointB-LOCAL"
-                    tools:files_text="33 files"
-                    tools:dirs_text="44 dirs"
-                    />
-                <com.wolfbang.shared.view.NestedRadioButton
-                    android:id="@+id/radio_clash"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:visibility="gone"
-                    tools:visibility="visible"
-                    app:radio_state="radio_off"
-                    app:heading_text="Files ignored or"
-                    tools:subheading_text="Clashes need resolving"
-                    tools:files_text="33 files"
-                    tools:dirs_text="44 dirs"
-                    />
+                <com.wolfbang.shared.view.RadioLayout
+                    android:id="@+id/radio_layout_to_a"
+                    style="@style/AppTheme.RadioLayout.Comparison"
+                    >
+                    <com.wolfbang.shared.view.TextButtonChevron
+                        android:id="@+id/radio_details_to_a"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:heading_text="Copy to:"
+                        tools:subheading_text="EndPointA-DELL"
+                        tools:files_text="33 files"
+                        tools:dirs_text="44 dirs"
+                        />
+                </com.wolfbang.shared.view.RadioLayout>
+                <View
+                    style="@style/AppTheme.VerticalPad"/>
+                <com.wolfbang.shared.view.RadioLayout
+                    android:id="@+id/radio_layout_to_b"
+                    style="@style/AppTheme.RadioLayout.Comparison"
+                    >
+                    <com.wolfbang.shared.view.TextButtonChevron
+                        android:id="@+id/radio_details_to_b"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        tools:subheading_text="EndPointB-LOCAL"
+                        tools:files_text="33 files"
+                        tools:dirs_text="44 dirs"
+                        />
+                </com.wolfbang.shared.view.RadioLayout>
+                <View
+                    style="@style/AppTheme.VerticalPad"/>
+                <com.wolfbang.shared.view.RadioLayout
+                    android:id="@+id/radio_layout_on_a"
+                    style="@style/AppTheme.RadioLayout.Comparison"
+                    >
+                    <com.wolfbang.shared.view.TextButtonChevron
+                        android:id="@+id/radio_details_on_a"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:heading_text="Overwrite on:"
+                        tools:subheading_text="EndPointA-DELL"
+                        tools:files_text="33 files"
+                        tools:dirs_text="44 dirs"
+                        />
+                </com.wolfbang.shared.view.RadioLayout>
+                <View
+                    style="@style/AppTheme.VerticalPad"/>
+                <com.wolfbang.shared.view.RadioLayout
+                    android:id="@+id/radio_layout_on_b"
+                    style="@style/AppTheme.RadioLayout.Comparison"
+                    >
+                    <com.wolfbang.shared.view.TextButtonChevron
+                        android:id="@+id/radio_details_on_b"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:heading_text="Overwrite on:"
+                        tools:subheading_text="EndPointB-LOCAL"
+                        tools:files_text="33 files"
+                        tools:dirs_text="44 dirs"
+                        />
+                </com.wolfbang.shared.view.RadioLayout>
+                <View
+                    style="@style/AppTheme.VerticalPad"/>
+                <com.wolfbang.shared.view.RadioLayout
+                    android:id="@+id/radio_layout_clash"
+                    style="@style/AppTheme.RadioLayout.Comparison"
+                    >
+                    <com.wolfbang.shared.view.TextButtonChevron
+                        android:id="@+id/radio_details_clash"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        app:heading_text="Files ignored or"
+                        tools:subheading_text="Clashes need resolving"
+                        tools:files_text="33 files"
+                        tools:dirs_text="44 dirs"
+                        />
+                </com.wolfbang.shared.view.RadioLayout>
+
             </com.wolfbang.shared.view.NestedRadioGroup>
 
         </android.support.v7.widget.CardView>
