@@ -49,7 +49,7 @@
         swipe:leftEdgeSwipeOffset="0dp"
         swipe:rightEdgeSwipeOffset="0dp">
         <include layout="@layout/layout_tree_item_common_swipe_bottom"/>
-        <include layout="@layout/layout_common_swipe_top"/>
+        <include layout="@layout/layout_tree_item"/>
     </com.daimajia.swipe.SwipeLayout>
 
 
