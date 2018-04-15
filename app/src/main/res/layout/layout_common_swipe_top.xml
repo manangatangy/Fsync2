@@ -7,7 +7,7 @@
     android:layout_height="@dimen/tree_browse_item_height"
     android:background="@drawable/file_item"
     android:elevation="5dp"
-    android:padding="10dp">
+    android:padding="@dimen/one_padding">
 
     <LinearLayout
         android:id="@+id/layout_surface"
@@ -21,9 +21,8 @@
         >
         <TextView
             android:id="@+id/item_title"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
             android:layout_gravity="center_vertical"
 
             android:textSize="16sp"
@@ -31,7 +30,8 @@
             android:text="file name description"/>
         <com.wolfbang.shared.view.LabelValueColumnView
             android:id="@+id/item_action"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:layout_gravity="center_vertical"
             app:label_layout_weight="0.5"
