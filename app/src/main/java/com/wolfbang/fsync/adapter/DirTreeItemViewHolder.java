@@ -24,7 +24,7 @@ public class DirTreeItemViewHolder extends BaseTreeItemViewHolder implements OnC
     }
 
     private DirTreeItemClickListener mDirTreeItemClickListener;
-    private DirNode mDirNode;
+    protected DirNode mDirNode;
 
     public static DirTreeItemViewHolder makeViewHolder(@NonNull ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tree_item, null);
@@ -44,8 +44,9 @@ public class DirTreeItemViewHolder extends BaseTreeItemViewHolder implements OnC
         mChevron.setVisibility(View.VISIBLE);
         mSubHeading.setValue(null);
 
-        int files = mDirNode.getFileCount();
-        int dirs = mDirNode.getDirCount();
+        // Note that mDirNode may be ActionableDirNode.
+        int files = mDirNode.getFileCount(treeItemRecyclerAdapter.getAction());
+        int dirs = mDirNode.getDirCount(treeItemRecyclerAdapter.getAction()) + 1;       // Add one, for this directory
         mSubHeading.setLabel("holds " + files + (files != 1 ? " files" : " file") + " in " + dirs + (dirs != 1 ? " dirs" : " dir"));
     }
 

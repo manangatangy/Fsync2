@@ -140,9 +140,6 @@ public class CommonTreeItemViewHolder extends BaseTreeItemViewHolder implements 
             actionValue = "unaffected";
             break;
         }
-        mSubHeading.setLabel(actionLabel);
-        mSubHeading.setValue(actionValue);
-
         mSubHeading.setValue(null);
         mSubHeading.setLabel(actionLabel + ": " + actionValue);
     }

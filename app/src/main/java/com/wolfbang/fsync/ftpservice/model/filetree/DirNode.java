@@ -3,6 +3,8 @@ package com.wolfbang.fsync.ftpservice.model.filetree;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.wolfbang.fsync.ftpservice.model.compare.Action;
+
 import java.util.Date;
 import java.util.Iterator;
 
@@ -76,7 +78,7 @@ public class DirNode extends FileNode  implements Iterable<Node> {
     }
 
     public int getDirCount() {
-        int count = 1;      // Include the root dir in the count.
+        int count = 0;      // Don't include the root dir in the count.
         for (Node child : getChildren()) {
             if (child instanceof DirNode) {
                 count++;
@@ -84,6 +86,19 @@ public class DirNode extends FileNode  implements Iterable<Node> {
             }
         }
         return count;
+    }
+
+    /**
+     * These two methods with Action parameter allow the
+     * {@link com.wolfbang.fsync.adapter.DirTreeItemViewHolder} to also handle
+     * {@link com.wolfbang.fsync.ftpservice.model.compare.ActionableDirNode}s
+     */
+    public int getFileCount(@Nullable Action action) {
+        return getFileCount();
+    }
+
+    public int getDirCount(@Nullable Action action) {
+        return getDirCount();
     }
 
     /**

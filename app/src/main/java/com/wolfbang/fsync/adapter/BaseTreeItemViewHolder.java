@@ -25,6 +25,9 @@ public abstract class BaseTreeItemViewHolder extends RecyclerView.ViewHolder {
     public static final int ITEM_TYPE_FILE = 0;
     public static final int ITEM_TYPE_DIR = 1;
     public static final int ITEM_TYPE_COMMON = 2;
+    public static final int ITEM_TYPE_DIR_ACTIONABLE = 3;
+    public static final int ITEM_TYPE_UNIQUE = 4;
+    public static final int ITEM_TYPE_CLASH = 5;
 
     // These components are in layout_tree_item
     @BindView(R.id.item_heading)

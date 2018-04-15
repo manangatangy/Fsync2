@@ -33,11 +33,10 @@ public interface TreeBrowseContract extends AbstractMvpContract {
     }
 
     interface Presenter extends AbstractPresenter<View, Model, Navigation> {
-//        void setMissionNameData(MissionNameData missionNameData);
         MissionNameData getMissionNameData();
+        @Nullable
+        Action getAction();
 
-        //        void onSomeButtonClicked(int timePeriod);
-//        DirNode getDirNode();
         boolean onBackClicked();        // return true if consumed
         void onListItemClicked(DirNode dirNode);
         void onPathElementClicked(int index);
@@ -46,12 +45,12 @@ public interface TreeBrowseContract extends AbstractMvpContract {
     interface Model extends AbstractModel {
         void setMissionNameData(MissionNameData missionNameData);
         MissionNameData getMissionNameData();
+        @Nullable
+        Action getAction();
 
         // Set the start of the browse tree.  A non-null action causes filtered browsing.
         void setBaseAndCurrentDir(@Nullable Action action, DirNode dirNode);
 
-//        // The dir currently shown in the fragment.
-//        DirNode getCurrentDir();
         String getCurrentDirName();
         Node[] getCurrentDirChildren();
 

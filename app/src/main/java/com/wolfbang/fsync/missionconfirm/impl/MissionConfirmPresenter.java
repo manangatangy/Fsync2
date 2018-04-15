@@ -216,14 +216,14 @@ public class MissionConfirmPresenter
     private int[] makeCounts(DirNode dirNode) {
         return new int[] {
                 dirNode.getFileCount(),
-                dirNode.getDirCount()
+                dirNode.getDirCount() + 1       // Add one, for this directory
         };
     }
 
     private int[] makeCounts(ActionableDirNode actionableDirNode, Action action) {
         return new int[] {
                 actionableDirNode.getFileCount(action),
-                actionableDirNode.getDirCount(action)
+                actionableDirNode.getDirCount(action) + 1       // Add one, for this directory
         };
     }
 

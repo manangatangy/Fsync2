@@ -213,6 +213,7 @@ public class TreeBrowseFragment
             adapter = new TreeItemRecyclerAdapter();
             adapter.setDirTreeItemClickListener(this);
             adapter.setMissionNameData(getPresenter().getMissionNameData());
+            adapter.setAction(getPresenter().getAction());
             mRecyclerView.setAdapter(adapter);
         }
         return adapter;

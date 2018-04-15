@@ -1,10 +1,12 @@
 package com.wolfbang.fsync.adapter;
 
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.wolfbang.fsync.adapter.DirTreeItemViewHolder.DirTreeItemClickListener;
+import com.wolfbang.fsync.ftpservice.model.compare.Action;
 import com.wolfbang.fsync.ftpservice.model.compare.CommonActionableFileNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
@@ -24,6 +26,8 @@ public class TreeItemRecyclerAdapter
     private DirTreeItemClickListener mDirTreeItemClickListener;
     private Node[] mChildren;
     private FileNode mSelected;
+    @Nullable
+    private Action mAction;         // Action being filtered on.
 
     public void setDirTreeItemClickListener(DirTreeItemClickListener dirTreeItemClickListener) {
         mDirTreeItemClickListener = dirTreeItemClickListener;
@@ -33,8 +37,16 @@ public class TreeItemRecyclerAdapter
         mMissionNameData = missionNameData;
     }
 
+    public void setAction(@Nullable Action action) {
+        mAction = action;
+    }
+
     public void setNodeItems(Node[] nodes) {
         mChildren = nodes;
+    }
+
+    public Action getAction() {
+        return mAction;
     }
 
     //region RecyclerView.Adapter<TreeItemRecyclerAdapter.TreeItemViewHolder>

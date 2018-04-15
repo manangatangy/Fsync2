@@ -67,7 +67,7 @@ public class ActionableDirNode extends DirNode {
      * @return a dir count filtered by the action
      */
     public int getDirCount(Action action) {
-        int count = 1;      // Include the root dir in the count.
+        int count = 0;      // Don't include the root dir in the count.
         for (Node child : getChildren()) {
             if (child instanceof ActionableDirNode) {
                 count++;

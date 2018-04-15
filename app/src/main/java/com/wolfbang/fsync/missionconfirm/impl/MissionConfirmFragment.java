@@ -310,6 +310,10 @@ public class MissionConfirmFragment
     //endregion
 
     //region Contract.Navigation
+    /**
+     * Show a tree browse fragment rooted at the DirNode, and filtered to only show
+     * Nodes that have the specified Action.
+     */
     @Override
     public void navigateToBrowseTree(final @Nullable Action action, final DirNode dirNode,
                                      final MissionNameData missionNameData, final String title) {

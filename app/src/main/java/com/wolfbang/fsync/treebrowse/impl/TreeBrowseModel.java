@@ -25,6 +25,7 @@ public class TreeBrowseModel
         implements Model {
 
     private MissionNameData mMissionNameData;
+    @Nullable
     private Action mAction = null;      // non-null means that mBaseDirNode is an ActionableDirNode
     private DirNode mBaseDirNode;       // The start of the browse tree - can't pop up above this.
     private DirNode mCurrentDirNode;    // Currently shown in the browse tree
@@ -35,6 +36,7 @@ public class TreeBrowseModel
         super(executor);
     }
 
+    //region TreeBrowseContract.Model
     @Override
     public void setMissionNameData(MissionNameData missionNameData) {
         mMissionNameData = missionNameData;
@@ -45,17 +47,18 @@ public class TreeBrowseModel
         return mMissionNameData;
     }
 
+    @Nullable
+    @Override
+    public Action getAction() {
+        return mAction;
+    }
+
     @Override
     public void setBaseAndCurrentDir(@Nullable Action action, DirNode dirNode) {
         this.mBaseDirNode = dirNode;
         this.mCurrentDirNode = dirNode;
         this.mAction = action;
     }
-
-//    @Override
-//    public DirNode getCurrentDir() {
-//        return mCurrentDirNode;
-//    }
 
     @Override
     public String getCurrentDirName() {
@@ -116,4 +119,6 @@ public class TreeBrowseModel
         }
         return true;
     }
+    //endregion
+
 }
