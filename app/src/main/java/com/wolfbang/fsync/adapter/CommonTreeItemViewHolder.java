@@ -74,7 +74,7 @@ public class CommonTreeItemViewHolder extends BaseTreeItemViewHolder implements 
 
     public static CommonTreeItemViewHolder makeViewHolder(@NonNull ViewGroup parent,
                                                           MissionNameData missionNameData) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tree_item_common_file, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tree_item_common, null);
         return new CommonTreeItemViewHolder(view, missionNameData);
     }
 
@@ -166,17 +166,19 @@ public class CommonTreeItemViewHolder extends BaseTreeItemViewHolder implements 
     //region RadioGroup.OnCheckedChangeListener
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
+        // The radio button selected is the one to keep
+        // Therefore overwrite the other one.
         if (mAllowPrecedenceCheckedNotification) {
             Action action = null;
             switch (checkedId) {
             case R.id.overwrite_a_radio:
-                action = Action.OVERWRITE_ON_A;
+                action = Action.OVERWRITE_ON_B;
                 break;
             case R.id.overwrite_none_radio:
                 action = Action.DO_NOTHING;
                 break;
             case R.id.overwrite_b_radio:
-                action = Action.OVERWRITE_ON_B;
+                action = Action.OVERWRITE_ON_A;
                 break;
             }
             setActionInSurface(action);

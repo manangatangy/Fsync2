@@ -13,6 +13,9 @@ public class CommonActionableFileNode extends ActionableFileNode {
     private Date mTimeStampA;
     private Date mTimeStampB;
 
+    /**
+     * The allowable actions for this node are; OVERWRITE_ON_A, OVERWRITE_ON_B, DO_NOTHING.
+     */
     public CommonActionableFileNode(Precedence precedence,
                                     String name, DirNode parent,
                                     Date timeStampA, Date timeStampB) {

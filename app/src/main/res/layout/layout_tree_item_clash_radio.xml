@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/layout_bottom"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/tree_browse_item_height"
+    android:gravity="center"
+    android:background="@color/grey_med_dark"
+    android:orientation="horizontal"
+    >
+
+    <com.wolfbang.shared.view.NestedRadioGroup
+        android:id="@+id/precedence_radio_group"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="@dimen/half_padding"
+        android:layout_marginBottom="@dimen/half_padding"
+        android:layout_marginLeft="@dimen/single_padding"
+        android:layout_marginRight="@dimen/single_padding"
+        android:layout_gravity="center_vertical"
+        android:orientation="horizontal"
+        android:weightSum="2"
+        >
+
+        <com.wolfbang.shared.view.RadioLayout
+            android:id="@+id/overwrite_a_radio"
+            android:layout_width="148dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/radio_background"
+            app:is_selectable="true"
+            app:select_state="select_off"
+            >
+            <com.wolfbang.shared.view.LabelValueColumnView
+                android:id="@+id/overwrite_a_item_value_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@style/AppTheme.LabelValueColumn"
+                app:value="Directory\n4 files in 3 dirs"
+                />
+        </com.wolfbang.shared.view.RadioLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+
+        <com.wolfbang.shared.view.RadioLayout
+            android:id="@+id/overwrite_none_radio"
+            android:layout_width="72dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/radio_background"
+            app:is_selectable="true"
+            app:select_state="select_on"
+            >
+            <com.wolfbang.shared.view.LabelValueColumnView
+                android:id="@+id/overwrite_none_item_value_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@style/AppTheme.LabelValueColumn"
+                app:label="[none]"
+                app:value="Select\nto keep"
+                />
+        </com.wolfbang.shared.view.RadioLayout>
+
+        <View
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+
+        <com.wolfbang.shared.view.RadioLayout
+            android:id="@+id/overwrite_b_radio"
+            android:layout_width="148dp"
+            android:layout_height="match_parent"
+            android:background="@drawable/radio_background"
+            app:is_selectable="true"
+            app:select_state="select_off"
+            >
+            <com.wolfbang.shared.view.LabelValueColumnView
+                android:id="@+id/overwrite_b_item_value_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                style="@style/AppTheme.LabelValueColumn"
+                />
+        </com.wolfbang.shared.view.RadioLayout>
+
+    </com.wolfbang.shared.view.NestedRadioGroup>
+
+</LinearLayout>

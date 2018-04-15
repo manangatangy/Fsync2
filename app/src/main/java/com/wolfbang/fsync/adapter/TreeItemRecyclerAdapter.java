@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import com.wolfbang.fsync.adapter.DirTreeItemViewHolder.DirTreeItemClickListener;
 import com.wolfbang.fsync.ftpservice.model.compare.Action;
 import com.wolfbang.fsync.ftpservice.model.compare.CommonActionableFileNode;
+import com.wolfbang.fsync.ftpservice.model.compare.UniqueActionableFileNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.Node;
@@ -54,6 +55,8 @@ public class TreeItemRecyclerAdapter
     public int getItemViewType(int position) {
         if (mChildren[position] instanceof CommonActionableFileNode) {
             return BaseTreeItemViewHolder.ITEM_TYPE_COMMON;
+        } else if (mChildren[position] instanceof UniqueActionableFileNode) {
+            return BaseTreeItemViewHolder.ITEM_TYPE_UNIQUE;
         } else if (mChildren[position] instanceof DirNode) {
             return BaseTreeItemViewHolder.ITEM_TYPE_DIR;
         } else if (mChildren[position] instanceof FileNode) {

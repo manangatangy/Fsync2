@@ -58,9 +58,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 style="@style/AppTheme.LabelValueColumn"
-                app:label_layout_weight="0.01"
-                app:label=""
-                app:value="Do\nnothing"
+                app:label="[none]"
+                app:value="Select\nto keep"
                 />
         </com.wolfbang.shared.view.RadioLayout>
 

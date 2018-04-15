@@ -10,6 +10,11 @@ public class UniqueActionableFileNode extends ActionableFileNode {
 
     private UniqueTo mUniqueTo;
 
+    /**
+     * The allowable actions for this node are; COPY_TO_A, COPY_TO_B, DO_NOTHING.
+     * For a specific instance, only one of COPY_TO_A and COPY_TO_B is allowed
+     * depending on the value of UniqueTo.
+     */
     public UniqueActionableFileNode(Precedence precedence,
                                     String name, DirNode parent,
                                     UniqueTo uniqueTo) {

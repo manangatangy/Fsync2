@@ -29,7 +29,7 @@ public abstract class BaseTreeItemViewHolder extends RecyclerView.ViewHolder {
     public static final int ITEM_TYPE_UNIQUE = 4;
     public static final int ITEM_TYPE_CLASH = 5;
 
-    // These components are in layout_tree_item
+    // These components are in layout_tree_item_base
     @BindView(R.id.item_heading)
     TextView mHeading;
     @BindView(R.id.item_sub_heading)

@@ -12,6 +12,10 @@ public class TypeClashActionableDirNode extends ActionableDirNode {
     private DirectoryOn mDirectoryOn;
 
 
+    /**
+     * The allowable actions for this node are; OVERWRITE_ON_A, OVERWRITE_ON_B, DO_NOTHING,
+     * regardless of the DirectoryOn value.
+     */
     public TypeClashActionableDirNode(Precedence precedence,
                                       String name, DirNode parent,
                                       DirectoryOn directoryOn) {

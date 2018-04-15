@@ -22,7 +22,7 @@ public class FileTreeItemViewHolder extends BaseTreeItemViewHolder {
     private FileNode mFileNode;
 
     public static FileTreeItemViewHolder makeViewHolder(@NonNull ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tree_item, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tree_item_base, null);
         return new FileTreeItemViewHolder(view);
     }
 

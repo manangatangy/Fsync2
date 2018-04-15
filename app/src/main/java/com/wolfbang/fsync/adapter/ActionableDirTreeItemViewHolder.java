@@ -14,7 +14,7 @@ import com.wolfbang.fsync.R;
 public class ActionableDirTreeItemViewHolder extends DirTreeItemViewHolder {
 
     public static ActionableDirTreeItemViewHolder makeViewHolder(@NonNull ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tree_item, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tree_item_base, null);
         return new ActionableDirTreeItemViewHolder(view);
     }
 

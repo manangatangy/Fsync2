@@ -27,7 +27,7 @@ public class DirTreeItemViewHolder extends BaseTreeItemViewHolder implements OnC
     protected DirNode mDirNode;
 
     public static DirTreeItemViewHolder makeViewHolder(@NonNull ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tree_item, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tree_item_base, null);
         return new DirTreeItemViewHolder(view);
     }
 
