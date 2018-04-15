@@ -164,12 +164,18 @@ public abstract class Node implements Comparable<Node> {
     }
     //endregion
 
-    private static String mDateFormat = "yyyy-MM-dd HH:mm:ss.SSS z";
+    private static String mDateFormat = "d MMM yyyy HH:mm:ss Z";
+    private static String mDateFormatWithBreak = "d MMM yyyy\nHH:mm:ss Z";
     // TODO should Locale be used in this formatter ?
     private static SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat(mDateFormat);
+    private static SimpleDateFormat mSimpleDateFormatWithBreak = new SimpleDateFormat(mDateFormatWithBreak);
 
     public static String formatDate(Date date) {
         return (date == null) ? "<null-date>" : mSimpleDateFormat.format(date);
+    }
+
+    public static String formatDateWithBreak(Date date) {
+        return (date == null) ? "<null-date>" : mSimpleDateFormatWithBreak.format(date);
     }
 
     public static Date parseDate(String timeStamp) {

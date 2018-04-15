@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import com.wolfbang.fsync.R;
 import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.Node;
-import com.wolfbang.fsync.view.ItemRowView;
+import com.wolfbang.shared.view.LabelValueView;
+
+import butterknife.ButterKnife;
 
 /**
  * @author david
@@ -17,36 +19,27 @@ import com.wolfbang.fsync.view.ItemRowView;
 
 public class FileTreeItemViewHolder extends BaseTreeItemViewHolder {
 
-    private ItemRowView mItemRowView;
     private FileNode mFileNode;
 
     public static FileTreeItemViewHolder makeViewHolder(@NonNull ViewGroup parent) {
-        // TODO use correct layout
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_tree_item, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tree_item, null);
         return new FileTreeItemViewHolder(view);
     }
 
     public FileTreeItemViewHolder(View itemView) {
         super(itemView);
-        mItemRowView = (ItemRowView)itemView;
+        ButterKnife.bind(this, itemView);
+        mSubHeading.setLabelGravity(LabelValueView.GRAVITY_RIGHT);
+        mSubHeading.setLabelLayoutWeight(0.999f);
     }
 
     @Override
     public void bind(Node node, TreeItemRecyclerAdapter treeItemRecyclerAdapter) {
         mFileNode = (FileNode)node;
-        mItemRowView.setChevronVisibility(ItemRowView.VISIBILITY_NO);
-        mItemRowView.setTitleText(mFileNode.getName());
-        mItemRowView.setDescriptionText(mFileNode.getTimeStampAsText());
-        mItemRowView.setExtraDataText("");
-
-//        mItemRowView.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (mTreeItemClickListener != null) {
-//                    mTreeItemClickListener.onTreeItemClick(mFileNode);
-//                }
-//            }
-//        });
+        mHeading.setText(mFileNode.getName());
+        mChevron.setVisibility(View.GONE);
+        mSubHeading.setValue(null);
+        mSubHeading.setLabel(mFileNode.getTimeStampAsText());
     }
 
 }

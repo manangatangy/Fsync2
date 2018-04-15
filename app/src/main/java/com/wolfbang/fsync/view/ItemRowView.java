@@ -112,7 +112,7 @@ public class ItemRowView extends LinearLayout {
     }
 
     public void setChevronVisibility(@Visibility int visibility) {
-        mChevronImage.setVisibility(visibility == VISIBILITY_YES ? View.VISIBLE : View.GONE);
+        mChevronImage.setVisibility(visibility == VISIBILITY_YES ? View.VISIBLE : View.INVISIBLE);
     }
 
     public void setDividerVisibility(@Visibility int visibility) {

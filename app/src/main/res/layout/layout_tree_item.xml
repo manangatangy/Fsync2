@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/tree_browse_item_height"
+    >
+    <RelativeLayout
+        android:id="@+id/layout_tree_browse_item"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/tree_browse_item_height"
+        android:paddingLeft="@dimen/one_padding"
+        android:background="@drawable/file_item"
+        >
+        <TextView
+            android:id="@+id/item_heading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/one_padding"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_above="@id/item_sub_heading"
+            android:layout_toLeftOf="@id/item_chevron"
+            android:layout_gravity="center_vertical"
+            android:gravity="center_vertical"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:text="TXT  TRANtory \nTXT   description"
+            />
+        <com.wolfbang.shared.view.LabelValueRowView
+            android:id="@+id/item_sub_heading"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="@dimen/one_padding"
+            app:label="2018-03-15 00:11:00.000 AEDT"
+            app:label_color="@color/grey_dark_med"
+            app:label_font_size="14sp"
+            app:label_layout_weight="0.7"
+            android:layout_alignParentLeft="true"
+            android:layout_above="@+id/item_divider"
+            android:layout_toLeftOf="@id/item_chevron"
+            app:layout_constraintEnd_toStartOf="@+id/item_chevron"
+            app:layout_constraintStart_toStartOf="parent"
+            app:value="100KB"
+            app:value_color="@color/black"
+            app:value_font_size="14sp"
+            />
+        <ImageView
+            android:id="@+id/item_chevron"
+            android:visibility="visible"
+            android:layout_width="60dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/red_right_chevron"
+            />
+        <View
+            android:id="@+id/item_divider"
+            android:visibility="visible"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_alignParentBottom="true"
+            android:background="@color/grey_medium"
+            />
+    </RelativeLayout>
+</FrameLayout>

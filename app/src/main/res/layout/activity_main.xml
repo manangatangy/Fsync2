@@ -48,7 +48,7 @@
         android:layout_height="wrap_content"
         swipe:leftEdgeSwipeOffset="0dp"
         swipe:rightEdgeSwipeOffset="0dp">
-        <include layout="@layout/layout_common_swipe_bottom"/>
+        <include layout="@layout/layout_tree_item_common_swipe_bottom"/>
         <include layout="@layout/layout_common_swipe_top"/>
     </com.daimajia.swipe.SwipeLayout>
 

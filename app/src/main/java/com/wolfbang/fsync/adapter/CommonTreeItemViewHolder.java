@@ -4,6 +4,7 @@ import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.RadioGroup.OnCheckedChangeListener;
@@ -16,6 +17,8 @@ import com.wolfbang.fsync.ftpservice.model.compare.CommonActionableFileNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.Node;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
 import com.wolfbang.shared.view.LabelValueColumnView;
+import com.wolfbang.shared.view.LabelValueRowView;
+import com.wolfbang.shared.view.LabelValueView;
 import com.wolfbang.shared.view.NestedRadioGroup;
 import com.wolfbang.shared.view.RadioLayout;
 
@@ -35,12 +38,20 @@ public class CommonTreeItemViewHolder extends BaseTreeItemViewHolder implements 
     @BindView(R.id.swipe_layout_item)
     SwipeLayout mSwipeLayout;
 
-    @BindView(R.id.layout_surface)
-    LinearLayout mLayoutSurface;
-    @BindView(R.id.item_title)
-    TextView mTitle;
-    @BindView(R.id.item_action)
-    LabelValueColumnView mAction;
+    // These components are in layout_tree_item
+    @BindView(R.id.item_heading)
+    TextView mHeading;
+    @BindView(R.id.item_sub_heading)
+    LabelValueRowView mSubHeading;
+    @BindView(R.id.item_chevron)
+    ImageView mChevron;
+
+    //    @BindView(R.id.layout_surface)
+//    LinearLayout mLayoutSurface;
+//    @BindView(R.id.item_title)
+//    TextView mTitle;
+//    @BindView(R.id.item_action)
+//    LabelValueColumnView mAction;
 
     @BindView(R.id.layout_bottom)
     LinearLayout mLayoutBottom;
@@ -63,7 +74,7 @@ public class CommonTreeItemViewHolder extends BaseTreeItemViewHolder implements 
 
     public static CommonTreeItemViewHolder makeViewHolder(@NonNull ViewGroup parent,
                                                           MissionNameData missionNameData) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_tree_item_common_file, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tree_item_common_file, null);
         return new CommonTreeItemViewHolder(view, missionNameData);
     }
 
@@ -73,6 +84,9 @@ public class CommonTreeItemViewHolder extends BaseTreeItemViewHolder implements 
         ButterKnife.bind(this, itemView);
         mSwipeLayout.setShowMode(SwipeLayout.ShowMode.LayDown);
         mRadioGroup.setOnCheckedChangeListener(this);
+
+        mSubHeading.setLabelGravity(LabelValueView.GRAVITY_RIGHT);
+        mSubHeading.setLabelLayoutWeight(0.999f);
 
 //        swipeLayout.addSwipeListener(new SimpleSwipeListener() {
 //            @Override
@@ -87,17 +101,14 @@ public class CommonTreeItemViewHolder extends BaseTreeItemViewHolder implements 
     public void bind(Node node, TreeItemRecyclerAdapter treeItemRecyclerAdapter) {
         mCommonActionableFileNode = (CommonActionableFileNode)node;
 
-        mTitle.setText(mCommonActionableFileNode.getName());        // TODO max 13 chars
+        mHeading.setText(mCommonActionableFileNode.getName());        // TODO max 13 chars - insert newline as needed
+        mChevron.setVisibility(View.GONE);
 
         mItemViewOverwriteA.setLabel(mMissionNameData.getEndPointA().getEndPointName());
         mItemViewOverwriteB.setLabel(mMissionNameData.getEndPointB().getEndPointName());
-        // TODO proper date formatting  "30 Mar 2018\n00:00:00 +1100"
-        String txt = Node.formatDate(mCommonActionableFileNode.getTimeStampA());
-        txt = txt.replace(" ", "\n");
-        mItemViewOverwriteA.setValue("30 Mar 2018\n00:00:00 +1100");
-        txt = Node.formatDate(mCommonActionableFileNode.getTimeStampB());
-        txt = txt.replace(" ", "\n");
-        mItemViewOverwriteB.setValue("30 Mar 2018\n00:00:00 +1100");
+
+        mItemViewOverwriteA.setValue(Node.formatDateWithBreak(mCommonActionableFileNode.getTimeStampA()));
+        mItemViewOverwriteB.setValue(Node.formatDateWithBreak(mCommonActionableFileNode.getTimeStampB()));
 
         setActionInSurface(mCommonActionableFileNode.getAction());
         setSelectedAction(mCommonActionableFileNode.getAction());
@@ -115,7 +126,7 @@ public class CommonTreeItemViewHolder extends BaseTreeItemViewHolder implements 
     private boolean mAllowPrecedenceCheckedNotification = true;
 
     public void setActionInSurface(Action action) {
-        String actionLabel = "will overwrite on";
+        String actionLabel = "will be overwritten on";
         String actionValue = null;
         switch (action) {
         case OVERWRITE_ON_A:
@@ -125,12 +136,15 @@ public class CommonTreeItemViewHolder extends BaseTreeItemViewHolder implements 
             actionValue = mMissionNameData.getEndPointB().getEndPointName();
             break;
         case DO_NOTHING:
-            actionLabel = "will do";
-            actionValue = "nothing";
+            actionLabel = "will be";
+            actionValue = "unaffected";
             break;
         }
-        mAction.setLabel(actionLabel);
-        mAction.setValue(actionValue);
+        mSubHeading.setLabel(actionLabel);
+        mSubHeading.setValue(actionValue);
+
+        mSubHeading.setValue(null);
+        mSubHeading.setLabel(actionLabel + ": " + actionValue);
     }
 
     public void setSelectedAction(Action action) {

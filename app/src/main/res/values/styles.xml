@@ -18,7 +18,7 @@
         <item name="value_gravity">centre</item>
         <item name="label">"xxxxxaaaaaxxxxx"</item>
         <item name="value">"30 Mar 2018\n00:00:00 +1100"</item>
-        <item name="android:paddingTop">@dimen/one_padding</item>
+        <item name="android:paddingTop">@dimen/half_padding</item>
     </style>
 
     <style name="AppTheme.RadioLayout">

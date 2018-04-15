@@ -5,9 +5,15 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.TextView;
 
+import com.wolfbang.fsync.R;
 import com.wolfbang.fsync.ftpservice.model.filetree.Node;
 import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
+import com.wolfbang.shared.view.LabelValueRowView;
+
+import butterknife.BindView;
 
 /**
  * @author david
@@ -19,6 +25,14 @@ public abstract class BaseTreeItemViewHolder extends RecyclerView.ViewHolder {
     public static final int ITEM_TYPE_FILE = 0;
     public static final int ITEM_TYPE_DIR = 1;
     public static final int ITEM_TYPE_COMMON = 2;
+
+    // These components are in layout_tree_item
+    @BindView(R.id.item_heading)
+    TextView mHeading;
+    @BindView(R.id.item_sub_heading)
+    LabelValueRowView mSubHeading;
+    @BindView(R.id.item_chevron)
+    ImageView mChevron;
 
     public BaseTreeItemViewHolder(View itemView) {
         super(itemView);

@@ -9,7 +9,8 @@ import android.view.ViewGroup;
 import com.wolfbang.fsync.R;
 import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
 import com.wolfbang.fsync.ftpservice.model.filetree.Node;
-import com.wolfbang.fsync.view.ItemRowView;
+
+import butterknife.ButterKnife;
 
 /**
  * @author david
@@ -24,27 +25,28 @@ public class DirTreeItemViewHolder extends BaseTreeItemViewHolder implements OnC
 
     private DirTreeItemClickListener mDirTreeItemClickListener;
     private DirNode mDirNode;
-    private ItemRowView mItemRowView;
 
     public static DirTreeItemViewHolder makeViewHolder(@NonNull ViewGroup parent) {
-        // TODO use correct layout
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.view_tree_item, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tree_item, null);
         return new DirTreeItemViewHolder(view);
     }
 
     public DirTreeItemViewHolder(View itemView) {
         super(itemView);
-        mItemRowView = (ItemRowView)itemView;
+        ButterKnife.bind(this, itemView);
+        itemView.setOnClickListener(this);
     }
 
     public void bind(Node node, TreeItemRecyclerAdapter treeItemRecyclerAdapter) {
         mDirNode = (DirNode) node;
         mDirTreeItemClickListener = treeItemRecyclerAdapter;
-        mItemRowView.setChevronVisibility(ItemRowView.VISIBILITY_YES);
-        mItemRowView.setTitleText(mDirNode.getName());
-        String extraData = "[ " + mDirNode.size() + " children]";
-        mItemRowView.setExtraDataText(extraData);
-        mItemRowView.setOnClickListener(this);
+        mHeading.setText(mDirNode.getName());
+        mChevron.setVisibility(View.VISIBLE);
+        mSubHeading.setValue(null);
+
+        int files = mDirNode.getFileCount();
+        int dirs = mDirNode.getDirCount();
+        mSubHeading.setLabel("holds " + files + (files != 1 ? " files" : " file") + " in " + dirs + (dirs != 1 ? " dirs" : " dir"));
     }
 
     @Override
