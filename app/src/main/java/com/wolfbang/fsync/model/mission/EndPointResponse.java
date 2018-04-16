@@ -12,7 +12,7 @@ public class EndPointResponse<ResponseT> {
     public final EndPointError endPointError;
     public final String errorMessage;
 
-    public EndPointResponse(ResponseT response, EndPointError endPointError, String errorMessage) {
+    public EndPointResponse(@Nullable ResponseT response, @Nullable EndPointError endPointError, @Nullable String errorMessage) {
         this.response = response;
         this.endPointError = endPointError;
         this.errorMessage = errorMessage;
@@ -32,6 +32,12 @@ public class EndPointResponse<ResponseT> {
         return endPointError;
     }
 
+    @Nullable
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    @Nullable
     public String getErrorText() {
         return (endPointError == null) ? null : (
                 endPointError.getError() + (

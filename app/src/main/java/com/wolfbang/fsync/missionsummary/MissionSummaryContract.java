@@ -36,14 +36,12 @@ public interface MissionSummaryContract extends AbstractMvpContract {
     interface Model extends AbstractModel {
         void setMissionNameData(MissionNameData missionNameData);
         MissionNameData getMissionNameData();
-
-        void doScan();
         ScanResult getScanResult();
-
         String getErrorMsg();
         boolean isBusy();
         ModelState getModelState();
         void resetModelState();
+        void doScan();
     }
 
     enum ModelState {

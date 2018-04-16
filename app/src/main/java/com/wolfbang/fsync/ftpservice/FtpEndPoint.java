@@ -1,6 +1,11 @@
 package com.wolfbang.fsync.ftpservice;
 
+import com.wolfbang.fsync.model.filetree.DirNode;
+import com.wolfbang.fsync.model.filetree.FileNode;
 import com.wolfbang.fsync.model.mission.EndPoint;
+import com.wolfbang.fsync.model.mission.EndPointResponse;
+
+import org.apache.commons.net.ftp.SymLinkParsingFtpClient;
 
 /**
  * @author david
@@ -26,32 +31,50 @@ public class FtpEndPoint extends EndPoint {
         return mHost;
     }
 
-    public void setHost(String mHost) {
-        this.mHost = mHost;
-    }
+//    public void setHost(String mHost) {
+//        this.mHost = mHost;
+//    }
 
     public String getUserName() {
         return mUserName;
     }
 
-    public void setUserName(String mUserName) {
-        this.mUserName = mUserName;
-    }
+//    public void setUserName(String mUserName) {
+//        this.mUserName = mUserName;
+//    }
 
     public String getPassword() {
         return mPassword;
     }
 
-    public void setPassword(String mPassword) {
-        this.mPassword = mPassword;
-    }
+//    public void setPassword(String mPassword) {
+//        this.mPassword = mPassword;
+//    }
 
     public String getRootDir() {
         return mRootDir;
     }
 
-    public void setRootDir(String mRootDir) {
-        this.mRootDir = mRootDir;
+//    public void setRootDir(String mRootDir) {
+//        this.mRootDir = mRootDir;
+//    }
+
+    @Override
+    public EndPointResponse<DirNode> fetchFileTree() {
+        FtpResponse<FileNode> ftpResponse = new FtpRecursiveList(new SymLinkParsingFtpClient(), mRootDir)
+                .setShowProtocolTrace(true)
+                .execute(mHost, mUserName, mPassword);
+
+        if (ftpResponse.isErrored()) {
+            return new FtpResponse<>(null, (FtpEndPointError)ftpResponse.endPointError,
+                                     ftpResponse.errorMessage);
+        }
+        if (! (ftpResponse.getResponse() instanceof DirNode)) {
+            return new FtpResponse<>(null, FtpEndPointError.ROOT_NOT_DIRECTORY,
+                                     "root path is not a directory (maybe a symlink?)");
+        }
+        DirNode dirNode = (DirNode)ftpResponse.getResponse();
+        return FtpResponse.success(dirNode);
     }
 
 }

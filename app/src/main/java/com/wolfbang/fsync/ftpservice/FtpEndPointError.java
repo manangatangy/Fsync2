@@ -19,6 +19,7 @@ public enum FtpEndPointError implements EndPointError {
     CONNECTION_EXCEPTION,
     IO_EXCEPTION,
     PATH_NOT_FOUND,
+    ROOT_NOT_DIRECTORY,
     UNKNOWN_EXCEPTION;
 
     @NonNull

@@ -23,7 +23,7 @@ public class FtpResponse<ResponseT> extends EndPointResponse<ResponseT> {
         return new FtpResponse<>(null, ftpEndPointError, errorMessage);
     }
 
-    private FtpResponse(ResponseT response, FtpEndPointError ftpEndPointError, String errorMessage) {
+    public FtpResponse(ResponseT response, FtpEndPointError ftpEndPointError, String errorMessage) {
         super(response, ftpEndPointError, errorMessage);
     }
 

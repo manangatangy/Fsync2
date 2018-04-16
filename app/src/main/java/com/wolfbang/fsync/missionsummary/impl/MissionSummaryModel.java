@@ -4,18 +4,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
 import com.lsmvp.simplemvp.BaseMvpModel;
-import com.wolfbang.fsync.ftpservice.FtpRecursiveList;
-import com.wolfbang.fsync.ftpservice.FtpResponse;
-import com.wolfbang.fsync.model.filetree.DirNode;
-import com.wolfbang.fsync.model.filetree.FileNode;
-import com.wolfbang.fsync.ftpservice.FtpEndPoint;
-import com.wolfbang.fsync.model.mission.MissionNameData;
-import com.wolfbang.fsync.model.mission.ScanResult;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelListener;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelState;
-
-import org.apache.commons.net.ftp.SymLinkParsingFtpClient;
+import com.wolfbang.fsync.model.filetree.DirNode;
+import com.wolfbang.fsync.model.mission.EndPointResponse;
+import com.wolfbang.fsync.model.mission.MissionNameData;
+import com.wolfbang.fsync.model.mission.ScanResult;
 
 import java.util.concurrent.Executor;
 import java.util.concurrent.atomic.AtomicBoolean;
@@ -31,10 +26,9 @@ public class MissionSummaryModel
         extends BaseMvpModel
         implements Model {
 
-    private int mRequestCount = 0;
     private MissionNameData mMissionNameData;
-
     private ScanResult mScanResult;
+    private String mErrorMsg;
 
     @VisibleForTesting
     ModelState mModelState = ModelState.IDLE;
@@ -65,71 +59,6 @@ public class MissionSummaryModel
     }
 
     @Override
-    public void doScan() {
-
-        // TODO time zone stuff
-//        java.util.TimeZone timeZone;
-//        timeZone.toZoneId()
-        if (mBusy.compareAndSet(false, true)) {
-
-            ModelListener listener = getListener();
-            if (listener != null) {
-                listener.onBusyChanged(true);
-            }
-
-            getExecutor().execute(new Runnable() {
-                @Override
-                public void run() {
-
-                    FtpEndPoint ftpEndPoint = (FtpEndPoint) mMissionNameData.getEndPointA();
-                    ModelListener listener = getListener();
-                    FtpResponse<FileNode> ftpResponse = new FtpRecursiveList(new SymLinkParsingFtpClient(), ftpEndPoint.getRootDir())
-                            .setShowProtocolTrace(true)
-                            .execute(
-                                    ftpEndPoint.getHost(),
-                                    ftpEndPoint.getUserName(),
-                                    ftpEndPoint.getPassword()
-                            );
-
-                    mBusy.set(false);
-                    if (listener != null) {
-                        listener.onBusyChanged(false);
-                    }
-
-                    if (ftpResponse.isErrored()) {
-                        mModelState = ModelState.ERROR;
-                        mErrorMsg = ftpResponse.getErrorText();
-                        if (listener != null) {
-                            listener.onRetrieveFailed(mErrorMsg);
-                        }
-                    } else {
-                        FileNode fileNodeA = ftpResponse.getResponse();
-
-                        if (fileNodeA instanceof DirNode) {
-                            // TODO now get the other endpoint - temp copy of A
-//                            DirNode dirNodeB = new DirNode(null, null, null);
-                            DirNode dirNodeB = (DirNode)fileNodeA;
-                            mModelState = ModelState.SUCCESS;
-                            if (listener != null) {
-                                listener.onRetrieveSucceeded(mMissionNameData, new ScanResult((DirNode)fileNodeA, dirNodeB));
-                            }
-
-                        } else {
-                            mModelState = ModelState.ERROR;
-                            mErrorMsg = "path is not a directory (maybe a symlink?)";
-                            if (listener != null) {
-                                listener.onRetrieveFailed(mErrorMsg);
-                            }
-                        }
-                    }
-                }
-            });
-
-        }
-    }
-
-    private String mErrorMsg;
-    @Override
     public String getErrorMsg() {
         return mErrorMsg;
     }
@@ -147,6 +76,62 @@ public class MissionSummaryModel
     @Override
     public void resetModelState() {
         mModelState = ModelState.IDLE;
+    }
+
+    @Override
+    public void doScan() {
+
+        // TODO time zone stuff
+//        java.util.TimeZone timeZone;
+//        timeZone.toZoneId()
+        if (mBusy.compareAndSet(false, true)) {
+
+            ModelListener listener = getListener();
+            if (listener != null) {
+                listener.onBusyChanged(true);
+            }
+
+            getExecutor().execute(new Runnable() {
+                @Override
+                public void run() {
+
+                    ScanResult scanResult = null;
+                    String errorText = null;
+                    EndPointResponse<DirNode> endPointResponseA = mMissionNameData.getEndPointA().fetchFileTree();
+                    if (endPointResponseA.isErrored()) {
+                        errorText = endPointResponseA.getErrorText();
+                    } else {
+                        EndPointResponse<DirNode> endPointResponseB = mMissionNameData.getEndPointB().fetchFileTree();
+                        if (endPointResponseB.isErrored()) {
+                            errorText = endPointResponseB.getErrorText();
+                        } else {
+                            scanResult = new ScanResult(endPointResponseA.getResponse(), endPointResponseB.getResponse());
+                        }
+                    }
+
+                    mBusy.set(false);
+                    ModelListener listener = getListener();
+                    if (listener != null) {
+                        listener.onBusyChanged(false);
+                    }
+                    if (errorText != null) {
+                        mModelState = ModelState.ERROR;
+                        mErrorMsg = errorText;
+                        if (listener != null) {
+                            listener.onRetrieveFailed(mErrorMsg);
+                        }
+                    } else {
+                        mModelState = ModelState.SUCCESS;
+                        mScanResult = scanResult;
+                        if (listener != null) {
+                            listener.onRetrieveSucceeded(mMissionNameData, mScanResult);
+                        }
+                    }
+
+                }
+            });
+
+        }
     }
     //endregion
 

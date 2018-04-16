@@ -68,30 +68,43 @@ public class MainActivity extends AnimatingActivity {
     @OnClick(R.id.mission_summary_button)
     public void onMissionSummaryButtonClick() {
         useStartAnimations();
-        startActivity(MissionSummaryFragment.createIntent(this,
-                new MissionNameData(
-                        "Mission-One",
-                        new FtpEndPoint(
-                                "Dell-Mint-Music",
-                                "192.168.0.9",
-                                "music",
-                                "music",
-                                "test"        // was "Music/."
-                        ),
-                        new FtpEndPoint(
-                                "Local-Android-Music",
-                                "host",
-                                "userName",
-                                "password",
-                                "rootDir"
-                        )
-                )
-        ));
+        startActivity(MissionSummaryFragment.createIntent(this, getMissionNameData1()));
     }
 
     @OnClick(R.id.feature2_button)
     public void onFeature2ButtonClick() {
         mPathScrollerView.push(new PathElementView(this));
+    }
+
+    private MissionNameData getMissionNameData1() {
+        return new MissionNameData("Mission-One", getFtpEndPoint1(), getFtpEndPoint2());
+    }
+    private FtpEndPoint getFtpEndPoint1() {
+        return new FtpEndPoint(
+                "Dell-Mint-Music",
+                "192.168.0.9",
+                "music",
+                "music",
+                "test"        // was "Music/."
+        );
+    }
+    private FtpEndPoint getFtpEndPoint2() {
+        return new FtpEndPoint(
+                "Local-Android-Music",
+                "192.168.0.9",
+                "music",
+                "music",
+                "test"        // was "Music/."
+        );
+    }
+    private FtpEndPoint getFtpEndPointRef() {
+        return new FtpEndPoint(
+                "Local-Android-Music",
+                "host",
+                "userName",
+                "password",
+                "rootDir"
+        );
     }
 
 }
