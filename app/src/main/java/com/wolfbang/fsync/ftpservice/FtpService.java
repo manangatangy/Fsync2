@@ -66,7 +66,7 @@ public abstract class FtpService<ResponseT> {
         try {
             if (InetAddress.getByName(hostName) == null) {
                 Log.d("FtpService", "server can't be named");
-                ftpResponse = FtpResponse.error(FtpError.ADDRESS_FOR_HOST_NOT_FOUND);
+                ftpResponse = FtpResponse.error(FtpEndPointError.ADDRESS_FOR_HOST_NOT_FOUND);
             } else {
                 if (mShowProtocolTrace) {
                     mFtpClient.addProtocolCommandListener(mPrintCommandListener);
@@ -75,11 +75,11 @@ public abstract class FtpService<ResponseT> {
                 mFtpClient.setDefaultTimeout(5000);
                 mFtpClient.connect(hostName);
                 if (!FTPReply.isPositiveCompletion(mFtpClient.getReplyCode())) {
-                    ftpResponse = FtpResponse.error(FtpError.CONNECT_REFUSED);
+                    ftpResponse = FtpResponse.error(FtpEndPointError.CONNECT_REFUSED);
                 } else {
                     if (!mFtpClient.login(userName, password)) {
                         Log.d("FtpService", "login failed");
-                        ftpResponse = FtpResponse.error(FtpError.LOGIN_FAILED);
+                        ftpResponse = FtpResponse.error(FtpEndPointError.LOGIN_FAILED);
                     } else {
                         mFtpClient.enterLocalPassiveMode();
                         String systemType = mFtpClient.getSystemType();
@@ -96,21 +96,21 @@ public abstract class FtpService<ResponseT> {
         } catch (UnknownHostException uhe) {
             // "crazycat.mental":"Unable to resolve host "crazycat.mental": No address associated with hostname"
             uhe.printStackTrace();
-            ftpResponse = FtpResponse.error(FtpError.UNKNOWN_HOST, uhe.getMessage());
+            ftpResponse = FtpResponse.error(FtpEndPointError.UNKNOWN_HOST, uhe.getMessage());
         } catch (FTPConnectionClosedException fcce) {
             fcce.printStackTrace();
-            ftpResponse = FtpResponse.error(FtpError.CONNECTION_CLOSED, fcce.getMessage());
+            ftpResponse = FtpResponse.error(FtpEndPointError.CONNECTION_CLOSED, fcce.getMessage());
         } catch (ConnectException ce) {
             // "localhost":ConnectException: "failed to connect to localhost/127.0.0.1 (port 21) after 5000ms: isConnected failed: ECONNREFUSED (Connection refused)"
             ce.printStackTrace();
-            ftpResponse = FtpResponse.error(FtpError.CONNECTION_EXCEPTION, ce.getMessage());
+            ftpResponse = FtpResponse.error(FtpEndPointError.CONNECTION_EXCEPTION, ce.getMessage());
         } catch (IOException ioe) {
             // "192.168.0.9"/"8.8.8.8":"Timed out waiting for initial connect reply"
             ioe.printStackTrace();
-            ftpResponse = FtpResponse.error(FtpError.IO_EXCEPTION, ioe.getMessage());
+            ftpResponse = FtpResponse.error(FtpEndPointError.IO_EXCEPTION, ioe.getMessage());
         } catch (Exception exc) {
             exc.printStackTrace();
-            ftpResponse = FtpResponse.error(FtpError.UNKNOWN_EXCEPTION, exc.getMessage());
+            ftpResponse = FtpResponse.error(FtpEndPointError.UNKNOWN_EXCEPTION, exc.getMessage());
         } finally {
             try {
                 mFtpClient.disconnect();

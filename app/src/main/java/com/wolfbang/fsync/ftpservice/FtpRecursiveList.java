@@ -43,7 +43,7 @@ public class FtpRecursiveList extends FtpService<FileNode> {
     /**
      * @return array of File, corresponding to the path which may be a directory
      * or a file. Do not pass null or empty string; use "." to specify the current
-     * directory.  Returns FtpError.PATH_NOT_FOUND if path does not exist,
+     * directory.  Returns FtpEndPointError.PATH_NOT_FOUND if path does not exist,
      */
     @NonNull
     @Override
@@ -52,7 +52,7 @@ public class FtpRecursiveList extends FtpService<FileNode> {
         FTPFile ftpRoot = mFtpClient.mlistFile(mRootPath);
 
         if (ftpRoot == null) {
-            return FtpResponse.error(FtpError.PATH_NOT_FOUND);
+            return FtpResponse.error(FtpEndPointError.PATH_NOT_FOUND);
         }
 
         FileNode rootFileNode = makeFile(ftpRoot, null);

@@ -88,6 +88,12 @@ public class DirNode extends FileNode  implements Iterable<Node> {
         return count;
     }
 
+    public String getFilesDirsCountText() {
+        int files = getFileCount();
+        int dirs = getDirCount() + 1;       // Add one, for this directory
+        return files + (files != 1 ? " files" : " file") + " in " + dirs + (dirs != 1 ? " dirs" : " dir");
+    }
+
     /**
      * These two methods with Action parameter allow the
      * {@link com.wolfbang.fsync.adapter.DirTreeItemViewHolder} to also handle
@@ -99,6 +105,10 @@ public class DirNode extends FileNode  implements Iterable<Node> {
 
     public int getDirCount(@Nullable Action action) {
         return getDirCount();
+    }
+
+    public String getFilesDirsCountText(@Nullable Action action) {
+        return getFilesDirsCountText();
     }
 
     /**

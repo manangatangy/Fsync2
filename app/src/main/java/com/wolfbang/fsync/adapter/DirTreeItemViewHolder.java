@@ -44,10 +44,8 @@ public class DirTreeItemViewHolder extends BaseTreeItemViewHolder implements OnC
         mChevron.setVisibility(View.VISIBLE);
         mSubHeading.setValue(null);
 
-        // Note that mDirNode may be ActionableDirNode.
-        int files = mDirNode.getFileCount(treeItemRecyclerAdapter.getAction());
-        int dirs = mDirNode.getDirCount(treeItemRecyclerAdapter.getAction()) + 1;       // Add one, for this directory
-        mSubHeading.setLabel("holds " + files + (files != 1 ? " files" : " file") + " in " + dirs + (dirs != 1 ? " dirs" : " dir"));
+        // Note that mDirNode may be ActionableDirNode in which case the getAction will be non-null
+        mSubHeading.setLabel("holds " + mDirNode.getFilesDirsCountText(treeItemRecyclerAdapter.getAction()));
     }
 
     @Override

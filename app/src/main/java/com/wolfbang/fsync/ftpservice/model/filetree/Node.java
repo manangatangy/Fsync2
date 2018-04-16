@@ -126,7 +126,7 @@ public abstract class Node implements Comparable<Node> {
         String name = names[names.length - 2];          // Filename (last path name)
         FileNode child = parent.findChild(name);
         if (child == null) {
-            child = new FileNode(name, parent, parseDate(createTimestamp));
+            child = new FileNode(name, parent, parseDateForInflation(createTimestamp));
             parent.add(child);
             Log.d("inflate", "create-file" + child.toStringWithPath());
         } else if (NodeType.FILE != child.getNodeType()) {
@@ -134,7 +134,7 @@ public abstract class Node implements Comparable<Node> {
                     + (names.length) + ", path:" + path);
             return null;          // Mismatch on node type for same path
         } else {
-            String actualTimeStamp = formatDate(child.getTimeStamp());
+            String actualTimeStamp = formatDateForInflation(child.getTimeStamp());
             if (!createTimestamp.equals(actualTimeStamp)) {
                 Log.d("inflate", "Mismatch on last node timestamp, actual '"
                         + actualTimeStamp + "', expected '" + createTimestamp + "'");
@@ -166,9 +166,11 @@ public abstract class Node implements Comparable<Node> {
 
     private static String mDateFormat = "d MMM yyyy HH:mm:ss Z";
     private static String mDateFormatWithBreak = "d MMM yyyy\nHH:mm:ss Z";
+    private static String mDateFormatForInflation = "yyyy-MM-dd HH:mm:ss.SSS z";
     // TODO should Locale be used in this formatter ?
     private static SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat(mDateFormat);
     private static SimpleDateFormat mSimpleDateFormatWithBreak = new SimpleDateFormat(mDateFormatWithBreak);
+    private static SimpleDateFormat mSimpleDateFormatForInflation = new SimpleDateFormat(mDateFormatForInflation);
 
     public static String formatDate(Date date) {
         return (date == null) ? "<null-date>" : mSimpleDateFormat.format(date);
@@ -178,9 +180,13 @@ public abstract class Node implements Comparable<Node> {
         return (date == null) ? "<null-date>" : mSimpleDateFormatWithBreak.format(date);
     }
 
-    public static Date parseDate(String timeStamp) {
+    public static String formatDateForInflation(Date date) {
+        return (date == null) ? "<null-date>" : mSimpleDateFormatForInflation.format(date);
+    }
+
+    public static Date parseDateForInflation(String timeStamp) {
         try {
-            return mSimpleDateFormat.parse(timeStamp);
+            return mSimpleDateFormatForInflation.parse(timeStamp);
         } catch (ParseException e) {
             return null;
         }

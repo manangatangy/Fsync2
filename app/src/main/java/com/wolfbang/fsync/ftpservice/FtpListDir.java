@@ -45,7 +45,7 @@ public class FtpListDir extends FtpService<FTPFile[]> {
         FTPFile[] files = mFtpClient.mlistDir(mPath);
         Log.d("ftp", "---------[" + mPath + "]--------");
         if (files == null) {
-            return FtpResponse.error(FtpError.PATH_NOT_FOUND);
+            return FtpResponse.error(FtpEndPointError.PATH_NOT_FOUND);
         } else {
             for (FTPFile file : files) {
                 Log.d("ftp", "name:" + file.getName()

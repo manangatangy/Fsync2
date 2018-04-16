@@ -46,7 +46,7 @@ public class FtpListFile extends FtpService<FTPFile> {
 
         // todo handle NOT_A_FILE
         if (file == null) {
-            return FtpResponse.error(FtpError.PATH_NOT_FOUND);
+            return FtpResponse.error(FtpEndPointError.PATH_NOT_FOUND);
         } else {
             Log.d("ftp", "name:" + file.getName()
                     + "  isSymbolicLink:" + file.isSymbolicLink()

@@ -82,13 +82,13 @@ public class MergeComparator {
                     // type clash
                     if (node1.getNodeType() == NodeType.DIR) {
                         // node1 is the dir, node2 is the non-dir   TODO - what if node2 is a symlink - can that be ignored ?
-                        DirNode dirNode = new TypeClashActionableDirNode(mPrecedence, name, resultDir, DirectoryOn.A);
+                        DirNode dirNode = new TypeClashActionableDirNode(mPrecedence, name, resultDir, node2.getTimeStamp(), DirectoryOn.A);
                         resultDir.add(dirNode);
                         // This compare call will recurse/traverse down the tree, adding in UniqueTo.A nodes only.
                         compare(dirNode, (DirNode)node1, mEmptyDir);
                     } else if (node2.getNodeType() == NodeType.DIR) {
                         // node2 is DIR, node1 is the non-dir   TODO same as above
-                        DirNode dirNode = new TypeClashActionableDirNode(mPrecedence, name, resultDir, DirectoryOn.B);
+                        DirNode dirNode = new TypeClashActionableDirNode(mPrecedence, name, resultDir, node1.getTimeStamp(), DirectoryOn.B);
                         resultDir.add(dirNode);
                         // This compare call will recurse/traverse down the tree, adding in UniqueTo.B nodes only.
                         compare(dirNode, mEmptyDir, (DirNode)node2);

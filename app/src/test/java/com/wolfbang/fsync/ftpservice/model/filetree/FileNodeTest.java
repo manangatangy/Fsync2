@@ -22,7 +22,7 @@ public class FileNodeTest {
     @Test
     public void testFileNodeInflate() {
         // Syntax for names; N-XXX [N=directory level, root is 0] [XXX=dir-name, xxx=file-name]
-        DirNode root = new DirNode("root", null, Node.parseDate("2018-01-01 00:00:00.000 AEDT"));
+        DirNode root = new DirNode("root", null, Node.parseDateForInflation("2018-01-01 00:00:00.000 AEDT"));
         assertEquals("'root/1-AAA/2-aaa', FILE', '2018-03-15 00:00:00.000 AEDT'",
                 Node.inflateFile(root, "1-AAA/2-aaa/2018-03-15 00:00:00.000 AEDT").toStringWithPath());
 
@@ -59,7 +59,7 @@ public class FileNodeTest {
 
     @Test
     public void testDirNodeInflate() {
-        DirNode root = new DirNode("root", null, Node.parseDate("2018-01-01 00:00:00.000 AEDT"));
+        DirNode root = new DirNode("root", null, Node.parseDateForInflation("2018-01-01 00:00:00.000 AEDT"));
         assertEquals("'root/1-AAA', DIR, [0 children]",
                 Node.inflateDir(root, "1-AAA").toStringWithPath());
 
@@ -157,7 +157,7 @@ public class FileNodeTest {
     }
 
     private DirNode inflateTree(String rootName, String[] paths) {
-        DirNode root = new DirNode(rootName, null, Node.parseDate("2018-01-01 00:00:00.000 AEDT"));
+        DirNode root = new DirNode(rootName, null, Node.parseDateForInflation("2018-01-01 00:00:00.000 AEDT"));
         for (String path : paths) {
             if (null == Node.inflateFile(root, path)) {
                 fail(path + " cannot be inflated");

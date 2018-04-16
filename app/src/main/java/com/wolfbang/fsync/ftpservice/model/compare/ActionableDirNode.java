@@ -48,6 +48,7 @@ public class ActionableDirNode extends DirNode {
     /**
      * @return a file count filtered by the action
      */
+    @Override
     public int getFileCount(Action action) {
         int count = 0;
         for (Node child : getChildren()) {
@@ -66,6 +67,7 @@ public class ActionableDirNode extends DirNode {
     /**
      * @return a dir count filtered by the action
      */
+    @Override
     public int getDirCount(Action action) {
         int count = 0;      // Don't include the root dir in the count.
         for (Node child : getChildren()) {
@@ -75,6 +77,13 @@ public class ActionableDirNode extends DirNode {
             }
         }
         return count;
+    }
+
+    @Override
+    public String getFilesDirsCountText(Action action) {
+        int files = getFileCount(action);
+        int dirs = getDirCount(action) + 1;       // Add one, for this directory
+        return files + (files != 1 ? " files" : " file") + " in " + dirs + (dirs != 1 ? " dirs" : " dir");
     }
 
 }

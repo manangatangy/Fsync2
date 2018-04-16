@@ -89,7 +89,7 @@ public class MergeComparatorTest {
     }
 
     private DirNode inflateTree(String rootName, String[] paths) {
-        DirNode root = new DirNode(rootName, null, Node.parseDate("2018-01-01 00:00:00.000 AEDT"));
+        DirNode root = new DirNode(rootName, null, Node.parseDateForInflation("2018-01-01 00:00:00.000 AEDT"));
         for (String path : paths) {
             if (null == Node.inflateFile(root, path)) {
                 fail(path + " cannot be inflated");

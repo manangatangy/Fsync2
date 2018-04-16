@@ -31,7 +31,7 @@ public class FtpListFiles extends FtpService<FTPFile> {
     protected FtpResponse<FTPFile> executeService() throws IOException {
         FTPFile[] files = mFtpClient.listFiles(mPathname);
         if (files == null) {
-            return FtpResponse.error(FtpError.PATH_NOT_FOUND);
+            return FtpResponse.error(FtpEndPointError.PATH_NOT_FOUND);
         } else {
             Log.d("ftp", "-----------------");
             for (FTPFile file : files) {
