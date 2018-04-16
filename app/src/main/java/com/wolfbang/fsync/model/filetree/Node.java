@@ -166,7 +166,7 @@ public abstract class Node implements Comparable<Node> {
 
     private static String mDateFormat = "d MMM yyyy HH:mm:ss Z";
     private static String mDateFormatWithBreak = "d MMM yyyy\nHH:mm:ss Z";
-    private static String mDateFormatForInflation = "yyyy-MM-dd HH:mm:ss.SSS z";
+    private static String mDateFormatForInflation = "yyyy-MM-dd HH:mm:ss.SSS";
     // TODO should Locale be used in this formatter ?
     private static SimpleDateFormat mSimpleDateFormat = new SimpleDateFormat(mDateFormat);
     private static SimpleDateFormat mSimpleDateFormatWithBreak = new SimpleDateFormat(mDateFormatWithBreak);

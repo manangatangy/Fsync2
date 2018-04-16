@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.daimajia.swipe.SwipeLayout;
 import com.wolfbang.fsync.ftpservice.FtpEndPoint;
+import com.wolfbang.fsync.model.mission.CannedDataEndPoint;
 import com.wolfbang.fsync.model.mission.MissionNameData;
 import com.wolfbang.fsync.missionsummary.impl.MissionSummaryFragment;
 import com.wolfbang.fsync.view.PathElementView;
@@ -68,7 +69,7 @@ public class MainActivity extends AnimatingActivity {
     @OnClick(R.id.mission_summary_button)
     public void onMissionSummaryButtonClick() {
         useStartAnimations();
-        startActivity(MissionSummaryFragment.createIntent(this, getMissionNameData1()));
+        startActivity(MissionSummaryFragment.createIntent(this, getMissionNameData2()));
     }
 
     @OnClick(R.id.feature2_button)
@@ -77,7 +78,7 @@ public class MainActivity extends AnimatingActivity {
     }
 
     private MissionNameData getMissionNameData1() {
-        return new MissionNameData("Mission-One", getFtpEndPoint1(), getFtpEndPoint2());
+        return new MissionNameData("Mission-Remote", getFtpEndPoint1(), getFtpEndPoint2());
     }
     private FtpEndPoint getFtpEndPoint1() {
         return new FtpEndPoint(
@@ -106,5 +107,47 @@ public class MainActivity extends AnimatingActivity {
                 "rootDir"
         );
     }
+
+    private MissionNameData getMissionNameData2() {
+        return new MissionNameData("Mission-Local-Canned", getCannedDataEndPoint1(), getCannedDataEndPoint2());
+    }
+    private CannedDataEndPoint getCannedDataEndPoint1() {
+        return new CannedDataEndPoint("Canned-Local-A", "root", paths1);
+    }
+    private CannedDataEndPoint getCannedDataEndPoint2() {
+        return new CannedDataEndPoint("Canned-Local-B", "root", paths2);
+    }
+
+    String[] paths1 = new String[] {
+            "1-AAA/2-aaa/2018-03-15 00:11:00.000",
+            "1-AAA/2-bbb/2018-03-15 00:00:00.000",
+            "1-AAA/2-ddd/2018-03-15 00:00:00.000",
+            "1-AAA/2-eee/2018-03-15 00:00:00.000",
+            "1-AAA/2-fff/2018-03-15 00:00:00.000",
+            // Directory only here with one file and one dir
+            "1-BBB/2-aaa/2018-03-15 00:00:00.000",
+            "1-BBB/2-AAA/3-aaa/2018-03-15 00:00:00.000",
+            "1-BBB/2-AAA/3-bbb/2018-03-15 00:00:00.000",
+            // Directory present in both
+            "1-CCC/2-AAA/3-aaa/2018-03-15 00:00:00.000",
+            // File in this tree
+            "1-CCC/2-AAA/3-ccc/2018-03-15 00:00:00.000",
+    };
+    String[] paths2 = new String[] {
+            "1-AAA/2-aaa/2018-03-15 00:00:00.000",
+            "1-AAA/2-bbb/2018-03-15 00:22:00.000",
+            "1-AAA/2-ccc/2018-03-15 00:00:00.000",
+            "1-AAA/2-ddd/2018-03-15 00:00:00.000",
+            "1-AAA/2-fff/2018-03-15 00:00:00.000",
+            "1-AAA/2-ggg/2018-03-15 00:00:00.000",
+            // Directory only here with one file and one dir
+            "1-CCC/2-aaa/2018-03-15 00:00:00.000",
+            "1-CCC/2-AAA/3-aaa/2018-03-15 00:00:00.000",
+            "1-CCC/2-AAA/3-bbb/2018-03-15 00:00:00.000",
+            // Directory present in both
+            "1-CCC/2-AAA/3-bbb/2018-03-15 00:00:00.000",
+            // Directory in this tree
+            "1-CCC/2-AAA/3-ccc/xxx/2018-03-15 00:00:00.000",
+    };
 
 }

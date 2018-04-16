@@ -13,10 +13,7 @@ import com.lsmvp.simplemvp.ModelUpdater;
 import com.lsmvp.simplemvp.ObjectRegistry;
 import com.wolfbang.fsync.R;
 import com.wolfbang.fsync.application.FsyncApplication;
-import com.wolfbang.fsync.model.mission.EndPoint;
 import com.wolfbang.fsync.ftpservice.FtpEndPoint;
-import com.wolfbang.fsync.model.mission.MissionNameData;
-import com.wolfbang.fsync.model.mission.ScanResult;
 import com.wolfbang.fsync.missionconfirm.impl.MissionConfirmFragment;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Navigation;
@@ -25,6 +22,10 @@ import com.wolfbang.fsync.missionsummary.MissionSummaryContract.View;
 import com.wolfbang.fsync.missionsummary._di.DaggerMissionSummaryComponent;
 import com.wolfbang.fsync.missionsummary._di.MissionSummaryComponent;
 import com.wolfbang.fsync.missionsummary._di.MissionSummaryModule;
+import com.wolfbang.fsync.model.mission.CannedDataEndPoint;
+import com.wolfbang.fsync.model.mission.EndPoint;
+import com.wolfbang.fsync.model.mission.MissionNameData;
+import com.wolfbang.fsync.model.mission.ScanResult;
 import com.wolfbang.fsync.view.EndPointDetailView;
 import com.wolfbang.shared.BackClickHandler;
 import com.wolfbang.shared.view.AnimatingActivity;
@@ -122,14 +123,12 @@ public class MissionSummaryFragment
 
     @Override
     public void setEndPointDetailsA(EndPoint endPoint) {
-        FtpEndPoint ftpEndPoint = (FtpEndPoint)endPoint;
-        setEndPointDetails("A", ftpEndPoint, mEndPointA);
+        setEndPointDetails("A", endPoint, mEndPointA);
     }
 
     @Override
     public void setEndPointDetailsB(EndPoint endPoint) {
-        FtpEndPoint ftpEndPoint = (FtpEndPoint)endPoint;
-        setEndPointDetails("B", ftpEndPoint, mEndPointB);
+        setEndPointDetails("B", endPoint, mEndPointB);
     }
 
     @Override
@@ -202,13 +201,25 @@ public class MissionSummaryFragment
         return false;
     }
 
-    private void setEndPointDetails(String name, FtpEndPoint endPoint, EndPointDetailView view) {
+    private void setEndPointDetails(String name, EndPoint endPoint, EndPointDetailView view) {
         view.getHeadingRowView().setLabel("End Point " + name);
         view.getHeadingRowView().setValue(endPoint.getEndPointName());
-        view.getHostNameRowView().setValue(endPoint.getHost());
-        view.getUserNameRowView().setValue(endPoint.getUserName());
-        view.getPasswordRowView().setValue(endPoint.getPassword());
-        view.getRootDirRowView().setValue(endPoint.getRootDir());
+
+        // TODO could do better
+        if (endPoint instanceof FtpEndPoint) {
+            FtpEndPoint ftpEndPoint = (FtpEndPoint)endPoint;
+            view.getHostNameRowView().setValue(ftpEndPoint.getHost());
+            view.getUserNameRowView().setValue(ftpEndPoint.getUserName());
+            view.getPasswordRowView().setValue(ftpEndPoint.getPassword());
+            view.getRootDirRowView().setValue(ftpEndPoint.getRootDir());
+        }
+        if (endPoint instanceof CannedDataEndPoint) {
+            CannedDataEndPoint cannedDataEndPoint = (CannedDataEndPoint)endPoint;
+            view.getHostNameRowView().setVisibility(android.view.View.GONE);
+            view.getUserNameRowView().setVisibility(android.view.View.GONE);
+            view.getPasswordRowView().setVisibility(android.view.View.GONE);
+            view.getRootDirRowView().setValue(cannedDataEndPoint.getRootDir());
+        }
     }
 
 }
