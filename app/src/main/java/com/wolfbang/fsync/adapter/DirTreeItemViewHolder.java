@@ -7,8 +7,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.wolfbang.fsync.R;
-import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.Node;
+import com.wolfbang.fsync.model.filetree.DirNode;
+import com.wolfbang.fsync.model.filetree.Node;
 
 import butterknife.ButterKnife;
 

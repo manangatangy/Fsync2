@@ -9,8 +9,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.wolfbang.fsync.R;
-import com.wolfbang.fsync.ftpservice.model.filetree.Node;
-import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
+import com.wolfbang.fsync.model.filetree.Node;
+import com.wolfbang.fsync.model.mission.MissionNameData;
 import com.wolfbang.shared.view.LabelValueRowView;
 
 import butterknife.BindView;

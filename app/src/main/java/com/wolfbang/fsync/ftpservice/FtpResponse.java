@@ -2,7 +2,7 @@ package com.wolfbang.fsync.ftpservice;
 
 import android.support.annotation.NonNull;
 
-import com.wolfbang.fsync.ftpservice.model.mission.EndPointResponse;
+import com.wolfbang.fsync.model.mission.EndPointResponse;
 
 /**
  * @author david

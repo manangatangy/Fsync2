@@ -3,12 +3,12 @@ package com.wolfbang.fsync.missionconfirm;
 import android.support.annotation.Nullable;
 
 import com.lsmvp.simplemvp.AbstractMvpContract;
-import com.wolfbang.fsync.ftpservice.model.compare.Action;
-import com.wolfbang.fsync.ftpservice.model.compare.ActionableDirNode;
-import com.wolfbang.fsync.ftpservice.model.compare.Precedence;
-import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
-import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
-import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
+import com.wolfbang.fsync.model.compare.Action;
+import com.wolfbang.fsync.model.compare.ActionableDirNode;
+import com.wolfbang.fsync.model.compare.Precedence;
+import com.wolfbang.fsync.model.filetree.DirNode;
+import com.wolfbang.fsync.model.mission.MissionNameData;
+import com.wolfbang.fsync.model.mission.ScanResult;
 
 /**
  * @author david

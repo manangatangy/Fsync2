@@ -6,8 +6,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.wolfbang.fsync.R;
-import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.Node;
+import com.wolfbang.fsync.model.filetree.FileNode;
+import com.wolfbang.fsync.model.filetree.Node;
 import com.wolfbang.shared.view.LabelValueView;
 
 import butterknife.ButterKnife;

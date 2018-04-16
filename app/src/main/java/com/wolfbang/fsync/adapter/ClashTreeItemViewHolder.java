@@ -6,11 +6,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.wolfbang.fsync.adapter.DirTreeItemViewHolder.DirTreeItemClickListener;
-import com.wolfbang.fsync.ftpservice.model.compare.Action;
-import com.wolfbang.fsync.ftpservice.model.compare.DirectoryOn;
-import com.wolfbang.fsync.ftpservice.model.compare.TypeClashActionableDirNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.Node;
-import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
+import com.wolfbang.fsync.model.compare.Action;
+import com.wolfbang.fsync.model.compare.DirectoryOn;
+import com.wolfbang.fsync.model.compare.TypeClashActionableDirNode;
+import com.wolfbang.fsync.model.filetree.Node;
+import com.wolfbang.fsync.model.mission.MissionNameData;
 
 /**
  * @author david

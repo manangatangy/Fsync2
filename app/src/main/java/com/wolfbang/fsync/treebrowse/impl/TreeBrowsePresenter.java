@@ -3,9 +3,9 @@ package com.wolfbang.fsync.treebrowse.impl;
 import android.support.annotation.NonNull;
 
 import com.lsmvp.simplemvp.BaseMvpPresenter;
-import com.wolfbang.fsync.ftpservice.model.compare.Action;
-import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
-import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
+import com.wolfbang.fsync.model.compare.Action;
+import com.wolfbang.fsync.model.filetree.DirNode;
+import com.wolfbang.fsync.model.mission.MissionNameData;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Model;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.ModelListener;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Navigation;

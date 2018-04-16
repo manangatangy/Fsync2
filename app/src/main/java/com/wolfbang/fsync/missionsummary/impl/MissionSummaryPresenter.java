@@ -3,8 +3,8 @@ package com.wolfbang.fsync.missionsummary.impl;
 import android.support.annotation.NonNull;
 
 import com.lsmvp.simplemvp.BaseMvpPresenter;
-import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
-import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
+import com.wolfbang.fsync.model.mission.MissionNameData;
+import com.wolfbang.fsync.model.mission.ScanResult;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Model;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.ModelListener;
 import com.wolfbang.fsync.missionsummary.MissionSummaryContract.Navigation;

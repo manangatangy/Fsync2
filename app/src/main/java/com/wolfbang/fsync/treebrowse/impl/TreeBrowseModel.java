@@ -3,11 +3,11 @@ package com.wolfbang.fsync.treebrowse.impl;
 import android.support.annotation.Nullable;
 
 import com.lsmvp.simplemvp.BaseMvpModel;
-import com.wolfbang.fsync.ftpservice.model.compare.Action;
-import com.wolfbang.fsync.ftpservice.model.compare.ActionableDirNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.Node;
-import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
+import com.wolfbang.fsync.model.compare.Action;
+import com.wolfbang.fsync.model.compare.ActionableDirNode;
+import com.wolfbang.fsync.model.filetree.DirNode;
+import com.wolfbang.fsync.model.filetree.Node;
+import com.wolfbang.fsync.model.mission.MissionNameData;
 import com.wolfbang.fsync.treebrowse.TreeBrowseContract.Model;
 
 import java.util.concurrent.Executor;

@@ -6,14 +6,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 
 import com.wolfbang.fsync.adapter.DirTreeItemViewHolder.DirTreeItemClickListener;
-import com.wolfbang.fsync.ftpservice.model.compare.Action;
-import com.wolfbang.fsync.ftpservice.model.compare.CommonActionableFileNode;
-import com.wolfbang.fsync.ftpservice.model.compare.TypeClashActionableDirNode;
-import com.wolfbang.fsync.ftpservice.model.compare.UniqueActionableFileNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.Node;
-import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
+import com.wolfbang.fsync.model.compare.Action;
+import com.wolfbang.fsync.model.compare.CommonActionableFileNode;
+import com.wolfbang.fsync.model.compare.TypeClashActionableDirNode;
+import com.wolfbang.fsync.model.compare.UniqueActionableFileNode;
+import com.wolfbang.fsync.model.filetree.DirNode;
+import com.wolfbang.fsync.model.filetree.FileNode;
+import com.wolfbang.fsync.model.filetree.Node;
+import com.wolfbang.fsync.model.mission.MissionNameData;
 
 /**
  * @author david

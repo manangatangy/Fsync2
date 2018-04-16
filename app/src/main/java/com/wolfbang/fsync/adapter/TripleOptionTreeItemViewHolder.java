@@ -12,9 +12,9 @@ import android.widget.TextView;
 
 import com.daimajia.swipe.SwipeLayout;
 import com.wolfbang.fsync.R;
-import com.wolfbang.fsync.ftpservice.model.compare.Action;
-import com.wolfbang.fsync.ftpservice.model.filetree.Node;
-import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
+import com.wolfbang.fsync.model.compare.Action;
+import com.wolfbang.fsync.model.filetree.Node;
+import com.wolfbang.fsync.model.mission.MissionNameData;
 import com.wolfbang.shared.view.LabelValueColumnView;
 import com.wolfbang.shared.view.LabelValueRowView;
 import com.wolfbang.shared.view.LabelValueView;

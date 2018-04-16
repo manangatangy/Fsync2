@@ -3,10 +3,10 @@ package com.wolfbang.fsync.ftpservice;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.wolfbang.fsync.ftpservice.model.filetree.DirNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.FileNode;
-import com.wolfbang.fsync.ftpservice.model.filetree.Node;
-import com.wolfbang.fsync.ftpservice.model.filetree.SymlinkNode;
+import com.wolfbang.fsync.model.filetree.DirNode;
+import com.wolfbang.fsync.model.filetree.FileNode;
+import com.wolfbang.fsync.model.filetree.Node;
+import com.wolfbang.fsync.model.filetree.SymlinkNode;
 
 import org.apache.commons.net.ftp.FTPClient;
 import org.apache.commons.net.ftp.FTPFile;

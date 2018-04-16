@@ -8,8 +8,8 @@ import android.util.AttributeSet;
 import android.view.View;
 
 import com.daimajia.swipe.SwipeLayout;
-import com.wolfbang.fsync.ftpservice.model.mission.FtpEndPoint;
-import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
+import com.wolfbang.fsync.ftpservice.FtpEndPoint;
+import com.wolfbang.fsync.model.mission.MissionNameData;
 import com.wolfbang.fsync.missionsummary.impl.MissionSummaryFragment;
 import com.wolfbang.fsync.view.PathElementView;
 import com.wolfbang.fsync.view.PathScrollerView;

@@ -4,11 +4,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.VisibleForTesting;
 
 import com.lsmvp.simplemvp.BaseMvpModel;
-import com.wolfbang.fsync.ftpservice.model.compare.ActionableDirNode;
-import com.wolfbang.fsync.ftpservice.model.compare.MergeComparator;
-import com.wolfbang.fsync.ftpservice.model.compare.Precedence;
-import com.wolfbang.fsync.ftpservice.model.mission.MissionNameData;
-import com.wolfbang.fsync.ftpservice.model.mission.ScanResult;
+import com.wolfbang.fsync.model.compare.ActionableDirNode;
+import com.wolfbang.fsync.model.compare.MergeComparator;
+import com.wolfbang.fsync.model.compare.Precedence;
+import com.wolfbang.fsync.model.mission.MissionNameData;
+import com.wolfbang.fsync.model.mission.ScanResult;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Model;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.ModelListener;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.ModelState;
