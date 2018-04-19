@@ -6,6 +6,7 @@ import android.view.ViewGroup;
 
 import com.wolfbang.fsync.model.compare.Action;
 import com.wolfbang.fsync.model.compare.DirectoryOn;
+import com.wolfbang.fsync.model.compare.NodeCounter;
 import com.wolfbang.fsync.model.compare.TypeClashActionableDirNode;
 import com.wolfbang.fsync.model.filetree.Node;
 import com.wolfbang.fsync.model.mission.MissionNameData;
@@ -38,13 +39,14 @@ public class ClashTreeItemViewHolder extends TripleOptionTreeItemViewHolder {
         // the children are not ActionableDir/FileNodes, and so would not appear due to
         // the filtering.
         mTypeClashActionableDirNode = (TypeClashActionableDirNode)node;
+        NodeCounter counter = new NodeCounter(mTypeClashActionableDirNode);
         if (mTypeClashActionableDirNode.getDirectoryOn() == DirectoryOn.A) {
             // The counts for the dirNode are not filtered on action.
-            mItemViewOverwriteA.setValue("Directory\n " + mTypeClashActionableDirNode.getFilesDirsCountText());
+            mItemViewOverwriteA.setValue("Directory\n " + counter.getFilesDirsCountText());
             mItemViewOverwriteB.setValue(Node.formatDateWithBreak(mTypeClashActionableDirNode.getFileTimeStamp()));
         } else {
             mItemViewOverwriteA.setValue(Node.formatDateWithBreak(mTypeClashActionableDirNode.getFileTimeStamp()));
-            mItemViewOverwriteB.setValue("Directory\n " + mTypeClashActionableDirNode.getFilesDirsCountText());
+            mItemViewOverwriteB.setValue("Directory\n " + counter.getFilesDirsCountText());
         }
 
         setActionInSurface(mTypeClashActionableDirNode.getAction());

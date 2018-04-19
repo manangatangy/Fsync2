@@ -7,6 +7,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 
 import com.wolfbang.fsync.R;
+import com.wolfbang.fsync.model.compare.NodeCounter;
 import com.wolfbang.fsync.model.filetree.DirNode;
 import com.wolfbang.fsync.model.filetree.Node;
 
@@ -45,7 +46,8 @@ public class DirTreeItemViewHolder extends BaseTreeItemViewHolder implements OnC
         mSubHeading.setValue(null);
 
         // Note that mDirNode may be ActionableDirNode in which case the getAction will be non-null
-        mSubHeading.setLabel("holds " + mDirNode.getFilesDirsCountText(treeItemRecyclerAdapter.getAction()));
+        NodeCounter counter = new NodeCounter(mDirNode, treeItemRecyclerAdapter.getAction());
+        mSubHeading.setLabel("holds " + counter.getFilesDirsCountText());
     }
 
     @Override

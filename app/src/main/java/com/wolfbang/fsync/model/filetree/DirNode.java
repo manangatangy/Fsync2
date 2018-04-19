@@ -3,8 +3,6 @@ package com.wolfbang.fsync.model.filetree;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-import com.wolfbang.fsync.model.compare.Action;
-
 import java.util.Date;
 import java.util.Iterator;
 
@@ -64,53 +62,7 @@ public class DirNode extends FileNode  implements Iterable<Node> {
     public Node[] toChildrenArray() {
         return mChildren.toArray();
     }
-
-    public int getFileCount() {
-        int count = 0;
-        for (Node child : getChildren()) {
-            if (child instanceof DirNode) {
-                count += ((DirNode) child).getFileCount();
-            } else {
-                count++;
-            }
-        }
-        return count;
-    }
-
-    public int getDirCount() {
-        int count = 0;      // Don't include the root dir in the count.
-        for (Node child : getChildren()) {
-            if (child instanceof DirNode) {
-                count++;
-                count += ((DirNode) child).getDirCount();
-            }
-        }
-        return count;
-    }
-
-    public String getFilesDirsCountText() {
-        int files = getFileCount();
-        int dirs = getDirCount() + 1;       // Add one, for this directory
-        return files + (files != 1 ? " files" : " file") + " in " + dirs + (dirs != 1 ? " dirs" : " dir");
-    }
-
-    /**
-     * These two methods with Action parameter allow the
-     * {@link com.wolfbang.fsync.adapter.DirTreeItemViewHolder} to also handle
-     * {@link com.wolfbang.fsync.model.compare.ActionableDirNode}s
-     */
-    public int getFileCount(@Nullable Action action) {
-        return getFileCount();
-    }
-
-    public int getDirCount(@Nullable Action action) {
-        return getDirCount();
-    }
-
-    public String getFilesDirsCountText(@Nullable Action action) {
-        return getFilesDirsCountText();
-    }
-
+    
     /**
      * Remove the node from it's current parent and place it into this tree, preserving
      * it's heritage (creating intermediate descendants as necessary). This means that

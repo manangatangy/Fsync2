@@ -3,16 +3,17 @@ package com.wolfbang.fsync.missionconfirm.impl;
 import android.support.annotation.NonNull;
 
 import com.lsmvp.simplemvp.BaseMvpPresenter;
-import com.wolfbang.fsync.model.compare.Action;
-import com.wolfbang.fsync.model.compare.ActionableDirNode;
-import com.wolfbang.fsync.model.compare.Precedence;
-import com.wolfbang.fsync.model.filetree.DirNode;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Model;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.ModelListener;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Navigation;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.Presenter;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.View;
 import com.wolfbang.fsync.missionconfirm.MissionConfirmContract.ViewFieldID;
+import com.wolfbang.fsync.model.compare.Action;
+import com.wolfbang.fsync.model.compare.ActionableDirNode;
+import com.wolfbang.fsync.model.compare.NodeCounter;
+import com.wolfbang.fsync.model.compare.Precedence;
+import com.wolfbang.fsync.model.filetree.DirNode;
 
 /**
  * @author david
@@ -183,47 +184,55 @@ public class MissionConfirmPresenter
         Precedence precedence = getModel().getPrecedence();
 
         int totalFiles = 0;
+        int[] counts;
 
         if (precedence == Precedence.A) {
             view.setFieldCountsAndVisibility(ViewFieldID.FIELD_TO_A, null);
             view.setFieldCountsAndVisibility(ViewFieldID.FIELD_ON_A, null);
         } else {
-            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_TO_A, makeCounts(comparisonTree, Action.COPY_TO_A));
-            totalFiles += comparisonTree.getFileCount(Action.COPY_TO_A);
-            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_ON_A, makeCounts(comparisonTree, Action.OVERWRITE_ON_A));
-            totalFiles += comparisonTree.getFileCount(Action.OVERWRITE_ON_A);
+            counts = makeCounts(comparisonTree, Action.COPY_TO_A);
+            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_TO_A, counts);
+            totalFiles += counts[0];
+            counts = makeCounts(comparisonTree, Action.OVERWRITE_ON_A);
+            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_ON_A, counts);
+            totalFiles += counts[0];
         }
 
         if (precedence == Precedence.B) {
             view.setFieldCountsAndVisibility(ViewFieldID.FIELD_TO_B, null);
             view.setFieldCountsAndVisibility(ViewFieldID.FIELD_ON_B, null);
         } else {
-            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_TO_B, makeCounts(comparisonTree, Action.COPY_TO_B));
-            totalFiles += comparisonTree.getFileCount(Action.COPY_TO_B);
-            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_ON_B, makeCounts(comparisonTree, Action.OVERWRITE_ON_B));
-            totalFiles += comparisonTree.getFileCount(Action.OVERWRITE_ON_B);
+            counts = makeCounts(comparisonTree, Action.COPY_TO_B);
+            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_TO_B, counts);
+            totalFiles += counts[0];
+            counts = makeCounts(comparisonTree, Action.OVERWRITE_ON_B);
+            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_ON_B, counts);
+            totalFiles += counts[0];
         }
 
         if (precedence != Precedence.NEWEST) {
             view.setFieldCountsAndVisibility(ViewFieldID.FIELD_NAME_CLASH, null);
         } else {
-            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_NAME_CLASH, makeCounts(comparisonTree, Action.DO_NOTHING));
-            totalFiles += comparisonTree.getFileCount(Action.DO_NOTHING);
+            counts = makeCounts(comparisonTree, Action.DO_NOTHING);
+            view.setFieldCountsAndVisibility(ViewFieldID.FIELD_NAME_CLASH, counts);
+            totalFiles += counts[0];
         }
         view.setComparisonAndSyncButton(true, totalFiles != 0);
     }
 
     private int[] makeCounts(DirNode dirNode) {
+        NodeCounter counter = new NodeCounter(dirNode);
         return new int[] {
-                dirNode.getFileCount(),
-                dirNode.getDirCount() + 1       // Add one, for this directory
+                counter.getFileCount(),
+                counter.getDirCount()
         };
     }
 
     private int[] makeCounts(ActionableDirNode actionableDirNode, Action action) {
+        NodeCounter counter = new NodeCounter(actionableDirNode, action);
         return new int[] {
-                actionableDirNode.getFileCount(action),
-                actionableDirNode.getDirCount(action) + 1       // Add one, for this directory
+                counter.getFileCount(),
+                counter.getDirCount()
         };
     }
 
