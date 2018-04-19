@@ -77,6 +77,10 @@ public class TreeBrowseFragment
     @BindView(R.id.recycler_view)
     RecyclerView mRecyclerView;
 
+    /**
+     * This creates a tree-browe frag that filters on the action.  For a non-null action then the
+     * tree shows ActionableDirNodes, and ActionableFileNodes that match the specified action.
+     */
     public static Intent createIntent(Context context, @Nullable Action action,
                                       @NonNull DirNode dirNode,
                                       MissionNameData missionNameData, String title) {
