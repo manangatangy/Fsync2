@@ -54,6 +54,8 @@ public abstract class BaseTreeItemViewHolder extends RecyclerView.ViewHolder {
             return CommonTreeItemViewHolder.makeViewHolder(parent, missionNameData);
         case ITEM_TYPE_CLASH:
             return ClashTreeItemViewHolder.makeViewHolder(parent, missionNameData);
+        case ITEM_TYPE_UNIQUE:
+            return UniqueTreeItemViewHolder.makeViewHolder(parent, missionNameData);
         }
         return null;
     }

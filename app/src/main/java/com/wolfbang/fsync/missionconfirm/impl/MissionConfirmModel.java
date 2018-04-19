@@ -55,6 +55,9 @@ public class MissionConfirmModel
                     mPrecedence = precedence;
                     MergeComparator mergeComparator = new MergeComparator(precedence);
                     mComparisonTree = mergeComparator.compare(mScanResult.getDirA(), mScanResult.getDirB());
+
+                    mComparisonTree.dump("Comparison-tree");
+
                     mModelState = ModelState.COMPARED;
                     mBusy.set(false);
                     ModelListener listener = busyChanged(false);

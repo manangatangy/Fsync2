@@ -26,9 +26,9 @@ import butterknife.ButterKnife;
 
 /**
  * @author David Weiss
- * @date 16/4/18
+ * @date 19/4/18
  */
-public abstract class TripleOptionTreeItemViewHolder
+public abstract class DoubleOptionTreeItemViewHolder
         extends BaseTreeItemViewHolder implements OnCheckedChangeListener {
 
     protected MissionNameData mMissionNameData;
@@ -50,40 +50,27 @@ public abstract class TripleOptionTreeItemViewHolder
     @BindView(R.id.precedence_radio_group)
     NestedRadioGroup mRadioGroup;
 
-    @BindView(R.id.overwrite_a_radio)
-    RadioLayout mRadioLayoutA;
-    @BindView(R.id.overwrite_none_radio)
+    @BindView(R.id.copy_ab_radio)
+    RadioLayout mRadioLayoutAB;
+    @BindView(R.id.copy_none_radio)
     RadioLayout mRadioLayoutNone;
-    @BindView(R.id.overwrite_b_radio)
-    RadioLayout mRadioLayoutB;
 
-    @BindView(R.id.overwrite_a_item_value_view)
-    LabelValueColumnView mItemViewOverwriteA;
-    @BindView(R.id.overwrite_none_item_value_view)
-    LabelValueColumnView mItemViewOverwriteNone;
-    @BindView(R.id.overwrite_b_item_value_view)
-    LabelValueColumnView mItemViewOverwriteB;
-
-//    public static CommonTreeItemViewHolder makeViewHolder(@NonNull ViewGroup parent,
-//                                                          MissionNameData missionNameData) {
-//
-//        return new CommonTreeItemViewHolder(view, missionNameData);
-//    }
+    @BindView(R.id.copy_ab_item_value_view)
+    LabelValueColumnView mItemViewCopyAB;
+    @BindView(R.id.copy_none_item_value_view)
+    LabelValueColumnView mItemViewCopyNone;
 
     public static View inflateLayout(@NonNull ViewGroup parent) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tree_item_triple, null);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tree_item_double, null);
         return view;
     }
 
     /**
-     * A TripleOptionTreeItemViewHolder can be either a ClashTreeItemViewHolder or a
-     * CommonTreeItemViewHolder.  The former represents a node that is a file in one
-     * endPoint and a directory in te other endpoint.  The use can select on the bottom
-     * layout, which action to use; overwrite one or the other, or do nothing.
-     * With the latter, it represents a node that is a file in both endpints, and again
-     * the user can choose from one of three options.
+     * A DoubleOptionTreeItemViewHolder represents a node that is a file in one
+     * endPoint and not present in the other endpoint.  The user can select on the
+     * bottom layout, which action to use; copy from one particular endpoint, or do nothing.
      */
-    public TripleOptionTreeItemViewHolder(View itemView, MissionNameData missionNameData) {
+    public DoubleOptionTreeItemViewHolder(View itemView, MissionNameData missionNameData) {
         super(itemView);
         mMissionNameData = missionNameData;
         ButterKnife.bind(this, itemView);
@@ -105,8 +92,6 @@ public abstract class TripleOptionTreeItemViewHolder
     @Override
     public void bind(Node node, TreeItemRecyclerAdapter treeItemRecyclerAdapter) {
         mHeading.setText(node.getName());        // TODO max 13 chars - insert newline as needed
-        mItemViewOverwriteA.setLabel(mMissionNameData.getEndPointA().getEndPointName());
-        mItemViewOverwriteB.setLabel(mMissionNameData.getEndPointB().getEndPointName());
 
 
 //        mItemRowView.setOnClickListener(new OnClickListener() {
@@ -122,18 +107,18 @@ public abstract class TripleOptionTreeItemViewHolder
     private boolean mAllowPrecedenceCheckedNotification = true;
 
     public void setActionInSurface(Action action) {
-        String actionLabel = "will be overwritten on";
+        String actionLabel = "will be copied to";
         String actionValue = null;
         switch (action) {
-        case OVERWRITE_ON_A:
+        case COPY_TO_A:
             actionValue = mMissionNameData.getEndPointA().getEndPointName();
             break;
-        case OVERWRITE_ON_B:
+        case COPY_TO_B:
             actionValue = mMissionNameData.getEndPointB().getEndPointName();
             break;
         case DO_NOTHING:
             actionLabel = "will be";
-            actionValue = "unaffected";
+            actionValue = "not copied";
             break;
         }
         mSubHeading.setValue(null);
@@ -142,16 +127,12 @@ public abstract class TripleOptionTreeItemViewHolder
 
     public void setSelectedAction(Action action) {
         mAllowPrecedenceCheckedNotification = false;
-        mRadioLayoutA.setChecked(false);
-        mRadioLayoutB.setChecked(false);
+        mRadioLayoutAB.setChecked(false);
         mRadioLayoutNone.setChecked(false);
-        // Checked the one being kept
         switch (action) {
-        case OVERWRITE_ON_A:
-            mRadioLayoutB.setChecked(true);
-            break;
-        case OVERWRITE_ON_B:
-            mRadioLayoutA.setChecked(true);
+        case COPY_TO_A:
+        case COPY_TO_B:
+            mRadioLayoutAB.setChecked(true);
             break;
         case DO_NOTHING:
             mRadioLayoutNone.setChecked(true);
@@ -163,19 +144,16 @@ public abstract class TripleOptionTreeItemViewHolder
     //region RadioGroup.OnCheckedChangeListener
     @Override
     public void onCheckedChanged(RadioGroup group, int checkedId) {
-        // The radio button selected is the one to keep
-        // Therefore overwrite the other one.
+        // The radio button selected is the one to be copied from
+        // Therefore copy to the other one.
         if (mAllowPrecedenceCheckedNotification) {
             Action action = null;
             switch (checkedId) {
-            case R.id.overwrite_a_radio:
-                action = Action.OVERWRITE_ON_B;
+            case R.id.copy_ab_radio:
+                action = getTargetCopyTo();
                 break;
-            case R.id.overwrite_none_radio:
+            case R.id.copy_none_radio:
                 action = Action.DO_NOTHING;
-                break;
-            case R.id.overwrite_b_radio:
-                action = Action.OVERWRITE_ON_A;
                 break;
             }
             onActionSelected(action);
@@ -185,5 +163,7 @@ public abstract class TripleOptionTreeItemViewHolder
 
     public abstract void onActionSelected(Action action);
 
-}
+    // Returns the COPY_A or COPY_B, depending on which endPoint is the unique
+    public abstract Action getTargetCopyTo();
 
+}

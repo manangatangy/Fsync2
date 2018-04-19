@@ -7,7 +7,7 @@
     android:layout_height="wrap_content"
     swipe:leftEdgeSwipeOffset="0dp"
     swipe:rightEdgeSwipeOffset="0dp">
-    <include layout="@layout/layout_tree_item_unique_radio"/>
+    <include layout="@layout/layout_tree_item_double_radio"/>
     <include layout="@layout/layout_tree_item_base"/>
 
 </com.daimajia.swipe.SwipeLayout>

@@ -167,6 +167,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="horizontal"
+                        app:heading_text="Copy to:"
                         tools:subheading_text="EndPointB-LOCAL"
                         tools:files_text="33 files"
                         tools:dirs_text="44 dirs"

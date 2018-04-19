@@ -37,4 +37,8 @@ public class UniqueActionableFileNode extends ActionableFileNode {
         return "FILE UNIQUE To: " + mUniqueTo.name() + ", action: " + getAction().name();
     }
 
+    public UniqueTo getUniqueTo() {
+        return mUniqueTo;
+    }
+
 }

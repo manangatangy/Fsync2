@@ -34,7 +34,17 @@ public class ActionableDirNode extends DirNode {
         ArrayList<Node> list = new ArrayList<>();
         for (Node child : getChildren()) {
             if (child instanceof ActionableDirNode) {
-                list.add(child);
+                // A sub dir which holds zero files of the filtered type, is not displayed in the child
+                // list since there is no files that can be view, after traversing through the subdirs.
+                ActionableDirNode actionableDirNode = (ActionableDirNode)child;
+                if (actionableDirNode.getFileCount(action) > 0) {
+                    // Unlike other DirNodes, but like FileNodes, TypeClashADN's are filtered on
+                    // their action. This is because they have a selectable action (like FileNodes).
+                    // This same filtering is applied to the counting methods.
+                    if (shouldActionableDirNodeBeIncluded(actionableDirNode, action)) {
+                        list.add(child);
+                    }
+                }
             } else if (child instanceof ActionableFileNode) {
                 ActionableFileNode actionableFileNode = (ActionableFileNode)child;
                 if (actionableFileNode.getAction() == action) {
@@ -45,6 +55,19 @@ public class ActionableDirNode extends DirNode {
         return list.toArray(new Node[list.size()]);
     }
 
+    private boolean shouldActionableDirNodeBeIncluded(ActionableDirNode actionableDirNode,
+                                                      Action action) {
+        // Non TypeClash nodes should always be included.
+        if (!(actionableDirNode instanceof TypeClashActionableDirNode)) {
+            return true;
+        }
+        // Type clash nodes included only if action matches (like file nodes).
+        if (actionableDirNode.getAction() == action) {
+            return true;
+        }
+        return false;
+    }
+
     /**
      * @return a file count filtered by the action
      */
@@ -53,7 +76,10 @@ public class ActionableDirNode extends DirNode {
         int count = 0;
         for (Node child : getChildren()) {
             if (child instanceof ActionableDirNode) {
-                count += ((ActionableDirNode) child).getFileCount(action);
+                ActionableDirNode actionableDirNode = (ActionableDirNode)child;
+                if (shouldActionableDirNodeBeIncluded(actionableDirNode, action)) {
+                    count += actionableDirNode.getFileCount(action);
+                }
             } else if (child instanceof ActionableFileNode) {
                 ActionableFileNode actionableFileNode = (ActionableFileNode)child;
                 if (actionableFileNode.getAction() == action) {
@@ -72,8 +98,11 @@ public class ActionableDirNode extends DirNode {
         int count = 0;      // Don't include the root dir in the count.
         for (Node child : getChildren()) {
             if (child instanceof ActionableDirNode) {
-                count++;
-                count += ((ActionableDirNode)child).getDirCount(action);
+                ActionableDirNode actionableDirNode = (ActionableDirNode)child;
+                if (shouldActionableDirNodeBeIncluded(actionableDirNode, action)) {
+                    count++;
+                    count += actionableDirNode.getDirCount(action);
+                }
             }
         }
         return count;
