@@ -92,16 +92,6 @@ public abstract class DoubleOptionTreeItemViewHolder
     @Override
     public void bind(Node node, TreeItemRecyclerAdapter treeItemRecyclerAdapter) {
         mHeading.setText(node.getName());        // TODO max 13 chars - insert newline as needed
-
-
-//        mItemRowView.setOnClickListener(new OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (mTreeItemClickListener != null) {
-//                    mTreeItemClickListener.onTreeItemClick(mFileNode);
-//                }
-//            }
-//        });
     }
 
     private boolean mAllowPrecedenceCheckedNotification = true;

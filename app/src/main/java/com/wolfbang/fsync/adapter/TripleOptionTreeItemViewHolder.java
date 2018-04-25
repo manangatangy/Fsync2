@@ -64,12 +64,6 @@ public abstract class TripleOptionTreeItemViewHolder
     @BindView(R.id.overwrite_b_item_value_view)
     LabelValueColumnView mItemViewOverwriteB;
 
-//    public static CommonTreeItemViewHolder makeViewHolder(@NonNull ViewGroup parent,
-//                                                          MissionNameData missionNameData) {
-//
-//        return new CommonTreeItemViewHolder(view, missionNameData);
-//    }
-
     public static View inflateLayout(@NonNull ViewGroup parent) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_tree_item_triple, null);
         return view;
