@@ -62,7 +62,7 @@ public class DirNode extends FileNode  implements Iterable<Node> {
     public Node[] toChildrenArray() {
         return mChildren.toArray();
     }
-    
+
     /**
      * Remove the node from it's current parent and place it into this tree, preserving
      * it's heritage (creating intermediate descendants as necessary). This means that
