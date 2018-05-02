@@ -21,12 +21,11 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/double_padding"
             android:layout_marginRight="@dimen/double_padding"
-            app:label_font_size="18sp"
-            app:label_style="bold"
             app:value_style="bold"
+            app:label_layout_weight="0.001"
             app:label_gravity="right"
-            app:value_gravity="left"
-            app:label="Mission : "
+            app:value_gravity="centre"
+            app:label=""
             tools:value="Dell/Local"
             />
 
