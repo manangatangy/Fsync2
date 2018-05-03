@@ -5,6 +5,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.design.widget.TextInputLayout;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import com.lsmvp.simplemvp.AbstractMvpViewFragment;
 import com.lsmvp.simplemvp.ModelUpdater;
@@ -20,7 +25,11 @@ import com.wolfbang.fsync.endpointedit._di.EndPointEditComponent;
 import com.wolfbang.fsync.endpointedit._di.EndPointEditModule;
 import com.wolfbang.shared.BackClickHandler;
 import com.wolfbang.shared.view.AnimatingActivity;
+import com.wolfbang.shared.view.NestedRadioGroup;
+import com.wolfbang.shared.view.RadioLayout;
 import com.wolfbang.shared.view.SingleFragActivity;
+
+import butterknife.BindView;
 
 /**
  * @author david
@@ -35,10 +44,53 @@ public class EndPointEditFragment
     private static final String MCF_MISSION_NAME_DATA = "MCF_MISSION_NAME_DATA";
     private static final String MCF_SCAN_RESULT = "MCF_SCAN_RESULT";
 
+    @BindView(R.id.text_input_layout_name)
+    TextInputLayout mInputLayoutName;
+    @BindView(R.id.edit_text_name)
+    EditText mEditTextName;
+
+    @BindView(R.id.image_chevron)
+    ImageView mImageChevron;
+
+    @BindView(R.id.radio_group_type)
+    NestedRadioGroup mRadioGroup;
+    @BindView(R.id.radio_ftp)
+    RadioLayout mRadioFtp;
+    @BindView(R.id.radio_dummy)
+    RadioLayout mRadioDummy;
+
+    @BindView(R.id.layout_ftp)
+    LinearLayout mLayoutFtp;
+
+    @BindView(R.id.text_input_layout_host)
+    TextInputLayout mInputLayoutHost;
+    @BindView(R.id.edit_text_host)
+    EditText mEditTextHost;
+
+    @BindView(R.id.text_input_layout_user)
+    TextInputLayout mInputLayoutUser;
+    @BindView(R.id.edit_text_user)
+    EditText mEditTextUser;
+
+    @BindView(R.id.text_input_layout_password)
+    TextInputLayout mInputLayoutPassword;
+    @BindView(R.id.edit_text_password)
+    EditText mEditTextPassword;
+
+    @BindView(R.id.text_input_layout_directory)
+    TextInputLayout mInputLayoutRootDir;
+    @BindView(R.id.edit_text_directory)
+    EditText mEditTextRootDir;
+
+    @BindView(R.id.ok_button)
+    Button mButtonOk;
+    @BindView(R.id.cancel_button)
+    Button mButtonCancel;
+
     public static Intent createIntent(Context context) {
         Intent intent = new SingleFragActivity.Builder(context, EndPointEditFragment.class.getName())
                 .setDisplayHomeAsUpEnabled(true)
-                .setTitle("Confirm")
+                .setTitle("Edit End Point")
                 .build();
 
         ObjectRegistry objectRegistry = FsyncApplication.getFsyncApplicationComponent().getObjectRegistry();
@@ -71,7 +123,7 @@ public class EndPointEditFragment
 
     @Override
     protected int getLayoutResource() {
-        return R.layout.fragment_mission_confirm;
+        return R.layout.fragment_end_point_edit;
     }
 
     @Override
